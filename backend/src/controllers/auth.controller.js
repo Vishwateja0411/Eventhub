@@ -128,6 +128,7 @@ const register = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: 'Account registered successfully.',
+      accessToken,
       user: {
         id: newUser.id,
         name: newUser.name,
@@ -205,6 +206,7 @@ const login = async (req, res, next) => {
     res.json({
       success: true,
       message: 'Logged in successfully.',
+      accessToken,
       user: {
         id: user.id,
         name: user.name,

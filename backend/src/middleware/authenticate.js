@@ -5,13 +5,13 @@ const authenticate = async (req, res, next) => {
   try {
     let token = null;
 
-    // 1. Check HTTP-only cookie first
-    if (req.cookies && req.cookies.accessToken) {
-      token = req.cookies.accessToken;
-    }
-    // 2. Check Authorization Bearer header
-    else if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    // 1. Check Authorization Bearer header first
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
       token = req.headers.authorization.split(' ')[1];
+    }
+    // 2. Check HTTP-only cookie
+    else if (req.cookies && req.cookies.accessToken) {
+      token = req.cookies.accessToken;
     }
 
     if (!token) {

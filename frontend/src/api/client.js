@@ -16,10 +16,14 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to normalize URL paths whether prefixed with /api or not
+// Request interceptor to normalize URL paths and attach Bearer token if present
 api.interceptors.request.use((config) => {
   if (config.url && config.url.startsWith('/api/')) {
     config.url = config.url.replace(/^\/api/, '');
+  }
+  const token = localStorage.getItem('eventhub_token');
+  if (token && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
