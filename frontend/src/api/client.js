@@ -8,6 +8,14 @@ const api = axios.create({
   },
 });
 
+// Request interceptor to normalize URL paths whether prefixed with /api or not
+api.interceptors.request.use((config) => {
+  if (config.url && config.url.startsWith('/api/')) {
+    config.url = config.url.replace(/^\/api/, '');
+  }
+  return config;
+});
+
 let isRefreshing = false;
 let failedQueue = [];
 

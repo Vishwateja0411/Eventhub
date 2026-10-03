@@ -21,6 +21,9 @@ const uploadRoutes = require('./routes/upload.routes');
 
 const app = express();
 
+// Trust reverse proxy (Render, Heroku, AWS ALB) for secure cookies & accurate rate limiting
+app.set('trust proxy', 1);
+
 // ─── SECURITY MIDDLEWARE ────────────────────────────────────────────────────
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }, // Allow Cloudinary images
@@ -29,14 +32,14 @@ app.use(helmet({
 // CORS — allow frontend origin with credentials
 const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:5173',
-  'https://eventhub-frontend.vercel.app', // replaced in B8 with real URL
+  'https://eventhub-frontend.vercel.app',
 ];
 
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (e.g. mobile apps, curl, Postman)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
+    if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) return callback(null, true);
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
   credentials: true, // Required for HTTP-only cookies
