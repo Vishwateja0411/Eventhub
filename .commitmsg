@@ -1,11 +1,14 @@
-feat(tickets): registration, atomic capacity enforcement, QR ticket generation, and check-in attendance
+feat(frontend): React + Vite setup, Tailwind CSS, Auth flow, Event discovery & QR ticket display
 
-- Implement atomic registration transaction with capacity check & duplicate registration prevention
-- Implement QR code data URI generation using qrcode library with error correction
-- Implement unpredictable cryptographic ticket codes (format: TKT-XXXXXXXX-YYYY)
-- Implement user registration history (GET /api/registrations/my-registrations) and registration cancellation
-- Implement organizer attendee management (GET /api/registrations/event/:id/attendees)
-- Implement ticket retrieval and scanner preview verification (GET /api/tickets/:ticketCode, /verify/:ticketCode)
-- Implement QR scanner check-in endpoint with duplicate check-in rejection (409 Conflict)
-- Implement organizer event attendance summary with turnout metrics (GET /api/attendance/event/:id)
-- Verified with 10 automated end-to-end smoke tests (all passing)
+- Initialize React 19 + Vite frontend with Tailwind CSS & PostCSS
+- Configure dark mode styling with ThemeContext and localStorage persistence
+- Implement Axios client with credentials (withCredentials: true) and 401 token rotation interceptor
+- Implement AuthContext with cookie session checking, login, register, and role helpers
+- Implement glassmorphic Navbar with role badges, search, and dark mode toggle
+- Implement Home page with hero section, category grid, and featured events
+- Implement Events catalog page with live search, category pills, city selector, and price filters
+- Implement EventDetail page with capacity progress, organizer info, and 1-click registration
+- Implement TicketModal displaying QR code data URI and cryptographic ticket identifier
+- Implement MyTickets page allowing users to view digital passes and cancel registrations
+- Implement CreateEvent page for organizers and admins to publish events
+- Verified with clean production build (npm run build succeeded with 0 errors)
