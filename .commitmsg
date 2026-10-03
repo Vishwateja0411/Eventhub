@@ -1,10 +1,11 @@
-feat(auth): full authentication & role-based authorization with Neon PostgreSQL
+feat(events): event CRUD, search, filter, pagination, categories, and image upload
 
-- Connect Neon PostgreSQL database and push all 15 Prisma tables
-- Seed database with 4 roles (VISITOR, USER, ORGANIZER, ADMIN), 3 test users, 8 categories, 2 events
-- Implement Zod validation schemas for registration, login, password reset
-- Implement authenticate middleware (HTTP-only cookies + Bearer token)
-- Implement authorize middleware for Role-Based Access Control (RBAC)
-- Implement full auth controller: register, login, refresh, logout, getMe, forgotPassword, resetPassword, verifyEmail
-- Wire up /api/auth routes with rate limiting
-- Verified with automated end-to-end smoke tests (all passing)
+- Implement Zod validation schemas for events, categories, and search filters
+- Implement Multer memory-storage upload middleware
+- Implement Cloudinary image upload controller with graceful fallback for local testing
+- Implement category controller (list categories with event count, get category by slug, admin create)
+- Implement event controller (public list with search/filter/pagination, get featured, get by slug, organizer create, update, delete, getOrganizerEvents)
+- Enforce strict RBAC: only ORGANIZER and ADMIN can create events (USER gets 403 Forbidden)
+- Enforce event ownership: organizers can only edit/delete their own events; ADMIN can edit any
+- Calculate real-time spotsLeft and isSoldOut based on confirmed registrations
+- Verified with 10 automated end-to-end smoke tests (all passing)
