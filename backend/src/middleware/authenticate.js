@@ -21,7 +21,7 @@ const authenticate = async (req, res, next) => {
       });
     }
 
-    const secret = process.env.JWT_ACCESS_SECRET || 'dev_secret_fallback';
+    const secret = process.env.JWT_ACCESS_SECRET || 'dev_access_secret';
     let decoded;
     try {
       decoded = jwt.verify(token, secret);
@@ -33,9 +33,11 @@ const authenticate = async (req, res, next) => {
           message: 'Access token expired. Please refresh your session.',
         });
       }
+      res.clearCookie('accessToken');
+      res.clearCookie('refreshToken');
       return res.status(401).json({
         success: false,
-        message: 'Invalid or corrupt authentication token.',
+        message: 'Invalid or corrupt authentication token. Please log in again.',
       });
     }
 
