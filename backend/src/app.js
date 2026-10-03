@@ -70,7 +70,27 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
-// ─── HEALTH CHECK ──────────────────────────────────────────────────────────
+// ─── ROOT WELCOME & HEALTH ──────────────────────────────────────────────────
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    service: 'EventHub Enterprise API',
+    version: '1.0.0',
+    health: '/health',
+    frontend: process.env.FRONTEND_URL || 'http://localhost:5173',
+    endpoints: {
+      auth: '/api/auth',
+      events: '/api/events',
+      categories: '/api/categories',
+      registrations: '/api/registrations',
+      tickets: '/api/tickets',
+      attendance: '/api/attendance',
+      notifications: '/api/notifications',
+      admin: '/api/admin',
+    },
+  });
+});
+
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
