@@ -2,21 +2,24 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import NotificationBell from '../notifications/NotificationBell';
 import {
   Calendar,
   Sun,
   Moon,
   PlusCircle,
   Ticket,
-  User,
   LogOut,
   Menu,
   X,
   Compass,
+  LayoutDashboard,
+  ShieldAlert,
+  QrCode,
 } from 'lucide-react';
 
 export default function Navbar() {
-  const { user, isAuthenticated, isOrganizer, logout } = useAuth();
+  const { user, isAuthenticated, isOrganizer, isAdmin, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -41,24 +44,14 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-5">
             <Link
               to="/events"
               className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
             >
               <Compass className="w-4 h-4" />
-              Explore Events
+              Explore
             </Link>
-
-            {isOrganizer && (
-              <Link
-                to="/events/create"
-                className="flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:opacity-80 transition-opacity"
-              >
-                <PlusCircle className="w-4 h-4" />
-                Create Event
-              </Link>
-            )}
 
             {isAuthenticated && (
               <Link
@@ -69,10 +62,49 @@ export default function Navbar() {
                 My Tickets
               </Link>
             )}
+
+            {isOrganizer && (
+              <>
+                <Link
+                  to="/dashboard/organizer"
+                  className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
+                >
+                  <LayoutDashboard className="w-4 h-4 text-primary-500" />
+                  Organizer
+                </Link>
+                <Link
+                  to="/scanner"
+                  className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
+                >
+                  <QrCode className="w-4 h-4 text-emerald-500" />
+                  Scanner
+                </Link>
+                <Link
+                  to="/events/create"
+                  className="flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:opacity-80 transition-opacity"
+                >
+                  <PlusCircle className="w-4 h-4" />
+                  Create
+                </Link>
+              </>
+            )}
+
+            {isAdmin && (
+              <Link
+                to="/dashboard/admin"
+                className="flex items-center gap-1.5 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:opacity-80 transition-opacity"
+              >
+                <ShieldAlert className="w-4 h-4" />
+                Admin
+              </Link>
+            )}
           </nav>
 
           {/* Right Action Icons & Auth */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
+            {/* Notification Bell */}
+            {isAuthenticated && <NotificationBell />}
+
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
@@ -89,7 +121,7 @@ export default function Navbar() {
                     {user?.name?.slice(0, 2) || 'U'}
                   </div>
                   <div className="text-left text-xs">
-                    <p className="font-semibold text-slate-900 dark:text-white line-clamp-1">
+                    <p className="font-semibold text-slate-900 dark:text-white line-clamp-1 max-w-[100px]">
                       {user?.name}
                     </p>
                     <span className="inline-block px-1.5 py-0.2 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
@@ -126,6 +158,7 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="flex md:hidden items-center gap-2">
+            {isAuthenticated && <NotificationBell />}
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg text-slate-500 dark:text-slate-400"
@@ -144,30 +177,55 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden glass border-b border-slate-200 dark:border-slate-800 px-4 pt-2 pb-6 space-y-3">
+        <div className="md:hidden glass border-b border-slate-200 dark:border-slate-800 px-4 pt-2 pb-6 space-y-2">
           <Link
             to="/events"
             onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-slate-800"
+            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-slate-800"
           >
             Explore Events
           </Link>
-          {isOrganizer && (
-            <Link
-              to="/events/create"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-lg text-base font-medium text-indigo-600 dark:text-indigo-400"
-            >
-              + Create Event
-            </Link>
-          )}
           {isAuthenticated && (
             <Link
               to="/my-tickets"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200"
+              className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200"
             >
               My Tickets
+            </Link>
+          )}
+          {isOrganizer && (
+            <>
+              <Link
+                to="/dashboard/organizer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 rounded-lg text-sm font-medium text-primary-600 dark:text-primary-400"
+              >
+                Organizer Dashboard
+              </Link>
+              <Link
+                to="/scanner"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 rounded-lg text-sm font-medium text-emerald-600 dark:text-emerald-400"
+              >
+                QR Venue Scanner
+              </Link>
+              <Link
+                to="/events/create"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-2 rounded-lg text-sm font-medium text-indigo-600 dark:text-indigo-400"
+              >
+                + Create Event
+              </Link>
+            </>
+          )}
+          {isAdmin && (
+            <Link
+              to="/dashboard/admin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm font-medium text-rose-600 dark:text-rose-400"
+            >
+              Admin Platform Console
             </Link>
           )}
 
@@ -185,7 +243,7 @@ export default function Navbar() {
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-3 py-2 text-rose-600 dark:text-rose-400 font-medium"
+                  className="w-full text-left px-3 py-2 text-rose-600 dark:text-rose-400 font-medium text-sm"
                 >
                   Sign Out
                 </button>

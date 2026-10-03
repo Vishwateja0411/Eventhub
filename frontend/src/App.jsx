@@ -14,6 +14,9 @@ import CreateEvent from './pages/CreateEvent';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import MyTickets from './pages/MyTickets';
+import OrganizerDashboard from './pages/OrganizerDashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import QRScanner from './pages/QRScanner';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,6 +44,9 @@ export default function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/my-tickets" element={<MyTickets />} />
+                  <Route path="/dashboard/organizer" element={<OrganizerDashboard />} />
+                  <Route path="/dashboard/admin" element={<AdminDashboard />} />
+                  <Route path="/scanner" element={<QRScanner />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </main>
