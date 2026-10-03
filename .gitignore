@@ -1,0 +1,40 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Environment secrets — NEVER commit real .env files
+.env
+.env.local
+.env.production
+.env.*.local
+backend/.env
+frontend/.env
+frontend/.env.local
+
+# Build outputs
+dist/
+build/
+frontend/dist/
+backend/dist/
+
+# Prisma
+backend/prisma/migrations/*.db
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Logs
+logs/
+*.log
+
+# Uploads (local)
+uploads/
