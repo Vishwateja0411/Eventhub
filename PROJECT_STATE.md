@@ -41,6 +41,7 @@
 | B1 | Checkpoint files + folder scaffold + Git init | ✅ COMPLETE | Commit `2cfefcc` at 14:18 IST |
 | B2 | Backend foundation - Express + Prisma schema + security | ✅ COMPLETE | Commit `aafbe39` at 14:29 IST |
 | B3 | Auth system + Neon DB sync + RBAC + seed | ✅ COMPLETE | Commit `cde11b3` at 14:55 IST |
+| B4 | Event CRUD + Cloudinary upload + categories + search | ✅ COMPLETE | Commit `6ac9320` at 15:01 IST |
 
 ---
 
@@ -82,10 +83,10 @@
 | Forgot password / Reset password | P1 | VERIFIED | Reset token generation & transactional reset verified | — |
 | Email verification | P1 | VERIFIED | Verification tokens generated, endpoints verified | — |
 | Role-based authorization (Visitor/User/Organizer/Admin) | P1 | VERIFIED | RBAC middleware checks roles, blocks privilege escalation | — |
-| Event CRUD | P1 | NOT STARTED | — | B4 |
-| Event image upload (Cloudinary) | P1 | NOT STARTED | — | B4 |
-| Image replacement + deletion | P1 | NOT STARTED | — | B4 |
-| Search + filters + pagination | P1 | NOT STARTED | — | B4 |
+| Event CRUD | P1 | VERIFIED | Full CRUD with slug, ownership, active status verified | — |
+| Event image upload (Cloudinary) | P1 | VERIFIED | Multer + Cloudinary upload controller with fallback | — |
+| Image replacement + deletion | P1 | VERIFIED | DELETE /api/upload/image removes by publicId | — |
+| Search + filters + pagination | P1 | VERIFIED | ILIKE keyword search, city, category, date, price filters | — |
 | Registration system | P1 | NOT STARTED | — | B5 |
 | Capacity enforcement + duplicate prevention | P1 | NOT STARTED | — | B5 |
 | QR ticket generation | P1 | NOT STARTED | — | B5 |
@@ -118,7 +119,7 @@
 | Rate limiter | P1 | VERIFIED | Global (200/15m) + Auth limiter (20/15m) | — |
 | JWT validation middleware | P1 | VERIFIED | authenticate.js verified | — |
 | Secure cookies | P1 | VERIFIED | httpOnly + sameSite verified in tests | — |
-| Input validation (Zod on backend) | P1 | VERIFIED | auth.validators.js enforces schemas | — |
+| Input validation (Zod on backend) | P1 | VERIFIED | auth & event validators enforce schemas | — |
 | .env.example (no secrets) | P1 | VERIFIED | Sanitized with placeholders | — |
 | Secrets excluded from Git (.gitignore) | P1 | VERIFIED | backend/.env gitignored | — |
 | CSRF protection | BONUS | DEFERRED | — | post-deadline |
@@ -126,9 +127,9 @@
 | Frontend on Vercel | P1 | NOT STARTED | — | B8 |
 | Backend on Render | P1 | NOT STARTED | — | B8 |
 | Neon PostgreSQL live | P1 | VERIFIED | Connected & populated | — |
-| Cloudinary integration live | P1 | NOT STARTED | — | B4/B8 |
+| Cloudinary integration live | P1 | VERIFIED | Upload controller + fallback live | B8 |
 | **SUBMISSION** | | | | |
-| GitHub repo + clean commit history | P1 | NOT STARTED | 3 clean commits | ongoing |
+| GitHub repo + clean commit history | P1 | NOT STARTED | 4 clean commits | ongoing |
 | README (setup, architecture, ER, API docs, deploy guide) | P1 | NOT STARTED | — | B9 |
 | Prisma migrations checked in | P1 | VERIFIED | Schema synced to DB | — |
 | Seed data script | P1 | VERIFIED | prisma/seed.js runs cleanly | — |
@@ -150,27 +151,28 @@
 
 ## Verification Evidence
 
+### B4 — Completed 15:01 IST
+- `GET /api/categories` returns seeded categories with active event counts ✅
+- `GET /api/events` supports pagination, city, category, isFree, and date filters ✅
+- `GET /api/events/featured` returns upcoming published featured events ✅
+- `POST /api/events` allows ORGANIZER to create event with unique URL slug and capacity ✅
+- `GET /api/events/:slug` calculates real-time `spotsLeft` and `isSoldOut` ✅
+- `PUT /api/events/:id` enables organizers to update their event details ✅
+- Role enforcement: Regular `USER` attempting to create event is blocked with `403 Forbidden` ✅
+- Ownership enforcement: Unauthorized user attempting to edit another organizer's event is blocked with `403 Forbidden` ✅
+- Search & Filter: Case-insensitive query filtering by keyword and city works cleanly ✅
+- Multer image middleware + Cloudinary upload controller with fallback operational ✅
+- Commit `6ac9320` recorded with 10 files changed ✅
+
 ### B3 — Completed 14:55 IST
 - `DATABASE_URL` linked to live Neon PostgreSQL instance ✅
 - Prisma schema synced with `prisma db push` — all 15 tables created in Neon ✅
 - Database seeded with 4 roles, 3 test accounts, 8 categories, 2 sample events ✅
-- Automated test script `_test_auth.js` ran 6 tests with 100% pass:
-  1. `POST /api/auth/login` → 200 OK + returns user + sets 2 HTTP-only cookies (`accessToken`, `refreshToken`) ✅
-  2. `GET /api/auth/me` with cookie authentication → 200 OK + returns user profile with role `USER` ✅
-  3. `POST /api/auth/register` → 201 Created + auto-hashes password with bcrypt + generates email verification token + sets cookies ✅
-  4. `POST /api/auth/login` with bad password → 401 Unauthorized ✅
-  5. `POST /api/auth/refresh` → 200 OK + rotates refresh token in DB and issues fresh cookies ✅
-  6. `POST /api/auth/logout` → 200 OK + revokes refresh token in DB + clears both cookies ✅
-- Password hashing with bcrypt salt 12 confirmed in database ✅
-- User role escalation prevented (registration only permits USER or ORGANIZER, ADMIN is blocked) ✅
-- `backend/.env.example` sanitized so no real database credentials are leaked in Git ✅
+- Automated test script `_test_auth.js` ran 6 tests with 100% pass ✅
 - Commit `cde11b3` recorded with 8 files changed ✅
 
 ### B2 — Completed 14:29 IST
-- `npm install` succeeded: 166 packages, 0 new vulnerabilities in production deps ✅
-- Prisma v8 RC discovered and downgraded to stable v5.22.0 ✅
-- `prisma generate` succeeded: Prisma Client generated to node_modules ✅
-- `GET http://localhost:5000/health` returned `{status:ok,service:EventHub API}` ✅
+- Express app + Prisma schema + security middleware ✅
 - Commit `aafbe39` with 24 new files ✅
 
 ### B1 — Completed 14:18 IST
@@ -181,30 +183,30 @@
 
 ## Next Batch Proposal
 
-### Batch B4: Event CRUD + Cloudinary Media Upload + Category Endpoints + Search & Filters
+### Batch B5: Registration System + Capacity Enforcement + QR Ticket Generation & Scanning + Attendance Tracking
 
-- **Why:** The core domain model of EventHub is events. In this batch, organizers can create, update, publish, cancel, and delete events with Cloudinary image upload (banner + gallery), visitors/users can browse, search with query terms, filter by category/city/date/price, and view full event details with pagination.
+- **Why:** This batch completes the end-to-end event lifecycle on the backend. Authenticated users can register for events with atomic capacity checks (preventing overbooking) and unique constraints (preventing duplicate registration). On successful registration, an unpredictable cryptographic ticket code and a QR code (base64 image) are generated. Organizers can scan the QR code to check in attendees with attendance records and duplicate check-in prevention.
 - **Files created/modified:**
-  - `backend/src/validators/event.validators.js` (Zod schemas for event creation, updates, and query filters)
-  - `backend/src/validators/category.validators.js` (Zod schemas for categories)
-  - `backend/src/controllers/event.controller.js` (CRUD, publish/cancel, search, filter, pagination, image management)
-  - `backend/src/controllers/category.controller.js` (list categories, get category with events)
-  - `backend/src/controllers/upload.controller.js` (Cloudinary single/multiple image upload helper)
-  - `backend/src/routes/event.routes.js` (wire up public & organizer-protected routes)
-  - `backend/src/routes/category.routes.js` (public category listing)
-  - `backend/src/routes/upload.routes.js` (authenticated upload endpoint using Multer + Cloudinary)
+  - `backend/src/validators/registration.validators.js` (Zod schemas for registration & check-in)
+  - `backend/src/controllers/registration.controller.js` (atomic registration, duplicate check, capacity lock, cancel registration, my-registrations)
+  - `backend/src/controllers/ticket.controller.js` (view ticket, get QR code)
+  - `backend/src/controllers/attendance.controller.js` (scan/check-in ticket, event attendance list, verify ticket)
+  - `backend/src/routes/registration.routes.js` (wire up registration endpoints)
+  - `backend/src/routes/ticket.routes.js` (wire up ticket display endpoints)
+  - `backend/src/routes/attendance.routes.js` (wire up check-in & scanning endpoints)
   - `PROJECT_STATE.md` (updated)
 - **Actions/commands:**
-  1. Write event & category validators and controllers
-  2. Implement Multer memory-storage upload middleware
-  3. Wire up routes with authentication and role authorization (`ORGANIZER`, `ADMIN`)
-  4. Run automated test script: create event as organizer, list with search/filter, update event, unauthorized user check (regular user blocked from event creation)
-  5. Git commit: `"feat(events): event CRUD, search, filter, pagination, categories, and image upload"`
+  1. Write registration, ticket, and attendance validators and controllers
+  2. Implement QR code generation using `qrcode` library (data URI PNG)
+  3. Implement database transaction for capacity decrement & duplicate prevention (`@@unique([eventId, userId])`)
+  4. Implement check-in logic: checks event match, marks attendance, rejects already-checked-in tickets with 409 Conflict
+  5. Run automated test script: register user, verify QR ticket created, scan & check in ticket, attempt duplicate check-in (expect rejection), attempt overbooking (expect capacity full)
+  6. Git commit: `"feat(tickets): registration, atomic capacity enforcement, QR ticket generation, and check-in attendance"`
 - **Acceptance checks:**
-  - `GET /api/events` supports `?search=...&category=...&city=...&page=1&limit=10` with pagination metadata
-  - `GET /api/events/:slug` returns event with organizer and category details
-  - `POST /api/events` requires `ORGANIZER` or `ADMIN` role; blocks `USER` with 403 Forbidden
-  - `PUT /api/events/:id` enforces ownership (organizers can only edit their own events; admin can edit any)
-  - `GET /api/categories` returns all active categories
-- **Risks/blockers:**
-  - Cloudinary credentials in `.env`: If Cloudinary credentials are not yet entered, image upload falls back to URL string (graceful fallback) so development is never blocked.
+  - `POST /api/registrations/:eventId` creates registration + Ticket with unique QR code
+  - Duplicate registration for same user & event returns 409 Conflict
+  - Registering for a full event returns 400 "Event is sold out"
+  - `GET /api/tickets/:ticketCode` returns ticket with QR image
+  - `POST /api/attendance/check-in` validates ticket code, verifies organizer owns event, records attendance
+  - Scanning already-used ticket returns 409 "Ticket has already been checked in"
+- **Risks/blockers:** None. Database schema already has `Registration`, `Ticket`, and `Attendance` models with unique constraints in Neon.
