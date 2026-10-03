@@ -1,11 +1,11 @@
-feat(events): event CRUD, search, filter, pagination, categories, and image upload
+feat(tickets): registration, atomic capacity enforcement, QR ticket generation, and check-in attendance
 
-- Implement Zod validation schemas for events, categories, and search filters
-- Implement Multer memory-storage upload middleware
-- Implement Cloudinary image upload controller with graceful fallback for local testing
-- Implement category controller (list categories with event count, get category by slug, admin create)
-- Implement event controller (public list with search/filter/pagination, get featured, get by slug, organizer create, update, delete, getOrganizerEvents)
-- Enforce strict RBAC: only ORGANIZER and ADMIN can create events (USER gets 403 Forbidden)
-- Enforce event ownership: organizers can only edit/delete their own events; ADMIN can edit any
-- Calculate real-time spotsLeft and isSoldOut based on confirmed registrations
+- Implement atomic registration transaction with capacity check & duplicate registration prevention
+- Implement QR code data URI generation using qrcode library with error correction
+- Implement unpredictable cryptographic ticket codes (format: TKT-XXXXXXXX-YYYY)
+- Implement user registration history (GET /api/registrations/my-registrations) and registration cancellation
+- Implement organizer attendee management (GET /api/registrations/event/:id/attendees)
+- Implement ticket retrieval and scanner preview verification (GET /api/tickets/:ticketCode, /verify/:ticketCode)
+- Implement QR scanner check-in endpoint with duplicate check-in rejection (409 Conflict)
+- Implement organizer event attendance summary with turnout metrics (GET /api/attendance/event/:id)
 - Verified with 10 automated end-to-end smoke tests (all passing)
