@@ -1,0 +1,264 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ROLES ───────────────────────────────────────────────────────────────────
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique // VISITOR, USER, ORGANIZER, ADMIN
+  createdAt DateTime @default(now())
+  users     User[]
+}
+
+// ─── USERS ───────────────────────────────────────────────────────────────────
+model User {
+  id              Int      @id @default(autoincrement())
+  name            String
+  email           String   @unique
+  passwordHash    String
+  avatar          String?  // Cloudinary URL
+  avatarPublicId  String?  // Cloudinary public_id for deletion
+  bio             String?
+  isEmailVerified Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  roleId          Int
+  role            Role     @relation(fields: [roleId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  sessions          Session[]
+  refreshTokens     RefreshToken[]
+  passwordResets    PasswordReset[]
+  emailVerifications EmailVerification[]
+  events            Event[]             @relation("OrganizerEvents")
+  registrations     Registration[]
+  notifications     Notification[]
+  activityLogs      ActivityLog[]
+  attendanceScanned Attendance[]        @relation("ScannedBy")
+}
+
+// ─── SESSIONS ────────────────────────────────────────────────────────────────
+model Session {
+  id        String   @id @default(uuid())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAgent String?
+  ipAddress String?
+  isValid   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+// ─── REFRESH TOKENS ───────────────────────────────────────────────────────────
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isRevoked Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+// ─── PASSWORD RESET ───────────────────────────────────────────────────────────
+model PasswordReset {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isUsed    Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+// ─── EMAIL VERIFICATION ───────────────────────────────────────────────────────
+model EmailVerification {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isUsed    Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+// ─── CATEGORIES ───────────────────────────────────────────────────────────────
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  createdAt   DateTime @default(now())
+  events      Event[]
+}
+
+// ─── EVENTS ───────────────────────────────────────────────────────────────────
+model Event {
+  id            Int      @id @default(autoincrement())
+  title         String
+  slug          String   @unique
+  description   String
+  organizerId   Int
+  organizer     User     @relation("OrganizerEvents", fields: [organizerId], references: [id])
+  categoryId    Int
+  category      Category @relation(fields: [categoryId], references: [id])
+
+  // Location
+  venue         String
+  address       String?
+  city          String
+  country       String   @default("India")
+  latitude      Float?
+  longitude     Float?
+
+  // Time
+  startDate     DateTime
+  endDate       DateTime
+
+  // Capacity & Pricing
+  capacity      Int
+  price         Float    @default(0)
+  isFree        Boolean  @default(true)
+  currency      String   @default("INR")
+
+  // Media
+  bannerUrl     String?  // Cloudinary URL
+  bannerPublicId String? // Cloudinary public_id
+
+  // Status
+  status        EventStatus @default(DRAFT)
+  isFeatured    Boolean     @default(false)
+  isPublished   Boolean     @default(false)
+
+  // Tags
+  tags          String[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  images        EventImage[]
+  registrations Registration[]
+  tickets       Ticket[]
+  attendance    Attendance[]
+  notifications Notification[]
+  activityLogs  ActivityLog[]
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
+}
+
+// ─── EVENT IMAGES ─────────────────────────────────────────────────────────────
+model EventImage {
+  id        Int      @id @default(autoincrement())
+  eventId   Int
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  url       String
+  publicId  String   // Cloudinary public_id
+  caption   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+// ─── REGISTRATIONS ────────────────────────────────────────────────────────────
+model Registration {
+  id          Int                @id @default(autoincrement())
+  eventId     Int
+  event       Event              @relation(fields: [eventId], references: [id])
+  userId      Int
+  user        User               @relation(fields: [userId], references: [id])
+  status      RegistrationStatus @default(CONFIRMED)
+  amount      Float              @default(0)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  ticket      Ticket?
+
+  @@unique([eventId, userId]) // prevent duplicate registration
+}
+
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  WAITLISTED
+}
+
+// ─── TICKETS ─────────────────────────────────────────────────────────────────
+model Ticket {
+  id             Int          @id @default(autoincrement())
+  ticketCode     String       @unique @default(uuid()) // unpredictable QR identifier
+  registrationId Int          @unique
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  eventId        Int
+  event          Event        @relation(fields: [eventId], references: [id])
+  qrCodeUrl      String?      // base64 or URL to QR image
+  issuedAt       DateTime     @default(now())
+  isValid        Boolean      @default(true)
+
+  attendance     Attendance?
+}
+
+// ─── ATTENDANCE ───────────────────────────────────────────────────────────────
+model Attendance {
+  id          Int      @id @default(autoincrement())
+  ticketId    Int      @unique
+  ticket      Ticket   @relation(fields: [ticketId], references: [id])
+  eventId     Int
+  event       Event    @relation(fields: [eventId], references: [id])
+  scannedById Int
+  scannedBy   User     @relation("ScannedBy", fields: [scannedById], references: [id])
+  checkedInAt DateTime @default(now())
+}
+
+// ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
+model Notification {
+  id        Int              @id @default(autoincrement())
+  userId    Int
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId   Int?
+  event     Event?           @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+}
+
+enum NotificationType {
+  REGISTRATION_CONFIRMED
+  EVENT_REMINDER
+  EVENT_CANCELLED
+  EVENT_UPDATED
+  TICKET_ISSUED
+  CHECK_IN_SUCCESS
+  GENERAL
+}
+
+// ─── ACTIVITY LOGS ────────────────────────────────────────────────────────────
+model ActivityLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  eventId   Int?
+  event     Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  action    String   // e.g. "USER_LOGIN", "EVENT_CREATED", "TICKET_SCANNED"
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}

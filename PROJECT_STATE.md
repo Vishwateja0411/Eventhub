@@ -12,7 +12,7 @@
 |---|---|
 | Node.js | v24.21.0 |
 | npm | 11.19.0 |
-| Git | Installed (confirmed by user) |
+| Git | v2.56.0 — at `C:\Users\vishw\AppData\Local\Programs\Git\bin\git.exe` (not on PATH; use full path in all commands) |
 | OS | Windows (PowerShell scripts disabled — use `cmd /c`) |
 | Project root | `C:\Users\vishw\Desktop\EventHub` |
 | Frontend dir | `C:\Users\vishw\Desktop\EventHub\frontend` |
@@ -36,7 +36,7 @@
 
 | Batch | Title | Status | Notes |
 |---|---|---|---|
-| B1 | Checkpoint files + folder scaffold + Git init | ✅ APPROVED & IN PROGRESS | Approved 14:10 IST |
+| B1 | Checkpoint files + folder scaffold + Git init | ✅ COMPLETE | Commit `2cfefcc` at 14:18 IST |
 
 ---
 
@@ -146,10 +146,17 @@
 
 ## Verification Evidence
 
-*(Populated after each batch completion)*
+### B1 — Completed 14:18 IST
+- `AI_RULES.md` created and readable ✅
+- `PROJECT_STATE.md` created and readable ✅
+- `README.md` skeleton created ✅
+- `.gitignore` created (covers .env, node_modules, dist, secrets) ✅
+- `backend/` and `frontend/` directories exist ✅
+- `git log --oneline` shows: `2cfefcc chore: initial scaffold` ✅
+- Git binary located at `C:\Users\vishw\AppData\Local\Programs\Git\bin\git.exe` (not on system PATH — workaround in place) ⚠️
 
 ---
 
 ## Next Batch
 
-**B2** — Backend foundation: Node/Express + Prisma schema (all 15 tables) + security middleware + `.env.example`
+**B2** — Backend foundation: `npm init` + install Express/Prisma/security packages + full Prisma schema (all 15 tables) + `.env.example` + basic server entrypoint
