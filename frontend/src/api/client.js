@@ -1,7 +1,15 @@
 import axios from 'axios';
 
+const rawBaseURL = import.meta.env.VITE_API_URL || '/api';
+// Automatically ensure the baseURL ends with /api for backend REST routes
+const normalizedBaseURL = rawBaseURL.startsWith('http')
+  ? (rawBaseURL.replace(/\/+$/, '').endsWith('/api')
+      ? rawBaseURL.replace(/\/+$/, '')
+      : `${rawBaseURL.replace(/\/+$/, '')}/api`)
+  : '/api';
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: normalizedBaseURL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
