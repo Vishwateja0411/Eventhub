@@ -1,19 +1,10 @@
-feat: backend foundation - express app, prisma schema, security middleware
+feat(auth): full authentication & role-based authorization with Neon PostgreSQL
 
-- npm packages: express, helmet, cors, rate-limit, cookie-parser, bcryptjs,
-  jsonwebtoken, cloudinary, nodemailer, uuid, qrcode, zod, multer, dotenv
-- Dev: prisma@5.22.0, nodemon
-- Prisma schema with all 15 required tables:
-  Role, User, Session, RefreshToken, PasswordReset, EmailVerification,
-  Category, Event, EventImage, Registration, Ticket, Attendance,
-  Notification, ActivityLog + EventStatus/RegistrationStatus/NotificationType enums
-- Express app with Helmet, CORS, rate limiting, cookie-parser
-- Global error handler (Prisma, JWT, Zod, HTTP errors)
-- 404 notFound middleware
-- Prisma singleton client
-- Cloudinary and Nodemailer lib modules
-- Route stubs for all 10 route groups
-- Prisma seed script with roles, test users, categories, sample events
-- .env.example with all required placeholders
-- package.json scripts: dev, start, db:migrate, db:seed, db:generate
-- Verified: APP_LOAD_OK + GET /health returns {status: ok}
+- Connect Neon PostgreSQL database and push all 15 Prisma tables
+- Seed database with 4 roles (VISITOR, USER, ORGANIZER, ADMIN), 3 test users, 8 categories, 2 events
+- Implement Zod validation schemas for registration, login, password reset
+- Implement authenticate middleware (HTTP-only cookies + Bearer token)
+- Implement authorize middleware for Role-Based Access Control (RBAC)
+- Implement full auth controller: register, login, refresh, logout, getMe, forgotPassword, resetPassword, verifyEmail
+- Wire up /api/auth routes with rate limiting
+- Verified with automated end-to-end smoke tests (all passing)

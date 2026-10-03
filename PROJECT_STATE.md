@@ -29,6 +29,8 @@
 | D1 | Monorepo: `frontend/` + `backend/` under one Git repo | Simpler for single-person submission; one GitHub URL |
 | D2 | Use `cmd /c` for all shell commands | PowerShell script execution disabled on this machine |
 | D3 | Bonus features deferred (OAuth, Stripe, Docker, Redis, Swagger, tests, PWA) | ~5 hrs insufficient; required features first |
+| D4 | Prisma v5.22.0 (stable ORM) used instead of v8 RC | npm auto-installed Prisma v8 (platform CLI), which has incompatible CLI. Downgraded to stable v5 that matches assignment expectations. |
+| D5 | @prisma/client in production deps, prisma CLI in devDeps | Server needs @prisma/client at runtime; CLI only needed at build time |
 
 ---
 
@@ -37,6 +39,7 @@
 | Batch | Title | Status | Notes |
 |---|---|---|---|
 | B1 | Checkpoint files + folder scaffold + Git init | ✅ COMPLETE | Commit `2cfefcc` at 14:18 IST |
+| B2 | Backend foundation - Express + Prisma schema + security | ✅ COMPLETE | Commit `aafbe39` at 14:29 IST |
 
 ---
 
@@ -146,7 +149,16 @@
 
 ## Verification Evidence
 
-### B1 — Completed 14:18 IST
+### B2 — Completed 14:29 IST
+- `npm install` succeeded: 166 packages, 0 new vulnerabilities in production deps ✅
+- Prisma v8 RC discovered and downgraded to stable v5.22.0 ✅
+- `prisma generate` succeeded: Prisma Client generated to node_modules ✅
+- `node _test_load.js` output: `APP_LOAD_OK` ✅
+- `GET http://localhost:5000/health` returned `{status:ok,service:EventHub API}` ✅
+- `node_modules/` correctly gitignored (not in `git status`) ✅
+- `backend/.env.example` committed, real `.env` gitignored ✅
+- Commit `aafbe39` with 24 new files ✅
+- 3 high severity vulnerabilities exist in dev deps (prisma toolchain) ⚠️ — not in production code path
 - `AI_RULES.md` created and readable ✅
 - `PROJECT_STATE.md` created and readable ✅
 - `README.md` skeleton created ✅
