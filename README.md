@@ -21,7 +21,6 @@ EventHub is a modern, enterprise-grade full-stack event discovery, registration,
 8. [Local Installation & Setup Guide](#local-installation--setup-guide)
 9. [Production Deployment Guide](#production-deployment-guide)
 10. [Security & Robustness Implementation](#security--robustness-implementation)
-11. [5–10 Minute Demo Video Walkthrough Guide](#510-minute-demo-video-walkthrough-guide)
 
 ---
 
