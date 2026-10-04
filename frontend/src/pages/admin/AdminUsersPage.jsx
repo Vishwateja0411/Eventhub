@@ -8,6 +8,8 @@ import {
   Filter,
   Mail,
   Calendar,
+  Pencil,
+  X,
 } from 'lucide-react';
 import client from '../../api/client';
 
@@ -25,6 +27,18 @@ export default function AdminUsersPage() {
   const [roleFilter, setRoleFilter] = useState('ALL');
   const [toast, setToast] = useState('');
 
+  // Edit User Modal State
+  const [editingUser, setEditingUser] = useState(null);
+  const [editForm, setEditForm] = useState({
+    name: '',
+    email: '',
+    role: 'USER',
+    isActive: true,
+    isEmailVerified: false,
+  });
+  const [editLoading, setEditLoading] = useState(false);
+  const [editError, setEditError] = useState('');
+
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -38,6 +52,39 @@ export default function AdminUsersPage() {
     };
     fetch();
   }, []);
+
+  const handleOpenEdit = (user) => {
+    setEditingUser(user);
+    setEditForm({
+      name: user.name || '',
+      email: user.email || '',
+      role: user.role || 'USER',
+      isActive: Boolean(user.isActive),
+      isEmailVerified: Boolean(user.isEmailVerified),
+    });
+    setEditError('');
+  };
+
+  const handleSaveEdit = async (e) => {
+    e.preventDefault();
+    setEditLoading(true);
+    setEditError('');
+    try {
+      const res = await client.put(`/admin/users/${editingUser.id}`, editForm);
+      if (res.data?.success) {
+        setUsers((prev) =>
+          prev.map((u) => (u.id === editingUser.id ? { ...u, ...res.data.user } : u))
+        );
+        setToast(res.data.message || 'User updated successfully.');
+        setTimeout(() => setToast(''), 4000);
+        setEditingUser(null);
+      }
+    } catch (err) {
+      setEditError(err.response?.data?.message || 'Failed to update user.');
+    } finally {
+      setEditLoading(false);
+    }
+  };
 
   const handleToggle = async (userId) => {
     try {
@@ -184,20 +231,31 @@ export default function AdminUsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button
-                        onClick={() => handleToggle(u.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ml-auto ${
-                          u.isActive
-                            ? 'text-rose-400 hover:bg-rose-950/40 border border-rose-900/50'
-                            : 'text-emerald-400 hover:bg-emerald-950/40 border border-emerald-900/50'
-                        }`}
-                      >
-                        {u.isActive ? (
-                          <><UserX className="w-3 h-3" /> Block</>
-                        ) : (
-                          <><UserCheck className="w-3 h-3" /> Unblock</>
-                        )}
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => handleOpenEdit(u)}
+                          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 transition-colors"
+                          title="Edit user details"
+                        >
+                          <Pencil className="w-3 h-3 text-indigo-400" />
+                          <span>Edit</span>
+                        </button>
+
+                        <button
+                          onClick={() => handleToggle(u.id)}
+                          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                            u.isActive
+                              ? 'text-rose-400 hover:bg-rose-950/40 border border-rose-900/50'
+                              : 'text-emerald-400 hover:bg-emerald-950/40 border border-emerald-900/50'
+                          }`}
+                        >
+                          {u.isActive ? (
+                            <><UserX className="w-3 h-3" /> Block</>
+                          ) : (
+                            <><UserCheck className="w-3 h-3" /> Unblock</>
+                          )}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -211,6 +269,126 @@ export default function AdminUsersPage() {
           </div>
         )}
       </div>
+
+      {/* ─── EDIT USER MODAL ─────────────────────────────────────── */}
+      {editingUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl p-6 text-white space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+              <div>
+                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Pencil className="w-5 h-5 text-indigo-400" />
+                  Edit User Account
+                </h2>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Update account credentials, permissions, and status.
+                </p>
+              </div>
+              <button
+                onClick={() => setEditingUser(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {editError && (
+              <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <span>{editError}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSaveEdit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editForm.name}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={editForm.email}
+                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    Account Role
+                  </label>
+                  <select
+                    value={editForm.role}
+                    onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+                  >
+                    <option value="USER">USER (Attendee)</option>
+                    <option value="ORGANIZER">ORGANIZER (Event Host)</option>
+                    <option value="ADMIN">ADMIN (Administrator)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    Account Status
+                  </label>
+                  <select
+                    value={editForm.isActive ? 'active' : 'blocked'}
+                    onChange={(e) => setEditForm({ ...editForm, isActive: e.target.value === 'active' })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+                  >
+                    <option value="active">Active (Access Allowed)</option>
+                    <option value="blocked">Blocked (Access Suspended)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <label className="flex items-center gap-2.5 cursor-pointer text-xs font-medium text-slate-300">
+                  <input
+                    type="checkbox"
+                    checked={editForm.isEmailVerified}
+                    onChange={(e) => setEditForm({ ...editForm, isEmailVerified: e.target.checked })}
+                    className="w-4 h-4 rounded-sm text-indigo-600 focus:ring-indigo-500 bg-slate-800 border-slate-700"
+                  />
+                  <span>Mark email as verified</span>
+                </label>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setEditingUser(null)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={editLoading}
+                  className="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 rounded-xl shadow-md transition-all flex items-center gap-2"
+                >
+                  {editLoading ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

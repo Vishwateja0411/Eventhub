@@ -6,6 +6,7 @@ const {
   getPlatformStats,
   getAllUsers,
   toggleUserStatus,
+  updateUser,
   getAllPayments,
 } = require('../controllers/admin.controller');
 
@@ -15,6 +16,8 @@ router.use(authenticate, authorize('ADMIN'));
 router.get('/stats', getPlatformStats);
 router.get('/users', getAllUsers);
 router.patch('/users/:id/toggle-status', toggleUserStatus);
+router.put('/users/:id', updateUser);
+router.patch('/users/:id', updateUser);
 router.get('/payments', getAllPayments);
 
 module.exports = router;

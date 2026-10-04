@@ -154,6 +154,92 @@ const toggleUserStatus = async (req, res, next) => {
 };
 
 /**
+ * PUT /api/admin/users/:id
+ * Protected: ADMIN only
+ */
+const updateUser = async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const { name, email, role, isActive, isEmailVerified } = req.body;
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
+      include: { role: true },
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({ success: false, message: 'User not found.' });
+    }
+
+    const updateData = {};
+
+    if (name !== undefined) {
+      if (!name.trim()) {
+        return res.status(400).json({ success: false, message: 'Name cannot be empty.' });
+      }
+      updateData.name = name.trim();
+    }
+
+    if (email !== undefined) {
+      const cleanEmail = email.trim().toLowerCase();
+      if (!cleanEmail) {
+        return res.status(400).json({ success: false, message: 'Email cannot be empty.' });
+      }
+      if (cleanEmail !== existingUser.email) {
+        const emailTaken = await prisma.user.findUnique({ where: { email: cleanEmail } });
+        if (emailTaken) {
+          return res.status(400).json({ success: false, message: 'Email is already taken by another account.' });
+        }
+        updateData.email = cleanEmail;
+      }
+    }
+
+    if (role !== undefined) {
+      const targetRole = await prisma.role.findUnique({ where: { name: role.toUpperCase() } });
+      if (!targetRole) {
+        return res.status(400).json({ success: false, message: `Invalid role: ${role}. Valid roles are USER, ORGANIZER, ADMIN.` });
+      }
+      updateData.roleId = targetRole.id;
+    }
+
+    if (isActive !== undefined) {
+      updateData.isActive = Boolean(isActive);
+    }
+
+    if (isEmailVerified !== undefined) {
+      updateData.isEmailVerified = Boolean(isEmailVerified);
+    }
+
+    const updated = await prisma.user.update({
+      where: { id },
+      data: updateData,
+      include: {
+        role: { select: { name: true } },
+        _count: {
+          select: {
+            events: true,
+            registrations: true,
+          },
+        },
+      },
+    });
+
+    res.json({
+      success: true,
+      message: 'User updated successfully.',
+      user: {
+        ...updated,
+        role: updated.role.name,
+        eventCount: updated._count.events,
+        registrationCount: updated._count.registrations,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * GET /api/admin/payments
  * Protected: ADMIN only
  */
@@ -202,5 +288,6 @@ module.exports = {
   getPlatformStats,
   getAllUsers,
   toggleUserStatus,
+  updateUser,
   getAllPayments,
 };
