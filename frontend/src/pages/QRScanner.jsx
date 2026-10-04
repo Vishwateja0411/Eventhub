@@ -170,7 +170,7 @@ export default function QRScanner() {
         {/* Navigation & Header */}
         <div className="flex items-center justify-between">
           <Link
-            to="/dashboard/organizer"
+            to="/organizer/dashboard"
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
