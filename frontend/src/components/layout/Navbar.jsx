@@ -12,6 +12,8 @@ import {
   Menu,
   X,
   Compass,
+  Layers,
+  Sparkles,
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -40,14 +42,30 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-5">
+          <nav className="hidden md:flex items-center gap-6">
             <Link
               to="/events"
               className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
             >
               <Compass className="w-4 h-4" />
-              Explore
+              Explore Events
             </Link>
+
+            <a
+              href="/#categories"
+              className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
+            >
+              <Layers className="w-4 h-4" />
+              Categories
+            </a>
+
+            <a
+              href="/#featured"
+              className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
+            >
+              <Sparkles className="w-4 h-4" />
+              Featured
+            </a>
 
             {isAuthenticated && user?.role === 'USER' && (
               <Link
@@ -68,7 +86,14 @@ export default function Navbar() {
               </Link>
             )}
 
-
+            {user?.role === 'ADMIN' && (
+              <Link
+                to="/admin/dashboard"
+                className="flex items-center gap-1.5 text-sm font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-700 transition-colors"
+              >
+                Admin Console
+              </Link>
+            )}
           </nav>
 
           {/* Right Action Icons & Auth */}
@@ -156,6 +181,20 @@ export default function Navbar() {
           >
             Explore Events
           </Link>
+          <a
+            href="/#categories"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-slate-800"
+          >
+            Categories
+          </a>
+          <a
+            href="/#featured"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-slate-800"
+          >
+            Featured
+          </a>
           {isAuthenticated && user?.role === 'USER' && (
             <Link
               to="/my-tickets"
