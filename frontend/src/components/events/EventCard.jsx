@@ -1,6 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Users, ArrowUpRight } from 'lucide-react';
+import { Calendar, MapPin, Users } from 'lucide-react';
+
+const DEFAULT_CATEGORY_IMAGES = {
+  Technology: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80',
+  Music: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=80',
+  Arts: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800&auto=format&fit=crop&q=80',
+  Business: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&auto=format&fit=crop&q=80',
+  Education: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&auto=format&fit=crop&q=80',
+  Sports: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&auto=format&fit=crop&q=80',
+  Food: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=80',
+  Health: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format&fit=crop&q=80',
+};
+
+const GENERIC_EVENT_IMAGE = 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80';
 
 export default function EventCard({ event }) {
   const startDate = new Date(event.startDate);
@@ -15,23 +28,18 @@ export default function EventCard({ event }) {
 
   const isSoldOut = event.spotsLeft <= 0;
   const isFree = event.isFree || event.price === 0;
+  const displayImage = event.bannerUrl || DEFAULT_CATEGORY_IMAGES[event.category?.name] || GENERIC_EVENT_IMAGE;
 
   return (
     <div className="group glass-card rounded-2xl overflow-hidden hover:shadow-glow transition-all duration-300 flex flex-col hover:-translate-y-1">
       {/* Banner Media */}
-      <div className="relative h-48 w-full overflow-hidden bg-gradient-to-tr from-indigo-900 to-slate-900">
-        {event.bannerUrl ? (
-          <img
-            src={event.bannerUrl}
-            alt={event.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center p-6 text-center bg-gradient-to-br from-indigo-600 to-purple-800 text-white">
-            <span className="font-bold text-lg">{event.title}</span>
-          </div>
-        )}
+      <div className="relative h-48 w-full overflow-hidden bg-slate-900">
+        <img
+          src={displayImage}
+          alt={event.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        />
 
         {/* Top Badges */}
         <div className="absolute top-3 left-3 flex gap-2">

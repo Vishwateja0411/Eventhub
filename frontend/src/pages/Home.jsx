@@ -50,38 +50,39 @@ export default function Home() {
   };
 
   return (
-    <div className="space-y-24 pb-24">
+    <div className="space-y-20 pb-20">
       {/* ─── HERO SECTION ────────────────────────────────────────── */}
-      <section className="relative pt-8 sm:pt-14 pb-16 overflow-hidden">
-        {/* Ambient lighting mesh background */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/20 to-pink-500/15 dark:from-indigo-600/15 dark:via-purple-600/10 dark:to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 left-1/4 w-80 h-80 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-pink-500/10 dark:bg-pink-500/5 rounded-full blur-2xl pointer-events-none" />
+      <section className="relative pt-6 sm:pt-12 pb-12 overflow-hidden">
+        {/* Ambient lighting & subtle gradient backdrop */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(99,102,241,0.18),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(99,102,241,0.14),rgba(2,6,23,0))] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/20 to-pink-500/15 dark:from-indigo-600/15 dark:via-purple-600/10 dark:to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 left-10 w-72 h-72 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 right-10 w-72 h-72 bg-pink-500/10 dark:bg-pink-500/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-5xl mx-auto px-4 text-center relative z-10">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-50/90 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/80 mb-6 backdrop-blur-md shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-            <span>The Modern Event Platform for Creators & Communities</span>
+          {/* Live Platform Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-indigo-50/90 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/80 mb-6 backdrop-blur-md shadow-xs">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Live Event Platform for Next-Gen Experiences</span>
           </div>
 
-          {/* Main Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.15] mb-5 max-w-4xl mx-auto">
-            Discover Unforgettable Experiences with{' '}
-            <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
-              Instant QR Ticketing
+          {/* Balanced 2-line Headline — No orphaned words */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-5 max-w-4xl mx-auto">
+            Discover Extraordinary Events
+            <span className="block mt-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
+              with Instant QR Passes
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
-            Find tech conferences, design summits, hands-on workshops, and music fests. Register in seconds and gain seamless check-in entry with cryptographic digital passes.
+            Join premier tech summits, design conferences, workshops, and music festivals. Instant cryptographic entry passes, verified admission, and zero gate queues.
           </p>
 
-          {/* Interactive Hero Search Bar */}
+          {/* Interactive Command Search Bar */}
           <form
             onSubmit={handleHeroSearch}
-            className="w-full max-w-3xl mx-auto p-2 sm:p-2.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-xl shadow-indigo-500/5 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-4"
+            className="w-full max-w-3xl mx-auto p-2 rounded-2xl bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-2xl shadow-indigo-500/10 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-4 transition-all focus-within:border-indigo-500/50 focus-within:ring-2 focus-within:ring-indigo-500/20"
           >
             {/* Keyword Input */}
             <div className="flex-1 flex items-center gap-3 px-3 py-2 text-slate-400">
@@ -95,16 +96,19 @@ export default function Home() {
               />
             </div>
 
+            {/* Subtle Divider */}
+            <div className="hidden sm:block h-7 w-px bg-slate-200 dark:border-slate-800" />
+
             {/* Location selector */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-2 border-l border-slate-200 dark:border-slate-800 text-slate-400">
+            <div className="flex items-center gap-2 px-3 py-2 text-slate-400">
               <MapPin className="w-4 h-4 text-indigo-500 flex-shrink-0" />
               <select
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
-                className="bg-transparent text-xs sm:text-sm text-slate-700 dark:text-slate-300 outline-none cursor-pointer pr-2"
+                className="bg-transparent text-xs sm:text-sm text-slate-700 dark:text-slate-300 outline-none cursor-pointer pr-2 font-medium"
               >
                 <option value="" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">All Cities</option>
-                <option value="Bengaluru" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Bengaluru</option>
+                <option value="Bangalore" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Bengaluru</option>
                 <option value="Mumbai" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Mumbai</option>
                 <option value="Delhi" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Delhi NCR</option>
                 <option value="Hyderabad" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Hyderabad</option>
@@ -115,30 +119,30 @@ export default function Home() {
             {/* Submit button */}
             <button
               type="submit"
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm shadow-md shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm shadow-md shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
-              Find Events
+              <span>Find Events</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
 
           {/* Quick Discovery Tags */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
-            <span className="text-xs font-medium text-slate-400 dark:text-slate-500 mr-1 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-amber-400" /> Popular:
+            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 mr-1 flex items-center gap-1">
+              Popular:
             </span>
             {[
               { label: '🔥 Trending', query: 'sortBy=date' },
               { label: '💻 Tech & AI', query: 'category=technology' },
-              { label: '🎨 Design', query: 'category=design' },
+              { label: '🎨 Arts & Design', query: 'category=arts' },
               { label: '🎵 Music', query: 'category=music' },
               { label: '💼 Business', query: 'category=business' },
-              { label: '⚡ Free Events', query: 'isFree=true' },
+              { label: '⚡ Free Passes', query: 'isFree=true' },
             ].map((pill, idx) => (
               <Link
                 key={idx}
                 to={`/events?${pill.query}`}
-                className="px-3 py-1 rounded-full text-xs font-medium bg-slate-100/90 hover:bg-slate-200/90 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700/60 transition-all hover:scale-105"
+                className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white/70 dark:bg-slate-900/70 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 shadow-xs transition-all hover:scale-105 hover:border-indigo-400/50"
               >
                 {pill.label}
               </Link>
@@ -146,23 +150,23 @@ export default function Home() {
           </div>
 
           {/* Social Proof & Trust Strip */}
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-slate-500 dark:text-slate-400 mb-12">
+          <div className="inline-flex flex-wrap items-center justify-center gap-4 sm:gap-6 px-5 py-2.5 rounded-full bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/70 dark:border-slate-800/80 shadow-xs text-xs text-slate-600 dark:text-slate-400 mb-12">
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
-                <div className="w-7 h-7 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
+                <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
                   AK
                 </div>
-                <div className="w-7 h-7 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-pink-500 to-rose-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
+                <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-pink-500 to-rose-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
                   SR
                 </div>
-                <div className="w-7 h-7 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
+                <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
                   VT
                 </div>
-                <div className="w-7 h-7 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
+                <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
                   +
                 </div>
               </div>
-              <span className="font-semibold text-slate-800 dark:text-slate-200">12,500+ attendees</span> registered
+              <span><strong className="text-slate-900 dark:text-white font-semibold">12,500+</strong> attendees registered</span>
             </div>
 
             <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
@@ -173,53 +177,53 @@ export default function Home() {
                   <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <span className="font-semibold text-slate-800 dark:text-slate-200">4.9/5</span> rating
+              <span><strong className="text-slate-900 dark:text-white font-semibold">4.9/5</strong> rating</span>
             </div>
 
             <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
 
             <div className="flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Cryptographic QR Verified</span>
+              <span>Instant QR Check-in</span>
             </div>
           </div>
 
           {/* Highlights bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto pt-8 border-t border-slate-200/60 dark:border-slate-800/60 text-left">
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/40 dark:bg-slate-900/40 border border-slate-200/40 dark:border-slate-800/40 backdrop-blur-sm hover:border-indigo-400/50 transition-all">
-              <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400">
+            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm hover:border-indigo-400/50 hover:shadow-xs transition-all">
+              <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
                 <QrCode className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-sm font-bold text-slate-900 dark:text-white">QR Check-in</p>
-                <p className="text-xs text-slate-500">1-second gate scan</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">1-second gate scan</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/40 dark:bg-slate-900/40 border border-slate-200/40 dark:border-slate-800/40 backdrop-blur-sm hover:border-emerald-400/50 transition-all">
-              <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400">
+            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm hover:border-emerald-400/50 hover:shadow-xs transition-all">
+              <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-sm font-bold text-slate-900 dark:text-white">Safe & Verified</p>
-                <p className="text-xs text-slate-500">Cryptographic tickets</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Cryptographic tickets</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/40 dark:bg-slate-900/40 border border-slate-200/40 dark:border-slate-800/40 backdrop-blur-sm hover:border-purple-400/50 transition-all">
-              <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-slate-800 text-purple-600 dark:text-purple-400">
+            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm hover:border-purple-400/50 hover:shadow-xs transition-all">
+              <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400">
                 <Zap className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-sm font-bold text-slate-900 dark:text-white">Zero Waitlist</p>
-                <p className="text-xs text-slate-500">Instant registration</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Instant registration</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/40 dark:bg-slate-900/40 border border-slate-200/40 dark:border-slate-800/40 backdrop-blur-sm hover:border-amber-400/50 transition-all">
-              <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-slate-800 text-amber-600 dark:text-amber-400">
+            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm hover:border-amber-400/50 hover:shadow-xs transition-all">
+              <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
                 <TrendingUp className="w-5 h-5" />
               </div>
               <div>
                 <p className="text-sm font-bold text-slate-900 dark:text-white">Live Analytics</p>
-                <p className="text-xs text-slate-500">Turnout tracking</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Turnout tracking</p>
               </div>
             </div>
           </div>
