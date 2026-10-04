@@ -42,13 +42,13 @@ export default function AdminLayout() {
   const SidebarContent = () => (
     <>
       {/* Brand */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-slate-700/50">
+      <div className="flex items-center gap-3 px-4 py-5 border-b border-slate-200 dark:border-slate-800">
         <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-orange-500 flex items-center justify-center shadow-lg">
           <ShieldCheck className="w-5 h-5 text-white" />
         </div>
         <div>
-          <p className="text-white font-bold text-sm leading-tight">EventHub</p>
-          <p className="text-rose-400 text-xs font-medium">Admin Console</p>
+          <p className="text-slate-900 dark:text-white font-bold text-sm leading-tight">EventHub</p>
+          <p className="text-rose-600 dark:text-rose-400 text-xs font-semibold">Admin Console</p>
         </div>
       </div>
 
@@ -62,8 +62,8 @@ export default function AdminLayout() {
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group ${
                 isActive
-                  ? 'bg-rose-600/20 text-rose-300 border border-rose-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                  ? 'bg-rose-50 dark:bg-rose-600/20 text-rose-600 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
               }`
             }
           >
@@ -75,19 +75,19 @@ export default function AdminLayout() {
       </nav>
 
       {/* User info & logout */}
-      <div className="px-3 py-4 border-t border-slate-700/50 space-y-3">
-        <div className="flex items-center gap-3 px-2 py-2 rounded-xl bg-slate-700/30">
+      <div className="px-3 py-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
+        <div className="flex items-center gap-3 px-2 py-2 rounded-xl bg-slate-100/80 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/40">
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-500 to-orange-500 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
             {user?.name?.slice(0, 2)?.toUpperCase() || 'AD'}
           </div>
           <div className="overflow-hidden">
-            <p className="text-white text-xs font-semibold truncate">{user?.name}</p>
-            <p className="text-rose-400 text-[10px] font-medium">Administrator</p>
+            <p className="text-slate-900 dark:text-white text-xs font-semibold truncate">{user?.name}</p>
+            <p className="text-rose-600 dark:text-rose-400 text-[10px] font-medium">Administrator</p>
           </div>
         </div>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:text-rose-400 hover:bg-slate-700/40 rounded-xl transition-colors"
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800/40 rounded-xl transition-colors"
         >
           <LogOut className="w-4 h-4" />
           Sign Out
@@ -97,28 +97,28 @@ export default function AdminLayout() {
   );
 
   return (
-    <div className="flex h-screen bg-slate-950 overflow-hidden">
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white overflow-hidden transition-colors duration-200">
       {/* ── Desktop Sidebar ──────────────────────────────── */}
-      <aside className="hidden lg:flex flex-col w-56 bg-slate-900 border-r border-slate-700/50 flex-shrink-0">
+      <aside className="hidden lg:flex flex-col w-56 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex-shrink-0">
         <SidebarContent />
       </aside>
 
       {/* ── Mobile Sidebar Overlay ───────────────────────── */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-56 bg-slate-900 border-r border-slate-700/50 flex flex-col transition-transform duration-300 lg:hidden ${
+        className={`fixed top-0 left-0 z-50 h-full w-56 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col transition-transform duration-300 lg:hidden ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex justify-end p-3">
           <button
             onClick={() => setSidebarOpen(false)}
-            className="p-1.5 text-slate-400 hover:text-white"
+            className="p-1.5 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>
@@ -129,16 +129,16 @@ export default function AdminLayout() {
       {/* ── Main Content ─────────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Topbar */}
-        <header className="flex items-center justify-between h-14 px-4 sm:px-6 bg-slate-900/80 border-b border-slate-700/50 backdrop-blur-sm flex-shrink-0">
+        <header className="flex items-center justify-between h-14 px-4 sm:px-6 bg-white/90 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 backdrop-blur-sm flex-shrink-0">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-1.5 text-slate-400 hover:text-white"
+            className="lg:hidden p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           >
             <Menu className="w-5 h-5" />
           </button>
 
           <div className="hidden lg:flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-full bg-rose-900/40 text-rose-300 text-[10px] font-bold uppercase tracking-widest border border-rose-800/50">
+            <span className="px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 text-[10px] font-bold uppercase tracking-widest border border-rose-200 dark:border-rose-800/50">
               Root Admin
             </span>
           </div>
@@ -147,7 +147,7 @@ export default function AdminLayout() {
             <NotificationBell />
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/50 transition-colors"
+              className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
               aria-label="Toggle theme"
             >
               {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
@@ -156,7 +156,7 @@ export default function AdminLayout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-slate-950">
+        <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
           <Outlet />
         </main>
       </div>

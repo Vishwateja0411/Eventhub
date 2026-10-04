@@ -15,17 +15,17 @@ import {
 import client from '../../api/client';
 
 const StatCard = ({ label, value, icon: Icon, iconClass, trend, sub }) => (
-  <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors">
+  <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-xs transition-colors">
     <div className="flex items-center justify-between mb-4">
-      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">{label}</span>
+      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">{label}</span>
       <div className={`p-2.5 rounded-xl ${iconClass}`}>
         <Icon className="w-5 h-5" />
       </div>
     </div>
-    <p className="text-3xl font-extrabold text-white">{value}</p>
-    {sub && <p className="text-xs text-slate-500 mt-1">{sub}</p>}
+    <p className="text-3xl font-extrabold text-slate-900 dark:text-white">{value}</p>
+    {sub && <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{sub}</p>}
     {trend && (
-      <p className="text-xs text-emerald-400 mt-2 flex items-center gap-1">
+      <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-2 flex items-center gap-1 font-medium">
         <ArrowUpRight className="w-3 h-3" /> {trend}
       </p>
     )}
@@ -66,12 +66,12 @@ export default function AdminDashboardPage() {
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-900/40 text-rose-300 text-[10px] font-bold uppercase tracking-widest border border-rose-800/50">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 text-[10px] font-bold uppercase tracking-widest border border-rose-200 dark:border-rose-800/50">
             <ShieldCheck className="w-3 h-3" /> Root Admin
           </span>
         </div>
-        <h1 className="text-2xl font-extrabold text-white">Platform Overview</h1>
-        <p className="text-slate-500 text-sm mt-1">
+        <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white">Platform Overview</h1>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
           Global system monitoring, platform metrics, and live activity.
         </p>
       </div>
@@ -82,28 +82,28 @@ export default function AdminDashboardPage() {
           label="Total Users"
           value={stats?.stats?.totalUsers ?? '—'}
           icon={Users}
-          iconClass="bg-indigo-950/60 text-indigo-400"
+          iconClass="bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400"
           sub="Registered accounts"
         />
         <StatCard
           label="Total Events"
           value={stats?.stats?.totalEvents ?? '—'}
           icon={Calendar}
-          iconClass="bg-purple-950/60 text-purple-400"
+          iconClass="bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400"
           sub="Published & draft"
         />
         <StatCard
           label="Registrations"
           value={stats?.stats?.totalRegistrations ?? '—'}
           icon={Ticket}
-          iconClass="bg-emerald-950/60 text-emerald-400"
+          iconClass="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400"
           sub="Confirmed tickets"
         />
         <StatCard
           label="Turnout Rate"
           value={stats?.stats?.turnoutRate ?? '0%'}
           icon={TrendingUp}
-          iconClass="bg-amber-950/60 text-amber-400"
+          iconClass="bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400"
           sub={`${stats?.stats?.totalCheckedIn ?? 0} check-ins`}
         />
       </div>
@@ -111,28 +111,28 @@ export default function AdminDashboardPage() {
       {/* Revenue + Breakdowns */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Revenue */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-rose-900/30 via-slate-900 to-slate-900 border border-rose-800/30">
+        <div className="p-6 rounded-2xl bg-gradient-to-br from-rose-50 via-white to-slate-50 dark:from-rose-900/30 dark:via-slate-900 dark:to-slate-900 border border-rose-200 dark:border-rose-800/30 shadow-xs">
           <div className="flex items-center gap-2 mb-3">
-            <IndianRupee className="w-4 h-4 text-rose-400" />
-            <span className="text-sm font-bold text-white">Total Revenue</span>
+            <IndianRupee className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+            <span className="text-sm font-bold text-slate-900 dark:text-white">Total Revenue</span>
           </div>
-          <p className="text-4xl font-black text-white">
+          <p className="text-4xl font-black text-slate-900 dark:text-white">
             ₹{((stats?.stats?.totalRevenue || 0) / 100).toLocaleString('en-IN')}
           </p>
-          <p className="text-xs text-slate-500 mt-1">Confirmed payments</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Confirmed payments</p>
         </div>
 
         {/* Users by Role */}
-        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
           <div className="flex items-center gap-2">
-            <Users className="w-4 h-4 text-indigo-400" />
-            <h3 className="text-sm font-bold text-white">Users by Role</h3>
+            <Users className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Users by Role</h3>
           </div>
           <div className="space-y-2.5">
             {stats?.rolesBreakdown?.map((r) => (
               <div key={r.role} className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-slate-300">{r.role}</span>
-                <span className="px-2.5 py-0.5 rounded-full font-mono bg-slate-800 text-slate-200 border border-slate-700">
+                <span className="font-semibold text-slate-700 dark:text-slate-300">{r.role}</span>
+                <span className="px-2.5 py-0.5 rounded-full font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
                   {r.count}
                 </span>
               </div>
@@ -141,25 +141,25 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Events by Status */}
-        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-purple-400" />
-            <h3 className="text-sm font-bold text-white">Events by Status</h3>
+            <Calendar className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Events by Status</h3>
           </div>
           <div className="space-y-2.5">
             {stats?.eventsByStatus?.map((s) => {
               const colors = {
-                PUBLISHED: 'text-emerald-300',
-                DRAFT: 'text-amber-300',
-                CANCELLED: 'text-rose-300',
-                COMPLETED: 'text-indigo-300',
+                PUBLISHED: 'text-emerald-600 dark:text-emerald-300',
+                DRAFT: 'text-amber-600 dark:text-amber-300',
+                CANCELLED: 'text-rose-600 dark:text-rose-300',
+                COMPLETED: 'text-indigo-600 dark:text-indigo-300',
               };
               return (
                 <div key={s.status} className="flex items-center justify-between text-xs">
-                  <span className={`font-semibold ${colors[s.status] || 'text-slate-300'}`}>
+                  <span className={`font-semibold ${colors[s.status] || 'text-slate-700 dark:text-slate-300'}`}>
                     {s.status}
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full font-mono bg-slate-800 text-slate-200 border border-slate-700">
+                  <span className="px-2.5 py-0.5 rounded-full font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
                     {s.count}
                   </span>
                 </div>
@@ -170,19 +170,19 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Category Distribution */}
-      <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+      <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
         <div className="flex items-center gap-2">
-          <Layers className="w-4 h-4 text-emerald-400" />
-          <h3 className="text-sm font-bold text-white">Category Distribution</h3>
+          <Layers className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Category Distribution</h3>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {stats?.categoriesBreakdown?.map((cat) => (
             <div
               key={cat.name}
-              className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-800/60 border border-slate-700/50 text-xs"
+              className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 text-xs"
             >
-              <span className="text-slate-300 truncate">{cat.name}</span>
-              <span className="ml-2 font-mono text-slate-400 flex-shrink-0">{cat.count}</span>
+              <span className="text-slate-700 dark:text-slate-300 truncate">{cat.name}</span>
+              <span className="ml-2 font-mono text-slate-500 dark:text-slate-400 flex-shrink-0">{cat.count}</span>
             </div>
           ))}
         </div>
@@ -190,19 +190,19 @@ export default function AdminDashboardPage() {
 
       {/* Recent Activity */}
       {stats?.recentActivity?.length > 0 && (
-        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
           <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-rose-400" />
-            <h3 className="text-sm font-bold text-white">Live Platform Activity</h3>
+            <Activity className="w-4 h-4 text-rose-500 dark:text-rose-400" />
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Live Platform Activity</h3>
           </div>
-          <div className="divide-y divide-slate-800">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800">
             {stats.recentActivity.map((act) => (
               <div key={act.id} className="py-3 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-rose-400 font-semibold text-[11px]">
+                  <span className="font-mono text-rose-600 dark:text-rose-400 font-semibold text-[11px]">
                     {act.action}
                   </span>
-                  <span className="text-slate-400">
+                  <span className="text-slate-600 dark:text-slate-400">
                     {act.user ? `${act.user.name}` : 'System'}
                     {act.event ? ` — "${act.event.title}"` : ''}
                   </span>
