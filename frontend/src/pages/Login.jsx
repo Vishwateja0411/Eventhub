@@ -42,6 +42,7 @@ const ROLES = {
   ADMIN: {
     id: 'ADMIN',
     name: 'ADMIN',
+    tag: 'GOVERNANCE',
     title: 'ADMIN LOGIN',
     welcome: 'Welcome back, Administrator',
     subtitle: 'Manage EventHub',
@@ -68,6 +69,7 @@ const ROLES = {
   ORGANIZER: {
     id: 'ORGANIZER',
     name: 'ORGANIZER',
+    tag: 'EVENT CREATOR',
     title: 'ORGANIZER LOGIN',
     welcome: 'Welcome back, Organizer',
     subtitle: 'Create & Manage Events',
@@ -94,6 +96,7 @@ const ROLES = {
   USER: {
     id: 'USER',
     name: 'USER',
+    tag: 'ATTENDEE PASS',
     title: 'USER LOGIN',
     welcome: 'Welcome back',
     subtitle: 'Discover & Book Events',
@@ -308,105 +311,127 @@ export default function Login() {
             >
               {/* Heading */}
               <div className="text-center mb-6 sm:mb-8 space-y-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold uppercase tracking-wider mb-1">
-                  <Sparkles className="w-3 h-3 text-indigo-400" />
-                  <span>Role-Based Authentication</span>
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs font-semibold uppercase tracking-wider mb-1 shadow-[0_0_20px_rgba(99,102,241,0.2)] backdrop-blur-md">
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Enterprise Role Authentication</span>
                 </div>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400">
                   Choose Your Portal
                 </h1>
-                <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">
+                <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
                   Select your role to access your dedicated workspace and tools
                 </p>
               </div>
 
               {/* ── DESKTOP & TABLET ORBIT COMPOSITION (hidden on small mobile) ── */}
-              <div className="hidden md:block relative w-[600px] h-[520px] mx-auto select-none">
-                {/* SVG Orbit Lines & SVG Connector Beams */}
+              <div className="hidden md:block relative w-[680px] h-[550px] mx-auto select-none">
+                {/* Background Nebula Glow Spotlight */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-indigo-600/15 via-purple-600/10 to-cyan-500/10 rounded-full blur-[110px] pointer-events-none" />
+
+                {/* SVG Orbit Lines & SVG Connector Laser Beams */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
                   <defs>
                     <linearGradient id="orbitGlowAdmin" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#6366f1" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#6366f1" stopOpacity="0.1" />
+                      <stop offset="0%" stopColor="#818cf8" stopOpacity="0.9" />
+                      <stop offset="100%" stopColor="#6366f1" stopOpacity="0.2" />
                     </linearGradient>
                     <linearGradient id="orbitGlowOrg" x1="0%" y1="100%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#10b981" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#10b981" stopOpacity="0.1" />
+                      <stop offset="0%" stopColor="#34d399" stopOpacity="0.9" />
+                      <stop offset="100%" stopColor="#10b981" stopOpacity="0.2" />
                     </linearGradient>
                     <linearGradient id="orbitGlowUser" x1="100%" y1="100%" x2="0%" y2="0%">
-                      <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.1" />
+                      <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.9" />
+                      <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.2" />
                     </linearGradient>
+                    <filter id="laserGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="3" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
                   </defs>
 
-                  {/* Concentric Orbit Rings */}
+                  {/* Concentric Radar / Orbit Rings */}
                   <circle
-                    cx="300"
-                    cy="260"
-                    r="200"
-                    fill="none"
-                    stroke="rgba(255, 255, 255, 0.06)"
-                    strokeWidth="1.5"
-                    strokeDasharray="4 6"
-                  />
-                  <circle
-                    cx="300"
-                    cy="260"
-                    r="150"
+                    cx="340"
+                    cy="275"
+                    r="240"
                     fill="none"
                     stroke="rgba(255, 255, 255, 0.04)"
                     strokeWidth="1"
                   />
+                  <circle
+                    cx="340"
+                    cy="275"
+                    r="190"
+                    fill="none"
+                    stroke="rgba(99, 102, 241, 0.08)"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 6"
+                  />
+                  <circle
+                    cx="340"
+                    cy="275"
+                    r="140"
+                    fill="none"
+                    stroke="rgba(255, 255, 255, 0.05)"
+                    strokeWidth="1"
+                    strokeDasharray="2 4"
+                  />
 
-                  {/* Dynamic Connection Beams to Roles */}
-                  {/* Center (300, 260) to Admin Top (300, 80) */}
+                  {/* Dynamic Laser Beams to Roles */}
+                  {/* Center (340, 275) to Admin Top (340, 100) */}
                   <line
-                    x1="300"
-                    y1="260"
-                    x2="300"
-                    y2="80"
-                    stroke={hoveredRole === 'ADMIN' ? 'url(#orbitGlowAdmin)' : 'rgba(255, 255, 255, 0.12)'}
-                    strokeWidth={hoveredRole === 'ADMIN' ? 2.5 : 1.5}
+                    x1="340"
+                    y1="275"
+                    x2="340"
+                    y2="100"
+                    stroke={hoveredRole === 'ADMIN' ? 'url(#orbitGlowAdmin)' : 'rgba(255, 255, 255, 0.15)'}
+                    strokeWidth={hoveredRole === 'ADMIN' ? 3 : 1.5}
                     strokeDasharray={hoveredRole === 'ADMIN' ? 'none' : '3 4'}
+                    filter={hoveredRole === 'ADMIN' ? 'url(#laserGlow)' : 'none'}
                     className="transition-all duration-300"
                   />
 
-                  {/* Center (300, 260) to Organizer Bottom-Left (140, 410) */}
+                  {/* Center (340, 275) to Organizer Bottom-Left (150, 435) */}
                   <line
-                    x1="300"
-                    y1="260"
-                    x2="140"
-                    y2="410"
-                    stroke={hoveredRole === 'ORGANIZER' ? 'url(#orbitGlowOrg)' : 'rgba(255, 255, 255, 0.12)'}
-                    strokeWidth={hoveredRole === 'ORGANIZER' ? 2.5 : 1.5}
+                    x1="340"
+                    y1="275"
+                    x2="150"
+                    y2="435"
+                    stroke={hoveredRole === 'ORGANIZER' ? 'url(#orbitGlowOrg)' : 'rgba(255, 255, 255, 0.15)'}
+                    strokeWidth={hoveredRole === 'ORGANIZER' ? 3 : 1.5}
                     strokeDasharray={hoveredRole === 'ORGANIZER' ? 'none' : '3 4'}
+                    filter={hoveredRole === 'ORGANIZER' ? 'url(#laserGlow)' : 'none'}
                     className="transition-all duration-300"
                   />
 
-                  {/* Center (300, 260) to User Bottom-Right (460, 410) */}
+                  {/* Center (340, 275) to User Bottom-Right (530, 435) */}
                   <line
-                    x1="300"
-                    y1="260"
-                    x2="460"
-                    y2="410"
-                    stroke={hoveredRole === 'USER' ? 'url(#orbitGlowUser)' : 'rgba(255, 255, 255, 0.12)'}
-                    strokeWidth={hoveredRole === 'USER' ? 2.5 : 1.5}
+                    x1="340"
+                    y1="275"
+                    x2="530"
+                    y2="435"
+                    stroke={hoveredRole === 'USER' ? 'url(#orbitGlowUser)' : 'rgba(255, 255, 255, 0.15)'}
+                    strokeWidth={hoveredRole === 'USER' ? 3 : 1.5}
                     strokeDasharray={hoveredRole === 'USER' ? 'none' : '3 4'}
+                    filter={hoveredRole === 'USER' ? 'url(#laserGlow)' : 'none'}
                     className="transition-all duration-300"
                   />
                 </svg>
 
-                {/* ── Central Animated Circle ── */}
+                {/* ── Central Animated Hub ── */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
                   <div className="relative w-48 h-48 flex items-center justify-center">
-                    {/* Pulsing Outer Aura */}
+                    {/* Pulsing Outer Nebula Aura */}
                     <motion.div
                       animate={
                         shouldReduceMotion
                           ? {}
                           : {
-                              scale: hoveredRole ? [1.1, 1.25, 1.1] : [1, 1.12, 1],
-                              opacity: hoveredRole ? [0.4, 0.7, 0.4] : [0.25, 0.45, 0.25],
+                              scale: hoveredRole ? [1.1, 1.28, 1.1] : [1, 1.14, 1],
+                              opacity: hoveredRole ? [0.45, 0.75, 0.45] : [0.25, 0.45, 0.25],
                             }
                       }
                       transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
@@ -414,12 +439,12 @@ export default function Login() {
                       style={{
                         background:
                           hoveredRole === 'ADMIN'
-                            ? 'radial-gradient(circle, rgba(99,102,241,0.5) 0%, transparent 70%)'
+                            ? 'radial-gradient(circle, rgba(99,102,241,0.6) 0%, rgba(139,92,246,0.2) 50%, transparent 70%)'
                             : hoveredRole === 'ORGANIZER'
-                            ? 'radial-gradient(circle, rgba(16,185,129,0.5) 0%, transparent 70%)'
+                            ? 'radial-gradient(circle, rgba(16,185,129,0.6) 0%, rgba(20,184,166,0.2) 50%, transparent 70%)'
                             : hoveredRole === 'USER'
-                            ? 'radial-gradient(circle, rgba(14,165,233,0.5) 0%, transparent 70%)'
-                            : 'radial-gradient(circle, rgba(99,102,241,0.35) 0%, transparent 70%)',
+                            ? 'radial-gradient(circle, rgba(14,165,233,0.6) 0%, rgba(59,130,246,0.2) 50%, transparent 70%)'
+                            : 'radial-gradient(circle, rgba(99,102,241,0.4) 0%, rgba(168,85,247,0.15) 50%, transparent 70%)',
                       }}
                     />
 
@@ -427,30 +452,31 @@ export default function Login() {
                     <motion.div
                       animate={shouldReduceMotion ? {} : { rotate: 360 }}
                       transition={{
-                        duration: hoveredRole ? 10 : 25,
+                        duration: hoveredRole ? 12 : 28,
                         repeat: Infinity,
                         ease: 'linear',
                       }}
-                      className="absolute inset-0 rounded-full border border-dashed border-indigo-400/30"
+                      className="absolute inset-[-4px] rounded-full border border-dashed border-indigo-400/35"
                     />
 
-                    {/* Counter-rotating Secondary Accent Ring with Orbiting Dot */}
+                    {/* Counter-rotating Secondary Accent Ring with Dual Orbiting Beacons */}
                     <motion.div
                       animate={shouldReduceMotion ? {} : { rotate: -360 }}
                       transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
                       className="absolute inset-2 rounded-full border border-white/10"
                     >
-                      <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+                      <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
+                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]" />
                     </motion.div>
 
                     {/* Center Core Glass Orb */}
-                    <div className="relative w-36 h-36 rounded-full bg-gradient-to-b from-[#111633]/90 to-[#080b1c]/95 border border-white/15 backdrop-blur-xl shadow-2xl flex flex-col items-center justify-center p-3 text-center">
-                      <div className="w-2 h-2 rounded-full bg-indigo-400 mb-1.5 shadow-[0_0_8px_#818cf8] animate-pulse" />
-                      <span className="text-[13px] font-black tracking-[0.22em] text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-indigo-200">
+                    <div className="relative w-36 h-36 rounded-full bg-gradient-to-b from-[#13193a]/95 to-[#080b1d]/98 border border-white/20 backdrop-blur-2xl shadow-[0_0_30px_rgba(99,102,241,0.25)] flex flex-col items-center justify-center p-3 text-center">
+                      <div className="w-2 h-2 rounded-full bg-indigo-400 mb-1.5 shadow-[0_0_10px_#818cf8] animate-pulse" />
+                      <span className="text-[13px] font-black tracking-[0.24em] text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-100 to-slate-200">
                         EVENTHUB
                       </span>
-                      <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider mt-0.5">
-                        Choose your role
+                      <span className="text-[9px] uppercase font-bold text-indigo-300/80 tracking-widest mt-1 px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
+                        CHOOSE ROLE
                       </span>
                     </div>
                   </div>
@@ -470,7 +496,7 @@ export default function Login() {
                 {/* ── BOTTOM LEFT ROLE: ORGANIZER ── */}
                 <RoleOrbitCard
                   role={ROLES.ORGANIZER}
-                  positionClasses="bottom-4 left-6"
+                  positionClasses="bottom-2 left-4"
                   isHovered={hoveredRole === 'ORGANIZER'}
                   onHover={() => setHoveredRole('ORGANIZER')}
                   onLeave={() => setHoveredRole(null)}
@@ -481,7 +507,7 @@ export default function Login() {
                 {/* ── BOTTOM RIGHT ROLE: USER ── */}
                 <RoleOrbitCard
                   role={ROLES.USER}
-                  positionClasses="bottom-4 right-6"
+                  positionClasses="bottom-2 right-4"
                   isHovered={hoveredRole === 'USER'}
                   onHover={() => setHoveredRole('USER')}
                   onLeave={() => setHoveredRole(null)}
@@ -500,11 +526,11 @@ export default function Login() {
                       transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
                       className="absolute inset-0 rounded-full border border-dashed border-indigo-400/40"
                     />
-                    <div className="relative w-28 h-28 rounded-full bg-[#111633]/90 border border-white/15 backdrop-blur-xl flex flex-col items-center justify-center p-2 text-center shadow-lg">
+                    <div className="relative w-28 h-28 rounded-full bg-[#111633]/90 border border-white/20 backdrop-blur-xl flex flex-col items-center justify-center p-2 text-center shadow-lg">
                       <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mb-1 animate-pulse" />
                       <span className="text-xs font-black tracking-widest text-white">EVENTHUB</span>
-                      <span className="text-[9px] uppercase font-medium text-slate-400 mt-0.5">
-                        Choose your role
+                      <span className="text-[9px] uppercase font-bold text-indigo-300 mt-0.5">
+                        CHOOSE ROLE
                       </span>
                     </div>
                   </div>
@@ -519,27 +545,30 @@ export default function Login() {
                       type="button"
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleSelectRole(role.id)}
-                      className="w-full text-left p-4 rounded-2xl bg-white/[0.04] border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.07] transition-all flex items-center gap-4 group backdrop-blur-md"
+                      className="w-full text-left p-4 rounded-3xl relative overflow-hidden bg-[#0e1432]/92 border border-white/[0.14] hover:border-white/30 hover:bg-[#12193e] transition-all flex items-center gap-4 group backdrop-blur-2xl shadow-xl"
                     >
                       <div
-                        className={`w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br ${role.theme.gradient} text-white shadow-md`}
+                        className={`absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${role.theme.gradient} opacity-80`}
+                      />
+                      <div
+                        className={`w-12 h-12 rounded-2xl flex items-center justify-center bg-gradient-to-br ${role.theme.gradient} text-white shadow-md shrink-0`}
                       >
                         <RoleIcon className="w-6 h-6" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-base font-bold text-white tracking-wide">
+                          <span className="text-base font-extrabold text-white tracking-wide">
                             {role.name}
                           </span>
                           <span
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${role.theme.badge}`}
+                            className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${role.theme.badge}`}
                           >
-                            PORTAL
+                            {role.tag}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-400 mt-0.5">{role.subtitle}</p>
+                        <p className="text-xs text-slate-300 mt-0.5">{role.subtitle}</p>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
                     </motion.button>
                   );
                 })}
@@ -875,18 +904,18 @@ function RoleOrbitCard({
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       onClick={onClick}
-      whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
-      whileTap={shouldReduceMotion ? {} : { scale: 0.96 }}
+      whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.97 }}
       animate={
         shouldReduceMotion
           ? {}
           : {
-              y: isHovered ? -4 : [0, -6, 0],
+              y: isHovered ? -6 : [0, -5, 0],
             }
       }
       transition={{
         y: {
-          duration: 4,
+          duration: 4.5,
           repeat: isHovered ? 0 : Infinity,
           ease: 'easeInOut',
         },
@@ -894,44 +923,64 @@ function RoleOrbitCard({
       }}
     >
       <div
-        className={`w-44 p-4 rounded-2xl bg-[#0e122b]/85 border transition-all duration-300 backdrop-blur-xl shadow-xl flex flex-col items-center text-center ${
+        className={`w-52 p-5 rounded-3xl relative overflow-hidden transition-all duration-300 backdrop-blur-2xl flex flex-col items-center text-center group ${
           isHovered
-            ? `${role.theme.activeBorder} shadow-2xl`
-            : 'border-white/10 hover:border-white/20'
+            ? `bg-[#131b40]/95 ${role.theme.activeBorder} shadow-2xl`
+            : 'bg-[#0e1432]/92 border border-white/[0.14] hover:border-white/30 hover:bg-[#11183c]/95'
         }`}
         style={{
           boxShadow: isHovered
-            ? `0 15px 35px -5px ${role.theme.glow}, 0 0 15px 2px ${role.theme.glow}`
-            : '0 10px 25px -5px rgba(0,0,0,0.5)',
+            ? `0 20px 40px -10px ${role.theme.glow}, 0 0 25px 2px ${role.theme.glow}`
+            : '0 12px 36px -8px rgba(0,0,0,0.65), 0 0 1px 1px rgba(255,255,255,0.06) inset',
         }}
       >
-        {/* Role Icon Circle */}
+        {/* Top Glowing Gradient Accent Rim */}
         <div
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br ${role.theme.gradient} text-white shadow-lg mb-3 transition-transform duration-300 ${
-            isHovered ? 'scale-110' : ''
+          className={`absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${role.theme.gradient} transition-opacity duration-300 ${
+            isHovered ? 'opacity-100 shadow-[0_0_12px_rgba(99,102,241,0.8)]' : 'opacity-70'
+          }`}
+        />
+
+        {/* Role Icon Circle with Elevated Glow */}
+        <div
+          className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br ${role.theme.gradient} text-white shadow-lg mb-3 transition-all duration-300 ${
+            isHovered ? 'scale-110 shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'shadow-md'
           }`}
         >
           <IconComponent className="w-7 h-7" />
         </div>
 
+        {/* Subtle Category Tag */}
+        <span
+          className={`text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-full border mb-1.5 transition-colors ${role.theme.badge}`}
+        >
+          {role.tag}
+        </span>
+
         {/* Role Name */}
-        <span className="text-base font-extrabold tracking-wider text-white">
+        <span className="text-lg font-black tracking-wide text-white">
           {role.name}
         </span>
 
         {/* Role Subtitle */}
-        <span className="text-[11px] font-medium text-slate-400 mt-0.5 leading-snug line-clamp-1">
+        <span className="text-xs font-medium text-slate-300 mt-1 leading-snug line-clamp-1">
           {role.subtitle}
         </span>
 
-        {/* Enter indicator */}
+        {/* Action Button Pill */}
         <div
-          className={`mt-3 flex items-center gap-1 text-[11px] font-semibold transition-colors ${
-            isHovered ? role.theme.accentText : 'text-slate-500'
+          className={`mt-4 w-full py-1.5 px-3 rounded-xl flex items-center justify-center gap-1.5 text-xs font-semibold transition-all ${
+            isHovered
+              ? `bg-white/15 text-white ${role.theme.ring} ring-1 shadow-sm`
+              : 'bg-white/[0.05] text-slate-400 group-hover:text-slate-200'
           }`}
         >
-          <span>Select Role</span>
-          <ArrowRight className="w-3 h-3" />
+          <span>Enter Portal</span>
+          <ArrowRight
+            className={`w-3.5 h-3.5 transition-transform duration-200 ${
+              isHovered ? 'translate-x-1 text-white' : 'text-slate-500'
+            }`}
+          />
         </div>
       </div>
     </motion.div>
