@@ -7,19 +7,15 @@ import {
   Calendar,
   Sun,
   Moon,
-  PlusCircle,
   Ticket,
   LogOut,
   Menu,
   X,
   Compass,
-  LayoutDashboard,
-  ShieldAlert,
-  QrCode,
 } from 'lucide-react';
 
 export default function Navbar() {
-  const { user, isAuthenticated, isOrganizer, isAdmin, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -63,41 +59,7 @@ export default function Navbar() {
               </Link>
             )}
 
-            {isOrganizer && (
-              <>
-                <Link
-                  to="/dashboard/organizer"
-                  className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
-                >
-                  <LayoutDashboard className="w-4 h-4 text-primary-500" />
-                  Organizer
-                </Link>
-                <Link
-                  to="/scanner"
-                  className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
-                >
-                  <QrCode className="w-4 h-4 text-emerald-500" />
-                  Scanner
-                </Link>
-                <Link
-                  to="/events/create"
-                  className="flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:opacity-80 transition-opacity"
-                >
-                  <PlusCircle className="w-4 h-4" />
-                  Create
-                </Link>
-              </>
-            )}
 
-            {isAdmin && (
-              <Link
-                to="/dashboard/admin"
-                className="flex items-center gap-1.5 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:opacity-80 transition-opacity"
-              >
-                <ShieldAlert className="w-4 h-4" />
-                Admin
-              </Link>
-            )}
           </nav>
 
           {/* Right Action Icons & Auth */}
@@ -194,40 +156,7 @@ export default function Navbar() {
               My Tickets
             </Link>
           )}
-          {isOrganizer && (
-            <>
-              <Link
-                to="/dashboard/organizer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2 rounded-lg text-sm font-medium text-primary-600 dark:text-primary-400"
-              >
-                Organizer Dashboard
-              </Link>
-              <Link
-                to="/scanner"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2 rounded-lg text-sm font-medium text-emerald-600 dark:text-emerald-400"
-              >
-                QR Venue Scanner
-              </Link>
-              <Link
-                to="/events/create"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2 rounded-lg text-sm font-medium text-indigo-600 dark:text-indigo-400"
-              >
-                + Create Event
-              </Link>
-            </>
-          )}
-          {isAdmin && (
-            <Link
-              to="/dashboard/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-lg text-sm font-medium text-rose-600 dark:text-rose-400"
-            >
-              Admin Platform Console
-            </Link>
-          )}
+
 
           <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
             {isAuthenticated ? (

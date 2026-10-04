@@ -44,6 +44,7 @@ model User {
   notifications     Notification[]
   activityLogs      ActivityLog[]
   attendanceScanned Attendance[]        @relation("ScannedBy")
+  payments          Payment[]
 }
 
 // ─── SESSIONS ────────────────────────────────────────────────────────────────
@@ -153,6 +154,7 @@ model Event {
   attendance    Attendance[]
   notifications Notification[]
   activityLogs  ActivityLog[]
+  payments      Payment[]
 }
 
 enum EventStatus {
@@ -187,6 +189,7 @@ model Registration {
   updatedAt   DateTime           @updatedAt
 
   ticket      Ticket?
+  payment     Payment?
 
   @@unique([eventId, userId]) // prevent duplicate registration
 }
@@ -262,3 +265,38 @@ model ActivityLog {
   userAgent String?
   createdAt DateTime @default(now())
 }
+
+// ─── PAYMENTS ─────────────────────────────────────────────────────────────────
+model Payment {
+  id                String        @id @default(uuid())
+  userId            Int
+  user              User          @relation(fields: [userId], references: [id])
+  eventId           Int
+  event             Event         @relation(fields: [eventId], references: [id])
+  registrationId    Int?          @unique
+  registration      Registration? @relation(fields: [registrationId], references: [id])
+
+  // Razorpay fields
+  razorpayOrderId   String        @unique            // Razorpay order_id
+  razorpayPaymentId String?       @unique            // Razorpay payment_id (set after capture)
+  razorpaySignature String?                          // Signature verified on backend
+
+  amount            Float                            // Amount in paise (INR smallest unit)
+  currency          String        @default("INR")
+  status            PaymentStatus @default(PENDING)
+
+  // Refund tracking
+  refundId          String?                          // Razorpay refund_id if refunded
+  refundedAt        DateTime?
+
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+}
+
+enum PaymentStatus {
+  PENDING
+  CAPTURED
+  FAILED
+  REFUNDED
+}
+
