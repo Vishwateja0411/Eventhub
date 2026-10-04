@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Calendar, Lock, Mail, User, AlertCircle, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('USER');
+  const [role, setRole] = useState(
+    searchParams.get('role')?.toUpperCase() === 'ORGANIZER' ? 'ORGANIZER' : 'USER'
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const queryRole = searchParams.get('role')?.toUpperCase();
+    if (queryRole === 'ORGANIZER') {
+      setRole('ORGANIZER');
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +31,11 @@ export default function Register() {
 
     try {
       await register({ name, email, password, role });
-      navigate('/events');
+      if (role === 'ORGANIZER') {
+        navigate('/organizer/create-event', { replace: true });
+      } else {
+        navigate('/events', { replace: true });
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please check inputs.');
     } finally {

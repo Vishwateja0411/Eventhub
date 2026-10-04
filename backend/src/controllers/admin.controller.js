@@ -153,8 +153,54 @@ const toggleUserStatus = async (req, res, next) => {
   }
 };
 
+/**
+ * GET /api/admin/payments
+ * Protected: ADMIN only
+ */
+const getAllPayments = async (req, res, next) => {
+  try {
+    const { status, search } = req.query;
+    const where = {};
+    if (status) where.status = status;
+    if (search) {
+      where.OR = [
+        { razorpayOrderId: { contains: search, mode: 'insensitive' } },
+        { razorpayPaymentId: { contains: search, mode: 'insensitive' } },
+        { user: { name: { contains: search, mode: 'insensitive' } } },
+        { user: { email: { contains: search, mode: 'insensitive' } } },
+        { event: { title: { contains: search, mode: 'insensitive' } } },
+      ];
+    }
+
+    const payments = await prisma.payment.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        user: { select: { id: true, name: true, email: true, avatar: true } },
+        event: { select: { id: true, title: true, startDate: true, slug: true } },
+        registration: { select: { id: true, status: true } },
+      },
+    });
+
+    const totalVolume = payments.reduce(
+      (acc, p) => acc + (p.status === 'CAPTURED' ? p.amount : 0),
+      0
+    );
+
+    res.json({
+      success: true,
+      payments,
+      totalCount: payments.length,
+      totalVolume,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getPlatformStats,
   getAllUsers,
   toggleUserStatus,
+  getAllPayments,
 };

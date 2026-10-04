@@ -7,6 +7,7 @@ import { AuthProvider } from './context/AuthContext';
 // ── Route Guards ─────────────────────────────────────────────────────────────
 import {
   ProtectedRoute,
+  UserRoute,
   AdminRoute,
   OrganizerRoute,
   PublicOnlyRoute,
@@ -107,9 +108,7 @@ export default function App() {
                 path="/login"
                 element={
                   <PublicOnlyRoute>
-                    <PublicLayout>
-                      <Login />
-                    </PublicLayout>
+                    <Login />
                   </PublicOnlyRoute>
                 }
               />
@@ -128,11 +127,11 @@ export default function App() {
               <Route
                 path="/my-tickets"
                 element={
-                  <ProtectedRoute>
+                  <UserRoute>
                     <PublicLayout>
                       <MyTickets />
                     </PublicLayout>
-                  </ProtectedRoute>
+                  </UserRoute>
                 }
               />
 

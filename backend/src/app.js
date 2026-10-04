@@ -18,6 +18,7 @@ const attendanceRoutes = require('./routes/attendance.routes');
 const notificationRoutes = require('./routes/notification.routes');
 const adminRoutes = require('./routes/admin.routes');
 const uploadRoutes = require('./routes/upload.routes');
+const paymentRoutes = require('./routes/payment.routes');
 
 const app = express();
 
@@ -50,18 +51,20 @@ app.use(cors({
 // Rate limiting — global
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200,
+  max: process.env.NODE_ENV === 'production' ? 1000 : 10000,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV !== 'production',
   message: { error: 'Too many requests, please try again later.' },
 });
 
-// Stricter limiter for auth endpoints
+// Stricter limiter for auth endpoints (skip /me and development)
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 20,
+  max: process.env.NODE_ENV === 'production' ? 100 : 1000,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.path === '/me' || process.env.NODE_ENV !== 'production',
   message: { error: 'Too many auth attempts, please try again later.' },
 });
 
@@ -111,6 +114,7 @@ app.use('/api/attendance', attendanceRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // ─── ERROR HANDLING ────────────────────────────────────────────────────────
 app.use(notFound);

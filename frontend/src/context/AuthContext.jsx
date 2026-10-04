@@ -25,14 +25,26 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = async (email, password) => {
-    const res = await api.post('/auth/login', { email, password });
+  const login = async (email, password, expectedRole) => {
+    const payload = { email, password };
+    if (expectedRole) payload.expectedRole = expectedRole;
+
+    const res = await api.post('/auth/login', payload);
     if (res.data?.success && res.data?.user) {
+      const loggedUser = res.data.user;
+
+      // Double-check role matching on client side as an extra safeguard
+      if (expectedRole && loggedUser.role !== expectedRole) {
+        localStorage.removeItem('eventhub_token');
+        setUser(null);
+        throw new Error('This account does not belong to the selected role.');
+      }
+
       if (res.data?.accessToken) {
         localStorage.setItem('eventhub_token', res.data.accessToken);
       }
-      setUser(res.data.user);
-      return res.data.user;
+      setUser(loggedUser);
+      return loggedUser;
     }
   };
 

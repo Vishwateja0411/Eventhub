@@ -28,6 +28,27 @@ export function ProtectedRoute({ children }) {
 }
 
 /**
+ * UserRoute — requires normal USER role.
+ * Organizers & Admins are redirected to their dashboards.
+ */
+export function UserRoute({ children }) {
+  const { user, isAuthenticated, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) return <AuthLoadingSpinner />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+  if (user?.role === 'ORGANIZER') {
+    return <Navigate to="/organizer/dashboard" replace />;
+  }
+  if (user?.role === 'ADMIN') {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+  return children;
+}
+
+/**
  * AdminRoute — requires ADMIN role.
  * Redirects to / if not admin.
  */
@@ -64,7 +85,7 @@ export function PublicOnlyRoute({ children }) {
 
   if (user) {
     if (isAdmin) return <Navigate to="/admin/dashboard" replace />;
-    if (isOrganizer) return <Navigate to="/organizer/dashboard" replace />;
+    if (isOrganizer) return <Navigate to="/organizer/create-event" replace />;
     return <Navigate to="/" replace />;
   }
 
@@ -82,7 +103,7 @@ export function RoleRedirect({ children }) {
 
   if (user) {
     if (isAdmin) return <Navigate to="/admin/dashboard" replace />;
-    if (isOrganizer) return <Navigate to="/organizer/dashboard" replace />;
+    if (isOrganizer) return <Navigate to="/organizer/create-event" replace />;
   }
 
   return children;

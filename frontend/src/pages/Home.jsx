@@ -48,7 +48,7 @@ export default function Home() {
             <span>The Modern Event Platform for Creators & Communities</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2] mb-6 max-w-4xl mx-auto">
             Discover Unforgettable Experiences with{' '}
             <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
               Instant QR Ticketing
@@ -59,18 +59,12 @@ export default function Home() {
             Find tech conferences, design summits, hands-on workshops, and music fests. Register in seconds and gain seamless check-in entry with cryptographic digital passes.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex items-center justify-center">
             <Link
               to="/events"
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all"
+              className="px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all"
             >
               Explore All Events <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              to="/events/create"
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-card font-semibold text-slate-800 dark:text-slate-100 hover:border-indigo-400 transition-all text-center"
-            >
-              Host an Event
             </Link>
           </div>
 

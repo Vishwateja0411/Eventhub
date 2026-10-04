@@ -49,13 +49,22 @@ export default function Navbar() {
               Explore
             </Link>
 
-            {isAuthenticated && (
+            {isAuthenticated && user?.role === 'USER' && (
               <Link
                 to="/my-tickets"
                 className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
               >
                 <Ticket className="w-4 h-4" />
                 My Tickets
+              </Link>
+            )}
+
+            {user?.role === 'ORGANIZER' && (
+              <Link
+                to="/organizer/dashboard"
+                className="flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 transition-colors"
+              >
+                Organizer Dashboard
               </Link>
             )}
 
@@ -147,13 +156,23 @@ export default function Navbar() {
           >
             Explore Events
           </Link>
-          {isAuthenticated && (
+          {isAuthenticated && user?.role === 'USER' && (
             <Link
               to="/my-tickets"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200"
             >
               My Tickets
+            </Link>
+          )}
+
+          {user?.role === 'ORGANIZER' && (
+            <Link
+              to="/organizer/dashboard"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm font-semibold text-indigo-600 dark:text-indigo-400"
+            >
+              Organizer Dashboard
             </Link>
           )}
 

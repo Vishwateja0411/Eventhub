@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import TicketModal from '../components/tickets/TicketModal';
+import PaymentModal from '../components/payments/PaymentModal';
 import {
   Calendar,
   Clock,
@@ -14,6 +15,7 @@ import {
   Tag,
   AlertCircle,
   ArrowLeft,
+  CreditCard,
 } from 'lucide-react';
 
 export default function EventDetail() {
@@ -26,6 +28,7 @@ export default function EventDetail() {
   const [registering, setRegistering] = useState(false);
   const [userRegistration, setUserRegistration] = useState(null);
   const [ticketModalData, setTicketModalData] = useState(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   // Fetch event details
@@ -58,11 +61,19 @@ export default function EventDetail() {
     }
   }, [isAuthenticated, event]);
 
-  const handleRegister = async () => {
+  const handleBookingClick = () => {
     if (!isAuthenticated) {
       return navigate('/login');
     }
 
+    if (event?.price > 0) {
+      setShowPaymentModal(true);
+    } else {
+      handleFreeRegister();
+    }
+  };
+
+  const handleFreeRegister = async () => {
     setRegistering(true);
     setErrorMsg('');
 
@@ -74,7 +85,6 @@ export default function EventDetail() {
           ticket: res.data.ticket,
           event,
         });
-        // Decrement spots left locally
         setEvent((prev) => ({
           ...prev,
           spotsLeft: Math.max(0, prev.spotsLeft - 1),
@@ -86,6 +96,19 @@ export default function EventDetail() {
     } finally {
       setRegistering(false);
     }
+  };
+
+  const handlePaymentSuccess = ({ ticket, registration }) => {
+    setUserRegistration(registration);
+    setTicketModalData({
+      ticket,
+      event,
+    });
+    setEvent((prev) => ({
+      ...prev,
+      spotsLeft: Math.max(0, prev.spotsLeft - 1),
+      attendeeCount: (prev.attendeeCount || 0) + 1,
+    }));
   };
 
   if (loading) {
@@ -334,10 +357,12 @@ export default function EventDetail() {
             ) : (
               <button
                 disabled={isSoldOut || registering}
-                onClick={handleRegister}
-                className={`w-full py-4 px-4 rounded-2xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 ${
+                onClick={handleBookingClick}
+                className={`w-full py-4 px-4 rounded-2xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer ${
                   isSoldOut
                     ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed shadow-none'
+                    : event.price > 0
+                    ? 'bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-indigo-500/25 hover:scale-[1.02]'
                     : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-500/25 hover:scale-[1.02]'
                 }`}
               >
@@ -349,9 +374,14 @@ export default function EventDetail() {
                 ) : isSoldOut ? (
                   'Event is Sold Out'
                 ) : !isAuthenticated ? (
-                  'Sign In to Register'
+                  'Sign In to Book Ticket'
+                ) : event.price > 0 ? (
+                  <>
+                    <CreditCard className="w-4 h-4" />
+                    <span>Pay ₹{event.price} & Book Ticket</span>
+                  </>
                 ) : (
-                  'Register & Get QR Ticket'
+                  'Register for Free & Get QR Ticket'
                 )}
               </button>
             )}
@@ -367,6 +397,16 @@ export default function EventDetail() {
           </div>
         </div>
       </div>
+
+      {/* Payment Gateway Modal */}
+      {showPaymentModal && (
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          event={event}
+          onSuccess={handlePaymentSuccess}
+        />
+      )}
 
       {/* QR Ticket Modal */}
       {ticketModalData && (

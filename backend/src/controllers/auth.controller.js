@@ -177,6 +177,14 @@ const login = async (req, res, next) => {
       });
     }
 
+    // Role verification: ensure authenticated user actually has the requested role
+    if (validatedData.expectedRole && user.role.name !== validatedData.expectedRole) {
+      return res.status(403).json({
+        success: false,
+        message: 'This account does not belong to the selected role.',
+      });
+    }
+
     const { accessToken, refreshToken } = generateTokens(user.id, user.role.name);
     const refreshExpiresAt = new Date(Date.now() + REFRESH_TOKEN_MAX_AGE);
 
