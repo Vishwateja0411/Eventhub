@@ -71,13 +71,6 @@ export default function Navbar() {
               How It Works
             </a>
 
-            <Link
-              to="/events/create"
-              className="text-sm font-medium text-slate-700 hover:text-[#6C4DF6] dark:text-slate-300 dark:hover:text-white transition-colors"
-            >
-              For Organizers
-            </Link>
-
             {isAuthenticated && user?.role === 'USER' && (
               <Link
                 to="/my-tickets"
@@ -214,13 +207,6 @@ export default function Navbar() {
           >
             How It Works
           </a>
-          <Link
-            to="/events/create"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            For Organizers
-          </Link>
 
           {isAuthenticated && user?.role === 'USER' && (
             <Link
