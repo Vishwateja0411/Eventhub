@@ -341,7 +341,63 @@ export default function Home() {
         )}
       </section>
 
-      {/* ─── 4. HOW IT WORKS SECTION ────────────────────────────────── */}
+      {/* ─── 4. POPULAR CATEGORIES ──────────────────────────────────── */}
+      <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
+        <div className="flex items-center justify-between mb-8 pb-3 border-b border-slate-200 dark:border-slate-800">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
+              EXPLORE BY CATEGORY
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Find events curated by topic, craft, and passion
+            </p>
+          </div>
+          <Link
+            to="/events"
+            className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#6C4DF6] dark:text-[#A78BFA] hover:underline flex items-center gap-1"
+          >
+            <span>View all</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-5">
+          {categories.map((cat) => {
+            const bgImage = CATEGORY_IMAGES[cat.name] || 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=600&auto=format&fit=crop&q=80';
+            return (
+              <Link
+                key={cat.id}
+                to={`/events?category=${cat.slug || cat.name?.toLowerCase()}`}
+                className="group relative h-40 sm:h-44 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
+                <img
+                  src={bgImage}
+                  alt={cat.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#070B1A] via-[#070B1A]/60 to-transparent" />
+
+                <div className="absolute inset-0 p-4 flex flex-col justify-between text-white">
+                  <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-lg border border-white/20">
+                    {cat.icon || '🎯'}
+                  </div>
+                  <div>
+                    <h3 className="text-sm sm:text-base font-extrabold uppercase tracking-wide text-white group-hover:text-[#A78BFA] transition-colors">
+                      {cat.name}
+                    </h3>
+                    <span className="text-[11px] text-slate-300 font-medium">
+                      {cat.eventCount || 0} upcoming
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ─── 5. HOW IT WORKS SECTION ────────────────────────────────── */}
       <section id="how-it-works" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
         <div className="p-6 sm:p-10 lg:p-12 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
           <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
@@ -395,62 +451,6 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ─── 5. POPULAR CATEGORIES ──────────────────────────────────── */}
-      <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
-        <div className="flex items-center justify-between mb-8 pb-3 border-b border-slate-200 dark:border-slate-800">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
-              EXPLORE BY CATEGORY
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-              Find events curated by topic, craft, and passion
-            </p>
-          </div>
-          <Link
-            to="/events"
-            className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#6C4DF6] dark:text-[#A78BFA] hover:underline flex items-center gap-1"
-          >
-            <span>View all</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-5">
-          {categories.map((cat) => {
-            const bgImage = CATEGORY_IMAGES[cat.name] || 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=600&auto=format&fit=crop&q=80';
-            return (
-              <Link
-                key={cat.id}
-                to={`/events?category=${cat.slug || cat.name?.toLowerCase()}`}
-                className="group relative h-40 sm:h-44 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              >
-                <img
-                  src={bgImage}
-                  alt={cat.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#070B1A] via-[#070B1A]/60 to-transparent" />
-
-                <div className="absolute inset-0 p-4 flex flex-col justify-between text-white">
-                  <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-lg border border-white/20">
-                    {cat.icon || '🎯'}
-                  </div>
-                  <div>
-                    <h3 className="text-sm sm:text-base font-extrabold uppercase tracking-wide text-white group-hover:text-[#A78BFA] transition-colors">
-                      {cat.name}
-                    </h3>
-                    <span className="text-[11px] text-slate-300 font-medium">
-                      {cat.eventCount || 0} upcoming
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
         </div>
       </section>
 

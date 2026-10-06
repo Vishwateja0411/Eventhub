@@ -68,19 +68,19 @@ export default function Navbar() {
             </Link>
 
             <a
-              href="/#categories"
-              onClick={(e) => handleAnchorClick(e, 'categories')}
-              className="text-sm font-medium text-slate-700 hover:text-[#6C4DF6] dark:text-slate-300 dark:hover:text-white transition-colors"
-            >
-              Categories
-            </a>
-
-            <a
               href="/#featured"
               onClick={(e) => handleAnchorClick(e, 'featured')}
               className="text-sm font-medium text-slate-700 hover:text-[#6C4DF6] dark:text-slate-300 dark:hover:text-white transition-colors"
             >
               Featured
+            </a>
+
+            <a
+              href="/#categories"
+              onClick={(e) => handleAnchorClick(e, 'categories')}
+              className="text-sm font-medium text-slate-700 hover:text-[#6C4DF6] dark:text-slate-300 dark:hover:text-white transition-colors"
+            >
+              Categories
             </a>
 
             <a
@@ -212,18 +212,18 @@ export default function Navbar() {
             Explore Events
           </Link>
           <a
-            href="/#categories"
-            onClick={(e) => handleAnchorClick(e, 'categories')}
-            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            Categories
-          </a>
-          <a
             href="/#featured"
             onClick={(e) => handleAnchorClick(e, 'featured')}
             className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             Featured
+          </a>
+          <a
+            href="/#categories"
+            onClick={(e) => handleAnchorClick(e, 'categories')}
+            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            Categories
           </a>
           <a
             href="/#how-it-works"
