@@ -110,10 +110,10 @@ export default function Home() {
   };
 
   return (
-    <div className="space-y-24 sm:space-y-32 pb-24 bg-white dark:bg-[#070B1A] transition-colors">
+    <div className="space-y-12 sm:space-y-16 pb-16 bg-white dark:bg-[#070B1A] transition-colors">
       
       {/* ─── 1. ENTERPRISE CINEMATIC HERO SECTION ─────────────────────── */}
-      <section className="relative min-h-[580px] lg:min-h-[640px] flex items-center overflow-hidden">
+      <section className="relative overflow-hidden">
         {/* Full-width 16:9 cinematic event hall background */}
         <img
           src="/enterprise-event-hero.jpg"
@@ -130,8 +130,8 @@ export default function Home() {
         <div className="hidden dark:block absolute inset-0 bg-gradient-to-t from-[#070B1A] via-transparent to-[#070B1A]/50" />
 
         {/* Content Container */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-14 sm:py-20 lg:py-24">
-          <div className="max-w-3xl space-y-6 text-left">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-10 sm:pt-14 pb-10 sm:pb-12">
+          <div className="max-w-3xl space-y-5 sm:space-y-6 text-left">
             {/* Eyebrow Pill */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-violet-50 dark:bg-white/10 backdrop-blur-md border border-violet-200/80 dark:border-white/15 text-xs font-bold uppercase tracking-widest text-[#6C4DF6] dark:text-[#C4B5FD]">
               <Sparkles className="w-3.5 h-3.5 text-[#6C4DF6] dark:text-[#C4B5FD]" />
@@ -173,7 +173,7 @@ export default function Home() {
             {/* Dual-Theme High-Contrast Luxury Search Bar */}
             <form
               onSubmit={handleHeroSearch}
-              className="w-full max-w-2xl p-2 rounded-xl bg-white/95 dark:bg-slate-950/85 backdrop-blur-xl border border-slate-200/90 dark:border-white/15 shadow-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all focus-within:border-[#6C4DF6]/60 dark:focus-within:border-white/40 focus-within:ring-2 focus-within:ring-[#6C4DF6]/10 dark:focus-within:ring-white/10 mt-6"
+              className="w-full max-w-2xl p-2 rounded-xl bg-white/95 dark:bg-slate-950/85 backdrop-blur-xl border border-slate-200/90 dark:border-white/15 shadow-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all focus-within:border-[#6C4DF6]/60 dark:focus-within:border-white/40 focus-within:ring-2 focus-within:ring-[#6C4DF6]/10 dark:focus-within:ring-white/10 mt-5 sm:mt-6"
             >
               {/* Keyword Search */}
               <div className="flex-1 flex items-center gap-3 px-3.5 py-2 text-slate-700 dark:text-slate-300 min-w-0">
@@ -222,7 +222,7 @@ export default function Home() {
 
       {/* ─── 2. EVERYTHING YOU NEED FOR BETTER EVENTS ─────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
           <span className="text-xs font-bold uppercase tracking-widest text-[#6C4DF6] dark:text-[#A78BFA]">
             PLATFORM CAPABILITIES
           </span>
@@ -304,7 +304,7 @@ export default function Home() {
 
       {/* ─── 3. FEATURED EVENTS: "EVENTS WORTH EXPERIENCING" ──────────── */}
       <section id="featured" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8 pb-4 border-b border-slate-200 dark:border-slate-800">
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-[#6C4DF6] dark:text-[#A78BFA]">
               PREMIER EVENT CATALOG
@@ -343,8 +343,8 @@ export default function Home() {
 
       {/* ─── 4. HOW IT WORKS SECTION ────────────────────────────────── */}
       <section id="how-it-works" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
-        <div className="p-8 sm:p-12 lg:p-14 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-          <div className="text-center max-w-xl mx-auto mb-12">
+        <div className="p-6 sm:p-10 lg:p-12 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
+          <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
             <span className="text-xs font-bold uppercase tracking-widest text-[#6C4DF6] dark:text-[#A78BFA]">
               HOW IT WORKS
             </span>
@@ -456,7 +456,7 @@ export default function Home() {
 
       {/* ─── 6. ORGANIZER SECTION (ENTERPRISE DEDICATED) ─────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#070B1A] via-[#0E1530] to-[#070B1A] text-white p-8 sm:p-12 lg:p-16 border border-slate-800 shadow-2xl">
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#070B1A] via-[#0E1530] to-[#070B1A] text-white p-6 sm:p-10 lg:p-12 border border-slate-800 shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
             {/* Left Headline & Description */}
@@ -480,7 +480,7 @@ export default function Home() {
               <div className="pt-2 flex flex-wrap items-center gap-4">
                 <Link
                   to="/events/create"
-                  className="px-8 py-4 rounded-lg bg-[#6C4DF6] hover:bg-[#5B3FE0] text-white font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-[#6C4DF6]/30 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="px-8 py-3.5 rounded-lg bg-[#6C4DF6] hover:bg-[#5B3FE0] text-white font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-[#6C4DF6]/30 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <span>CREATE AN EVENT</span>
                   <ArrowRight className="w-4 h-4" />
@@ -488,7 +488,7 @@ export default function Home() {
 
                 <Link
                   to="/organizer/dashboard"
-                  className="px-7 py-4 rounded-lg border-2 border-white/80 hover:border-white hover:bg-white/10 text-white font-extrabold text-sm uppercase tracking-wider transition-all"
+                  className="px-7 py-3.5 rounded-lg border-2 border-white/80 hover:border-white hover:bg-white/10 text-white font-extrabold text-sm uppercase tracking-wider transition-all"
                 >
                   <span>ORGANIZER DASHBOARD</span>
                 </Link>
@@ -529,12 +529,12 @@ export default function Home() {
 
       {/* ─── 7. SECURITY & ENTERPRISE TRUST ──────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 p-8 sm:p-12 text-center">
+        <div className="rounded-3xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 p-6 sm:p-10 text-center">
           <span className="text-xs font-bold uppercase tracking-widest text-[#6C4DF6] dark:text-[#A78BFA]">
             ENTERPRISE PLATFORM TRUST
           </span>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-slate-900 dark:text-white mt-2 mb-8">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-slate-900 dark:text-white mt-2 mb-6">
             BUILT FOR SEAMLESS EVENT EXPERIENCES
           </h2>
 
