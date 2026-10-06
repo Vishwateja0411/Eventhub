@@ -112,131 +112,162 @@ export default function Home() {
   return (
     <div className="space-y-24 sm:space-y-32 pb-24 bg-white dark:bg-[#070B1A] transition-colors">
       
-      {/* ─── 1. ENTERPRISE CINEMATIC HERO SECTION ─────────────────────── */}
-      <section className="relative min-h-[85vh] lg:h-[88vh] flex items-center overflow-hidden">
-        {/* Full-width 16:9 cinematic event hall background */}
-        <img
-          src="/enterprise-event-hero.jpg"
-          alt="Premier Event Convention Hall"
-          className="absolute inset-0 w-full h-full object-cover object-center scale-100"
-        />
+      {/* ─── 1. ENTERPRISE CINEMATIC HERO & TRUST BAR ─────────────────── */}
+      <div className="relative">
+        <section className="relative min-h-[580px] lg:min-h-[640px] flex items-center overflow-hidden">
+          {/* Full-width 16:9 cinematic event hall background */}
+          <img
+            src="/enterprise-event-hero.jpg"
+            alt="Premier Event Convention Hall"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
 
-        {/* Smooth Photographic Vignette Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#070B1A] via-[#070B1A]/90 via-[#070B1A]/65 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#070B1A] via-transparent to-[#070B1A]/50" />
+          {/* Light Mode Vignette: Clean luminous white gradient on the left, soft fade on the right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 via-white/80 to-transparent dark:hidden" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-white/40 dark:hidden" />
 
-        {/* Content Container */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-10 sm:py-12 flex flex-col justify-between h-full">
-          
-          <div className="max-w-3xl space-y-6 pt-2 sm:pt-4 text-left">
-            {/* Small Eyebrow Text */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold uppercase tracking-widest text-[#C4B5FD]">
-              <Sparkles className="w-3.5 h-3.5 text-[#C4B5FD]" />
-              <span>The Future of Event Experiences</span>
-            </div>
+          {/* Dark Mode Vignette: Deep rich navy on the left, reveals photo on the right */}
+          <div className="hidden dark:block absolute inset-0 bg-gradient-to-r from-[#070B1A] via-[#070B1A]/95 via-[#070B1A]/70 to-transparent" />
+          <div className="hidden dark:block absolute inset-0 bg-gradient-to-t from-[#070B1A] via-transparent to-[#070B1A]/50" />
 
-            {/* Main Headline (Tight tracking, refined gradient) */}
-            <h1 className="text-4xl sm:text-6xl lg:text-[72px] font-black uppercase tracking-[-0.03em] text-white leading-[0.98] sm:leading-[1.02]">
-              DISCOVER EVENTS <br />
-              WORTH{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9D7BFF] via-[#C4B5FD] to-[#DDD6FE]">
-                EXPERIENCING.
-              </span>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-300 max-w-xl font-normal leading-relaxed">
-              Discover, book, and experience extraordinary events with seamless digital tickets and instant QR entry.
-            </p>
-
-            {/* Two Primary CTAs */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-1">
-              <Link
-                to="/events"
-                className="px-8 py-3.5 rounded-lg bg-[#6C4DF6] hover:bg-[#5839E6] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-md shadow-[#6C4DF6]/25 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <span>EXPLORE EVENTS</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-
-              <Link
-                to="/events/create"
-                className="px-7 py-3.5 rounded-lg border border-white/30 hover:border-white/70 bg-white/[0.04] hover:bg-white/[0.1] text-white font-bold text-xs sm:text-sm uppercase tracking-wider backdrop-blur-md transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <span>HOST AN EVENT</span>
-              </Link>
-            </div>
-
-            {/* High-Contrast Luxury Search Interface */}
-            <form
-              onSubmit={handleHeroSearch}
-              className="w-full max-w-2xl p-2 rounded-xl bg-slate-950/80 backdrop-blur-xl border border-white/15 shadow-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all focus-within:border-white/40 focus-within:ring-2 focus-within:ring-white/10 mt-6"
-            >
-              {/* Keyword Search */}
-              <div className="flex-1 flex items-center gap-3 px-3.5 py-2 text-slate-300 min-w-0">
-                <Search className="w-4 h-4 text-slate-400 shrink-0" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search conferences, workshops, summits..."
-                  className="w-full bg-transparent text-sm text-white placeholder-slate-400 outline-none font-medium truncate"
-                />
+          {/* Content Container */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-14 sm:py-20 lg:py-24">
+            <div className="max-w-3xl space-y-6 text-left">
+              {/* Eyebrow Pill */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-violet-50 dark:bg-white/10 backdrop-blur-md border border-violet-200/80 dark:border-white/15 text-xs font-bold uppercase tracking-widest text-[#6C4DF6] dark:text-[#C4B5FD]">
+                <Sparkles className="w-3.5 h-3.5 text-[#6C4DF6] dark:text-[#C4B5FD]" />
+                <span>The Future of Event Experiences</span>
               </div>
 
-              {/* Subtle Divider */}
-              <div className="hidden sm:block h-7 w-px bg-white/15" />
+              {/* Main Headline (High Contrast in both Light and Dark) */}
+              <h1 className="text-4xl sm:text-6xl lg:text-[72px] font-black uppercase tracking-[-0.03em] text-slate-950 dark:text-white leading-[0.98] sm:leading-[1.02]">
+                DISCOVER EVENTS <br />
+                WORTH{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6C4DF6] via-[#7C3AED] to-[#4F46E5] dark:from-[#9D7BFF] dark:via-[#C4B5FD] dark:to-[#DDD6FE]">
+                  EXPERIENCING.
+                </span>
+              </h1>
 
-              {/* City Selector */}
-              <div className="flex items-center gap-2 px-3 py-2 text-slate-300 shrink-0">
-                <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
-                <select
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                  className="bg-transparent text-xs sm:text-sm text-white outline-none cursor-pointer pr-2 font-medium"
+              {/* Subtitle */}
+              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl font-normal leading-relaxed">
+                Discover, book, and experience extraordinary events with seamless digital tickets and instant QR entry.
+              </p>
+
+              {/* Two Primary CTAs */}
+              <div className="flex flex-wrap items-center gap-3.5 pt-1">
+                <Link
+                  to="/events"
+                  className="px-8 py-3.5 rounded-lg bg-[#6C4DF6] hover:bg-[#5839E6] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-md shadow-[#6C4DF6]/25 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <option value="" className="bg-[#070B1A] text-white">All Cities</option>
-                  <option value="Bangalore" className="bg-[#070B1A] text-white">Bengaluru</option>
-                  <option value="Mumbai" className="bg-[#070B1A] text-white">Mumbai</option>
-                  <option value="Delhi" className="bg-[#070B1A] text-white">Delhi NCR</option>
-                  <option value="Hyderabad" className="bg-[#070B1A] text-white">Hyderabad</option>
-                  <option value="Online" className="bg-[#070B1A] text-white">Online / Virtual</option>
-                </select>
+                  <span>EXPLORE EVENTS</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+
+                <Link
+                  to="/events/create"
+                  className="px-7 py-3.5 rounded-lg border border-slate-300 hover:border-slate-400 bg-white/80 hover:bg-white text-slate-800 shadow-xs dark:border-white/30 dark:hover:border-white/70 dark:bg-white/[0.04] dark:hover:bg-white/[0.1] dark:text-white font-bold text-xs sm:text-sm uppercase tracking-wider backdrop-blur-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <span>HOST AN EVENT</span>
+                </Link>
               </div>
 
-              {/* High-Contrast Luxury Search Trigger (Eliminates Purple Button Clash) */}
-              <button
-                type="submit"
-                className="px-6 py-3 rounded-lg bg-white hover:bg-slate-100 text-slate-950 font-extrabold text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm shrink-0"
+              {/* Dual-Theme High-Contrast Luxury Search Bar */}
+              <form
+                onSubmit={handleHeroSearch}
+                className="w-full max-w-2xl p-2 rounded-xl bg-white/95 dark:bg-slate-950/85 backdrop-blur-xl border border-slate-200/90 dark:border-white/15 shadow-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all focus-within:border-[#6C4DF6]/60 dark:focus-within:border-white/40 focus-within:ring-2 focus-within:ring-[#6C4DF6]/10 dark:focus-within:ring-white/10 mt-6"
               >
-                <span>FIND EVENTS</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </form>
-          </div>
+                {/* Keyword Search */}
+                <div className="flex-1 flex items-center gap-3 px-3.5 py-2 text-slate-700 dark:text-slate-300 min-w-0">
+                  <Search className="w-4 h-4 text-slate-400 shrink-0" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search conferences, workshops, summits..."
+                    className="w-full bg-transparent text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none font-medium truncate"
+                  />
+                </div>
 
-          {/* Bottom Hero Trust Row */}
-          <div className="pt-6 sm:pt-8 border-t border-white/10 mt-6 sm:mt-8 flex flex-wrap items-center justify-between gap-4 text-xs font-semibold text-slate-300">
-            <div className="flex items-center gap-2">
-              <QrCode className="w-4 h-4 text-[#C4B5FD]" />
-              <span>Instant QR Entry</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CreditCard className="w-4 h-4 text-[#C4B5FD]" />
-              <span>Secure Payments</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#C4B5FD]" />
-              <span>Verified Events</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-[#C4B5FD]" />
-              <span>Real-Time Booking</span>
+                {/* Subtle Divider */}
+                <div className="hidden sm:block h-7 w-px bg-slate-200 dark:bg-white/15" />
+
+                {/* City Selector */}
+                <div className="flex items-center gap-2 px-3 py-2 text-slate-700 dark:text-slate-300 shrink-0">
+                  <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
+                  <select
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    className="bg-transparent text-xs sm:text-sm text-slate-800 dark:text-white outline-none cursor-pointer pr-2 font-medium"
+                  >
+                    <option value="" className="bg-white dark:bg-[#070B1A] text-slate-900 dark:text-white">All Cities</option>
+                    <option value="Bangalore" className="bg-white dark:bg-[#070B1A] text-slate-900 dark:text-white">Bengaluru</option>
+                    <option value="Mumbai" className="bg-white dark:bg-[#070B1A] text-slate-900 dark:text-white">Mumbai</option>
+                    <option value="Delhi" className="bg-white dark:bg-[#070B1A] text-slate-900 dark:text-white">Delhi NCR</option>
+                    <option value="Hyderabad" className="bg-white dark:bg-[#070B1A] text-slate-900 dark:text-white">Hyderabad</option>
+                    <option value="Online" className="bg-white dark:bg-[#070B1A] text-slate-900 dark:text-white">Online / Virtual</option>
+                  </select>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  className="px-6 py-3 rounded-lg bg-[#6C4DF6] hover:bg-[#5839E6] text-white dark:bg-white dark:hover:bg-slate-100 dark:text-slate-950 font-extrabold text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm shrink-0"
+                >
+                  <span>FIND EVENTS</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </form>
             </div>
           </div>
+        </section>
 
+        {/* ─── ENTERPRISE TRUST & VALUE PROPOSITION TICKER ───────────────── */}
+        <div className="border-y border-slate-200/90 dark:border-slate-800/80 bg-slate-50/90 dark:bg-[#090E23]/90 backdrop-blur-md py-4 sm:py-5 shadow-xs">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 items-center">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#6C4DF6]/10 dark:bg-[#6C4DF6]/20 flex items-center justify-center text-[#6C4DF6] dark:text-[#C4B5FD] shrink-0">
+                  <QrCode className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">Instant QR Entry</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">Frictionless pass at gates</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#6C4DF6]/10 dark:bg-[#6C4DF6]/20 flex items-center justify-center text-[#6C4DF6] dark:text-[#C4B5FD] shrink-0">
+                  <CreditCard className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">Secure Payments</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">Encrypted checkout flow</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#6C4DF6]/10 dark:bg-[#6C4DF6]/20 flex items-center justify-center text-[#6C4DF6] dark:text-[#C4B5FD] shrink-0">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">Verified Events</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">Curated & authentic hosts</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#6C4DF6]/10 dark:bg-[#6C4DF6]/20 flex items-center justify-center text-[#6C4DF6] dark:text-[#C4B5FD] shrink-0">
+                  <Zap className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">Real-Time Booking</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">Instant seat reservation</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
 
       {/* ─── 2. EVERYTHING YOU NEED FOR BETTER EVENTS ─────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
