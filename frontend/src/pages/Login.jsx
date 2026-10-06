@@ -3,21 +3,16 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
+  Eye,
+  EyeOff,
+  AlertCircle,
+  CheckCircle2,
+  HelpCircle,
+  X,
   Shield,
   Calendar,
   User,
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  AlertCircle,
-  HelpCircle,
-  X,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -36,83 +31,57 @@ const loginSchema = z.object({
 });
 
 // ── Role Definitions ─────────────────────────────────────────────────────────
-const ROLES = {
-  ADMIN: {
-    id: 'ADMIN',
-    name: 'ADMIN',
-    label: 'ADMIN',
-    title: 'Manage EventHub',
-    modalTitle: 'Admin Portal Login',
-    welcome: 'Welcome back, Administrator',
-    description: 'Manage users, organizers, events, payments and platform activity.',
-    buttonText: 'Continue as Admin',
-    icon: Shield,
-    redirect: '/admin/dashboard',
-    accentColor: '#6366F1',
-    badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-800',
-    iconBgClass: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/70 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white',
-    hoverBorder: 'hover:border-indigo-500',
-    hoverButton: 'group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600',
-    formButton: 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-500/20',
-    demo: {
-      email: 'admin@eventhub.com',
-      password: 'Admin@123',
-    },
-  },
-  ORGANIZER: {
-    id: 'ORGANIZER',
-    name: 'ORGANIZER',
-    label: 'ORGANIZER',
-    title: 'Create & Manage Events',
-    modalTitle: 'Organizer Portal Login',
-    welcome: 'Welcome back, Organizer',
-    description: 'Create events, manage registrations, track payments and monitor attendance.',
-    buttonText: 'Continue as Organizer',
-    icon: Calendar,
-    redirect: '/organizer/create-event',
-    accentColor: '#10B981',
-    badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
-    iconBgClass: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white',
-    hoverBorder: 'hover:border-emerald-500',
-    hoverButton: 'group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600',
-    formButton: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-500/20',
-    demo: {
-      email: 'organizer@eventhub.com',
-      password: 'Organizer@123',
-    },
-  },
-  USER: {
+const ROLES = [
+  {
     id: 'USER',
-    name: 'USER',
-    label: 'USER',
-    title: 'Discover & Book Events',
-    modalTitle: 'User Account Login',
-    welcome: 'Welcome back',
-    description: 'Explore events, book tickets, make payments and access your QR passes.',
-    buttonText: 'Continue as User',
+    name: 'User',
+    title: 'Attendee / User Portal',
+    stepNumber: '1',
+    description: 'Explore live events, book tickets & access QR passes',
     icon: User,
     redirect: '/',
-    accentColor: '#3B82F6',
-    badgeClass: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800',
-    iconBgClass: 'bg-blue-50 text-blue-600 dark:bg-blue-950/70 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white',
-    hoverBorder: 'hover:border-blue-500',
-    hoverButton: 'group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600',
-    formButton: 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20',
     demo: {
       email: 'user@eventhub.com',
       password: 'User@123',
     },
   },
-};
+  {
+    id: 'ORGANIZER',
+    name: 'Organizer',
+    title: 'Organizer Workspace',
+    stepNumber: '2',
+    description: 'Host experiences, manage ticket sales & gate check-ins',
+    icon: Calendar,
+    redirect: '/organizer/create-event',
+    demo: {
+      email: 'organizer@eventhub.com',
+      password: 'Organizer@123',
+    },
+  },
+  {
+    id: 'ADMIN',
+    name: 'Admin',
+    title: 'Administrator Console',
+    stepNumber: '3',
+    description: 'Platform management, system governance & analytics',
+    icon: Shield,
+    redirect: '/admin/dashboard',
+    demo: {
+      email: 'admin@eventhub.com',
+      password: 'Admin@123',
+    },
+  },
+];
 
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const shouldReduceMotion = useReducedMotion();
 
   // State
-  const [selectedRole, setSelectedRole] = useState(null);
+  const [selectedRoleIndex, setSelectedRoleIndex] = useState(0);
+  const selectedRole = ROLES[selectedRoleIndex];
+
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -124,7 +93,6 @@ export default function Login() {
     register,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -135,53 +103,40 @@ export default function Login() {
     },
   });
 
-  // When changing role, clear error & success state
-  const handleSelectRole = (roleKey) => {
-    setSelectedRole(ROLES[roleKey]);
+  // Role Selection
+  const handleSelectRole = (index) => {
+    setSelectedRoleIndex(index);
     setAuthError('');
     setIsSuccess(false);
-    reset();
-  };
-
-  const handleBackToRoles = () => {
-    setSelectedRole(null);
-    setAuthError('');
-    setIsSuccess(false);
-    reset();
   };
 
   // Quick fill helper
-  const handleFillDemo = (email, password) => {
-    setValue('email', email, { shouldValidate: true });
-    setValue('password', password, { shouldValidate: true });
+  const handleFillDemo = () => {
+    setValue('email', selectedRole.demo.email, { shouldValidate: true });
+    setValue('password', selectedRole.demo.password, { shouldValidate: true });
   };
 
-  // Submit Handler with Backend Role Verification
+  // Submit Handler
   const onSubmit = async (values) => {
-    if (!selectedRole) return;
     setIsSubmitting(true);
     setAuthError('');
 
     try {
-      // 1. Authenticate with backend, passing expectedRole
       const authenticatedUser = await login(values.email, values.password, selectedRole.id);
 
-      // 2. Double-check role verification
       if (!authenticatedUser || authenticatedUser.role !== selectedRole.id) {
         throw new Error('This account does not belong to the selected role.');
       }
 
-      // 3. Trigger success animation
       setIsSuccess(true);
 
-      // 4. Redirect after smooth confirmation
       setTimeout(() => {
         const destination =
           selectedRole.id === 'USER'
             ? location.state?.from?.pathname || selectedRole.redirect
             : selectedRole.redirect;
         navigate(destination, { replace: true });
-      }, 600);
+      }, 500);
     } catch (err) {
       console.error('Login error:', err);
       const serverMessage =
@@ -210,454 +165,314 @@ export default function Login() {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#F8F9FC] dark:bg-[#0B0F19] text-[#111827] dark:text-slate-100 flex flex-col justify-between overflow-x-hidden transition-colors duration-200">
-      {/* ── Extremely Subtle Ambient Background Corner Blobs ───────────────── */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-purple-500/5 dark:bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-      </div>
+    <div className="min-h-screen w-full bg-[#07070a] text-white flex items-center justify-center p-3 sm:p-6 lg:p-10 font-sans selection:bg-purple-500/30">
+      {/* ── Main Window Frame (Inspired by reference design) ───────────────── */}
+      <div className="w-full max-w-5xl rounded-[32px] bg-[#0c0d12] border border-white/[0.08] p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-8 lg:gap-12 shadow-2xl relative">
+        
+        {/* ── LEFT PANEL: Radiant Purple Ambient Card with Step Pills ──────── */}
+        <div
+          className="relative rounded-[26px] overflow-hidden p-8 sm:p-10 flex flex-col justify-between items-center text-center w-full lg:w-[48%] min-h-[520px] lg:min-h-[620px] border border-white/10 shadow-2xl"
+          style={{
+            background:
+              'radial-gradient(ellipse 95% 75% at 50% 12%, rgba(147, 51, 234, 0.72) 0%, rgba(99, 102, 241, 0.35) 42%, rgba(14, 11, 26, 0.95) 75%, #08070d 100%)',
+          }}
+        >
+          {/* Subtle noise/dot overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
-      {/* ── Top Navigation Bar / Header ───────────────────────────────────── */}
-      <header className="sticky top-0 z-30 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E5E7EB] dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link
-            to="/"
-            className="flex items-center gap-2.5 group transition-transform duration-200 hover:scale-[1.01]"
-          >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#5B4BFF] to-[#7C3AED] flex items-center justify-center text-white shadow-sm">
-              <Calendar className="w-5 h-5" />
+          {/* Top Brand Logo */}
+          <Link to="/" className="relative z-10 flex items-center gap-2.5 text-white font-extrabold text-lg group">
+            <div className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-white" />
             </div>
-            <span className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-              Event<span className="text-[#5B4BFF]">Hub</span>
-            </span>
+            <span className="tracking-tight">EventHub</span>
           </Link>
 
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to Home</span>
-          </Link>
-        </div>
-      </header>
+          {/* Center Content: Headline & 3 Interactive Role Pills */}
+          <div className="relative z-10 w-full max-w-sm space-y-6 my-auto py-6">
+            <div className="space-y-2">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                Welcome to EventHub
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-300/80 max-w-xs mx-auto leading-relaxed">
+                Choose your portal to sign in and access your workspace.
+              </p>
+            </div>
 
-      {/* ── Main View Container ────────────────────────────────────────────── */}
-      <main className="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-        <AnimatePresence mode="wait">
-          {!selectedRole ? (
-            /* ═════════════════════════════════════════════════════════════════
-               1. ROLE SELECTION VIEW (Clean 3-Card Grid Layout)
-               ═════════════════════════════════════════════════════════════════ */
-            <motion.div
-              key="role-selection"
-              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 15 }}
-              animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -15 }}
-              transition={{ duration: 0.35, ease: 'easeOut' }}
-              className="w-full max-w-5xl flex flex-col items-center"
-            >
-              {/* Center Brand Element & Hero Heading */}
-              <div className="text-center mb-10 sm:mb-12 space-y-3">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200/80 dark:border-indigo-800/80 text-indigo-700 dark:text-indigo-300 text-xs font-bold tracking-wide uppercase">
-                  <Calendar className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                  <span>Welcome to EventHub</span>
-                </div>
+            {/* Vertical Pill List (Exact aesthetic from user screenshot) */}
+            <div className="space-y-3 pt-2">
+              {ROLES.map((role, idx) => {
+                const isActive = selectedRoleIndex === idx;
 
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#111827] dark:text-white">
-                  Choose how you want to continue
-                </h1>
-
-                <p className="text-sm sm:text-base text-[#6B7280] dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
-                  Select your account type to access the right EventHub experience.
-                </p>
-              </div>
-
-              {/* Three Role Cards (Horizontal on Desktop, Stack on Mobile) */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full">
-                {['ADMIN', 'ORGANIZER', 'USER'].map((roleKey) => {
-                  const role = ROLES[roleKey];
-                  const RoleIcon = role.icon;
-
-                  return (
-                    <motion.div
-                      key={role.id}
-                      whileHover={shouldReduceMotion ? {} : { y: -5 }}
-                      transition={{ duration: 0.25, ease: 'easeOut' }}
-                      onClick={() => handleSelectRole(role.id)}
-                      className={`group cursor-pointer rounded-[22px] bg-white dark:bg-slate-900 border border-[#E5E7EB] dark:border-slate-800 ${role.hoverBorder} shadow-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 p-7 sm:p-8 flex flex-col justify-between text-left relative overflow-hidden`}
-                    >
-                      {/* Top Accent Line */}
-                      <div
-                        className="absolute top-0 inset-x-0 h-1 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                        style={{ backgroundColor: role.accentColor }}
-                      />
-
-                      <div>
-                        {/* Icon Container & Role Tag */}
-                        <div className="flex items-center justify-between mb-6">
-                          <div
-                            className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${role.iconBgClass} shadow-sm`}
-                          >
-                            <RoleIcon className="w-6 h-6" />
-                          </div>
-
-                          <span
-                            className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full border ${role.badgeClass}`}
-                          >
-                            {role.label}
-                          </span>
-                        </div>
-
-                        {/* Title */}
-                        <h2 className="text-xl font-bold text-[#111827] dark:text-white mb-2 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
-                          {role.title}
-                        </h2>
-
-                        {/* Description */}
-                        <p className="text-xs sm:text-sm text-[#6B7280] dark:text-slate-400 leading-relaxed mb-8">
-                          {role.description}
-                        </p>
-                      </div>
-
-                      {/* CTA Button */}
-                      <div
-                        className={`w-full py-3 px-4 rounded-xl font-semibold text-xs sm:text-sm border border-[#E5E7EB] dark:border-slate-800 bg-[#F9FAFB] dark:bg-slate-800/80 text-[#111827] dark:text-slate-200 flex items-center justify-center gap-2 transition-all duration-300 ${role.hoverButton}`}
-                      >
-                        <span>{role.buttonText}</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-
-              {/* Bottom Trust Section */}
-              <div className="mt-14 text-center space-y-3">
-                <p className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
-                  One platform. Every event experience.
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-slate-500 dark:text-slate-400">
-                  <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
-                    <CheckCircle2 className="w-4 h-4" />
-                    Secure Authentication
-                  </span>
-                  <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
-                  <span className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-medium">
-                    <CheckCircle2 className="w-4 h-4" />
-                    Verified Events
-                  </span>
-                  <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
-                  <span className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-medium">
-                    <CheckCircle2 className="w-4 h-4" />
-                    Fast QR Check-in
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          ) : (
-            /* ═════════════════════════════════════════════════════════════════
-               2. ROLE LOGIN FORM VIEW (Clean Modern SaaS Form Card)
-               ═════════════════════════════════════════════════════════════════ */
-            <motion.div
-              key="role-login-form"
-              initial={
-                shouldReduceMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, y: 15, scale: 0.98 }
-              }
-              animate={
-                shouldReduceMotion
-                  ? { opacity: 1 }
-                  : { opacity: 1, y: 0, scale: 1 }
-              }
-              exit={
-                shouldReduceMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, y: -15, scale: 0.98 }
-              }
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="w-full max-w-md"
-            >
-              <div className="relative rounded-[22px] bg-white dark:bg-slate-900 border border-[#E5E7EB] dark:border-slate-800 p-7 sm:p-8 shadow-xl overflow-hidden">
-                {/* Top Subtle Role Accent Stripe */}
-                <div
-                  className="absolute top-0 inset-x-0 h-1.5"
-                  style={{ backgroundColor: selectedRole.accentColor }}
-                />
-
-                {/* Header with Role Badge */}
-                <div className="text-center space-y-2 mb-6">
-                  <div className="flex justify-center">
-                    <div
-                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider ${selectedRole.badgeClass}`}
-                    >
-                      {React.createElement(selectedRole.icon, { className: 'w-3.5 h-3.5' })}
-                      <span>{selectedRole.name}</span>
-                    </div>
-                  </div>
-
-                  <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-                    {selectedRole.modalTitle}
-                  </h2>
-                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                    {selectedRole.welcome}
-                  </p>
-                </div>
-
-                {/* 1-Click Demo Account Quick Fill Button */}
-                <div className="mb-5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex items-center justify-between gap-3">
-                  <div className="text-left">
-                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                      ⚡ Demo Credentials
-                    </p>
-                    <p className="text-[11px] text-slate-500 truncate max-w-[200px]">
-                      {selectedRole.demo.email}
-                    </p>
-                  </div>
+                return (
                   <button
+                    key={role.id}
                     type="button"
-                    onClick={() =>
-                      handleFillDemo(selectedRole.demo.email, selectedRole.demo.password)
-                    }
-                    className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 transition-colors border border-slate-200 dark:border-slate-600 shadow-2xs cursor-pointer"
-                  >
-                    Auto Fill
-                  </button>
-                </div>
-
-                {/* Error Banner */}
-                <AnimatePresence>
-                  {authError && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mb-4 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2.5"
-                    >
-                      <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <span className="font-semibold block text-rose-800 dark:text-rose-200">
-                          Authentication Notice
-                        </span>
-                        <span>{authError}</span>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Success Banner */}
-                <AnimatePresence>
-                  {isSuccess && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="mb-4 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2.5"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 animate-bounce" />
-                      <span className="font-semibold">
-                        Role verified! Redirecting to workspace...
-                      </span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Login Form */}
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                  {/* Email Field */}
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                      Email Address
-                    </label>
-                    <div className="relative group">
-                      <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 group-focus-within:text-[#5B4BFF] transition-colors" />
-                      <input
-                        type="email"
-                        autoComplete="email"
-                        {...register('email')}
-                        placeholder={`e.g. ${selectedRole.demo.email}`}
-                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl border bg-slate-50 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:bg-white dark:focus:bg-slate-900 transition-all ${
-                          errors.email
-                            ? 'border-rose-300 dark:border-rose-700 focus:ring-rose-400/30'
-                            : 'border-slate-200 dark:border-slate-700 focus:border-[#5B4BFF] focus:ring-[#5B4BFF]/20'
-                        }`}
-                      />
-                    </div>
-                    {errors.email && (
-                      <p className="text-[11px] text-rose-500 mt-1 pl-1">
-                        {errors.email.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Password Field */}
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                      Password
-                    </label>
-                    <div className="relative group">
-                      <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 group-focus-within:text-[#5B4BFF] transition-colors" />
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        autoComplete="current-password"
-                        {...register('password')}
-                        placeholder="••••••••"
-                        className={`w-full pl-10 pr-10 py-2.5 rounded-xl border bg-slate-50 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:bg-white dark:focus:bg-slate-900 transition-all ${
-                          errors.password
-                            ? 'border-rose-300 dark:border-rose-700 focus:ring-rose-400/30'
-                            : 'border-slate-200 dark:border-slate-700 focus:border-[#5B4BFF] focus:ring-[#5B4BFF]/20'
-                        }`}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 cursor-pointer"
-                        aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="w-4 h-4" />
-                        ) : (
-                          <Eye className="w-4 h-4" />
-                        )}
-                      </button>
-                    </div>
-                    {errors.password && (
-                      <p className="text-[11px] text-rose-500 mt-1 pl-1">
-                        {errors.password.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Remember Me & Forgot Password */}
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <label className="flex items-center gap-2 cursor-pointer select-none text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
-                      <input
-                        type="checkbox"
-                        {...register('rememberMe')}
-                        className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-[#5B4BFF] focus:ring-[#5B4BFF] cursor-pointer"
-                      />
-                      <span>Remember me</span>
-                    </label>
-
-                    <button
-                      type="button"
-                      onClick={() => setShowForgotModal(true)}
-                      className="text-slate-500 dark:text-slate-400 hover:text-[#5B4BFF] dark:hover:text-indigo-400 hover:underline transition-colors cursor-pointer"
-                    >
-                      Forgot password?
-                    </button>
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting || isSuccess}
-                    className={`w-full mt-2 py-3 px-4 rounded-xl font-bold text-sm tracking-wide shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${selectedRole.formButton} ${
-                      isSubmitting || isSuccess ? 'opacity-85 cursor-not-allowed' : 'hover:scale-[1.01] active:scale-[0.99]'
+                    onClick={() => handleSelectRole(idx)}
+                    className={`w-full py-3.5 px-4 rounded-2xl flex items-center gap-3.5 transition-all duration-200 text-left cursor-pointer ${
+                      isActive
+                        ? 'bg-white text-slate-950 font-bold shadow-xl scale-[1.02]'
+                        : 'bg-white/[0.07] hover:bg-white/[0.12] text-white/70 hover:text-white border border-white/[0.06]'
                     }`}
                   >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span>Verifying {selectedRole.name}...</span>
-                      </>
-                    ) : isSuccess ? (
-                      <>
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span>Authenticated</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Sign In as {selectedRole.name}</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
+                    {/* Circle Number Badge */}
+                    <div
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shrink-0 ${
+                        isActive
+                          ? 'bg-slate-950 text-white'
+                          : 'bg-white/[0.15] text-white/90'
+                      }`}
+                    >
+                      {role.stepNumber}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm truncate ${isActive ? 'text-slate-950' : 'text-white'}`}>
+                        {role.title}
+                      </p>
+                    </div>
                   </button>
-                </form>
+                );
+              })}
+            </div>
+          </div>
 
-                {/* Footer Controls: Change Role & Registration Link */}
-                <div className="mt-6 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-col items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={handleBackToRoles}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors group cursor-pointer"
-                  >
-                    <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-                    <span>Change Role</span>
-                  </button>
+          {/* Bottom Trust/Footer note */}
+          <div className="relative z-10 text-[11px] text-slate-400/80 flex items-center gap-1.5">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span>Instant QR pass verification & secure access</span>
+          </div>
+        </div>
 
-                  {/* Organizer Registration Link */}
-                  {selectedRole.id === 'ORGANIZER' && (
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Don't have an account?{' '}
-                      <Link
-                        to="/register?role=ORGANIZER"
-                        className="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline transition-colors"
-                      >
-                        Create new account
-                      </Link>
-                    </p>
-                  )}
+        {/* ── RIGHT PANEL: Clean Dark Sign In Form ─────────────────────────── */}
+        <div className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full px-2 sm:px-4 py-4">
+          
+          {/* Header */}
+          <div className="text-center sm:text-left mb-6 space-y-1">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Sign In Account
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400">
+              Enter your credentials to access your {selectedRole.name.toLowerCase()} account.
+            </p>
+          </div>
 
-                  {/* Normal User Registration Link */}
-                  {selectedRole.id === 'USER' && (
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Don't have an account?{' '}
-                      <Link
-                        to="/register?role=USER"
-                        className="font-semibold text-blue-600 dark:text-blue-400 hover:underline transition-colors"
-                      >
-                        Create new account
-                      </Link>
-                    </p>
-                  )}
-                </div>
-              </div>
-            </motion.div>
+          {/* Social Buttons */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            <button
+              type="button"
+              onClick={handleFillDemo}
+              className="py-2.5 px-4 rounded-xl bg-[#14151c] hover:bg-[#1a1b24] border border-white/[0.08] text-xs font-semibold text-slate-300 flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            >
+              {/* Google G logo */}
+              <svg className="w-4 h-4" viewBox="0 0 24 24">
+                <path
+                  fill="#EA4335"
+                  d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
+                />
+                <path
+                  fill="#4285F4"
+                  d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12 0 12s.7 2.3 1.9 4.7l3.7-1.9z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.4C3.7 20.1 7.5 23 12 23z"
+                />
+              </svg>
+              <span>Google</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleFillDemo}
+              className="py-2.5 px-4 rounded-xl bg-[#14151c] hover:bg-[#1a1b24] border border-white/[0.08] text-xs font-semibold text-slate-300 flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            >
+              {/* GitHub logo */}
+              <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                />
+              </svg>
+              <span>Github</span>
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="relative flex items-center justify-center mb-6">
+            <div className="border-t border-white/[0.08] w-full" />
+            <span className="bg-[#0c0d12] px-3 text-[11px] uppercase font-bold text-slate-500 absolute">
+              Or
+            </span>
+          </div>
+
+          {/* Demo Quick Pill */}
+          <div className="mb-4 p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between text-xs">
+            <span className="text-slate-400 text-[11px]">
+              Demo: <strong className="text-slate-200">{selectedRole.demo.email}</strong>
+            </span>
+            <button
+              type="button"
+              onClick={handleFillDemo}
+              className="text-[11px] font-bold text-purple-400 hover:text-purple-300 underline cursor-pointer"
+            >
+              Auto Fill
+            </button>
+          </div>
+
+          {/* Error Banner */}
+          {authError && (
+            <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-300 text-xs flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+              <span>{authError}</span>
+            </div>
           )}
-        </AnimatePresence>
-      </main>
 
-      {/* ── Bottom Brand Footer ────────────────────────────────────────────── */}
-      <footer className="relative z-10 w-full py-4 text-center text-xs text-slate-400 dark:text-slate-500">
-        <span>© {new Date().getFullYear()} EventHub Technologies Inc. All rights reserved.</span>
-      </footer>
+          {/* Success Banner */}
+          {isSuccess && (
+            <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>Authentication successful! Redirecting...</span>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Email Field */}
+            <div>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                Email
+              </label>
+              <input
+                type="email"
+                autoComplete="email"
+                {...register('email')}
+                placeholder={`eg. ${selectedRole.demo.email}`}
+                className={`w-full px-4 py-3 rounded-xl bg-[#161720] border text-sm text-white placeholder-slate-500 outline-none transition-all ${
+                  errors.email
+                    ? 'border-rose-500/60 focus:border-rose-400'
+                    : 'border-white/[0.08] focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30'
+                }`}
+              />
+              {errors.email && (
+                <p className="text-[11px] text-rose-400 mt-1 pl-1">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-medium text-slate-300">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowForgotModal(true)}
+                  className="text-[11px] text-slate-400 hover:text-white transition-colors cursor-pointer"
+                >
+                  Forgot?
+                </button>
+              </div>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  {...register('password')}
+                  placeholder="Enter your password"
+                  className={`w-full pl-4 pr-11 py-3 rounded-xl bg-[#161720] border text-sm text-white placeholder-slate-500 outline-none transition-all ${
+                    errors.password
+                      ? 'border-rose-500/60 focus:border-rose-400'
+                      : 'border-white/[0.08] focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors cursor-pointer p-1"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {errors.password ? (
+                <p className="text-[11px] text-rose-400 mt-1 pl-1">
+                  {errors.password.message}
+                </p>
+              ) : (
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Must be at least 6 characters.
+                </p>
+              )}
+            </div>
+
+            {/* Solid Pure White CTA Button (Matching reference design) */}
+            <button
+              type="submit"
+              disabled={isSubmitting || isSuccess}
+              className={`w-full mt-2 py-3.5 px-6 rounded-xl font-bold text-sm bg-white text-slate-950 hover:bg-slate-100 transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer ${
+                isSubmitting || isSuccess ? 'opacity-80 cursor-not-allowed' : 'hover:scale-[1.01] active:scale-[0.99]'
+              }`}
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin" />
+                  <span>Signing In as {selectedRole.name}...</span>
+                </>
+              ) : (
+                <span>Sign In</span>
+              )}
+            </button>
+          </form>
+
+          {/* Footer Navigation */}
+          <div className="mt-8 text-center text-xs text-slate-400">
+            <span>Don't have an account? </span>
+            <Link
+              to="/register"
+              className="font-bold text-white hover:underline transition-all"
+            >
+              Sign Up
+            </Link>
+          </div>
+        </div>
+
+      </div>
 
       {/* ── Forgot Password Modal ──────────────────────────────────────────── */}
-      <AnimatePresence>
-        {showForgotModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-sm rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-2xl relative"
+      {showForgotModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl bg-[#12131c] border border-white/10 p-6 shadow-2xl relative">
+            <button
+              type="button"
+              onClick={() => setShowForgotModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
-              <button
-                type="button"
-                onClick={() => setShowForgotModal(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3">
-                <HelpCircle className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Reset Password</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
-                Password recovery is managed by your system administrator. For demo purposes, you can use the default demo credentials provided on the login card.
-              </p>
-              <button
-                type="button"
-                onClick={() => setShowForgotModal(false)}
-                className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white text-xs font-semibold transition-colors cursor-pointer"
-              >
-                Got it
-              </button>
-            </motion.div>
+              <X className="w-5 h-5" />
+            </button>
+            <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mb-3">
+              <HelpCircle className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-white mb-1">Reset Password</h3>
+            <p className="text-xs text-slate-400 mb-4 leading-relaxed">
+              Password recovery is managed by the system administrator. For demo testing, use the auto-fill demo credentials provided on the login card.
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowForgotModal(false)}
+              className="w-full py-2.5 px-4 rounded-xl bg-white text-slate-950 font-bold text-xs hover:bg-slate-200 transition-colors cursor-pointer"
+            >
+              Got it
+            </button>
           </div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 }

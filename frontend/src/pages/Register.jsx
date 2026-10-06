@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Calendar, Lock, Mail, User, AlertCircle, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState(
     searchParams.get('role')?.toUpperCase() === 'ORGANIZER' ? 'ORGANIZER' : 'USER'
   );
@@ -29,8 +31,10 @@ export default function Register() {
     setLoading(true);
     setError('');
 
+    const fullName = `${firstName.trim()} ${lastName.trim()}`.trim() || firstName.trim();
+
     try {
-      await register({ name, email, password, role });
+      await register({ name: fullName, email, password, role });
       if (role === 'ORGANIZER') {
         navigate('/organizer/create-event', { replace: true });
       } else {
@@ -44,136 +48,294 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md space-y-6">
-        {/* Brand Header */}
-        <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white mx-auto shadow-glow">
-            <Calendar className="w-6 h-6" />
+    <div className="min-h-screen w-full bg-[#07070a] text-white flex items-center justify-center p-3 sm:p-6 lg:p-10 font-sans selection:bg-purple-500/30">
+      {/* ── Main Window Frame (Exact match to reference design) ─────────────── */}
+      <div className="w-full max-w-5xl rounded-[32px] bg-[#0c0d12] border border-white/[0.08] p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-8 lg:gap-12 shadow-2xl relative">
+        
+        {/* ── LEFT PANEL: Radiant Purple Blooming Card ────────────────────── */}
+        <div
+          className="relative rounded-[26px] overflow-hidden p-8 sm:p-10 flex flex-col justify-between items-center text-center w-full lg:w-[48%] min-h-[520px] lg:min-h-[640px] border border-white/10 shadow-2xl"
+          style={{
+            background:
+              'radial-gradient(ellipse 95% 75% at 50% 12%, rgba(147, 51, 234, 0.72) 0%, rgba(99, 102, 241, 0.35) 42%, rgba(14, 11, 26, 0.95) 75%, #08070d 100%)',
+          }}
+        >
+          {/* Subtle noise/dot overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+
+          {/* Top Brand Logo */}
+          <Link to="/" className="relative z-10 flex items-center gap-2.5 text-white font-extrabold text-lg group">
+            <div className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-white" />
+            </div>
+            <span className="tracking-tight">EventHub</span>
+          </Link>
+
+          {/* Center Content: Headline & 3 Step Pills */}
+          <div className="relative z-10 w-full max-w-sm space-y-6 my-auto py-6">
+            <div className="space-y-2">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                Get Started with Us
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-300/80 max-w-xs mx-auto leading-relaxed">
+                Complete these easy steps to register your account.
+              </p>
+            </div>
+
+            {/* Vertical Step Pills (Exact match to reference design) */}
+            <div className="space-y-3 pt-2">
+              {/* Step 1: Active Pure White Pill */}
+              <div className="w-full py-3.5 px-4 rounded-2xl bg-white text-slate-950 font-bold shadow-xl flex items-center gap-3.5 text-left">
+                <div className="w-6 h-6 rounded-full bg-slate-950 text-white flex items-center justify-center text-xs font-extrabold shrink-0">
+                  1
+                </div>
+                <p className="text-sm text-slate-950">Sign up your account</p>
+              </div>
+
+              {/* Step 2: Dark translucent Pill (Role selector) */}
+              <button
+                type="button"
+                onClick={() => setRole(role === 'USER' ? 'ORGANIZER' : 'USER')}
+                className="w-full py-3.5 px-4 rounded-2xl bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.06] text-white/80 hover:text-white flex items-center justify-between gap-3.5 text-left transition-colors cursor-pointer"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="w-6 h-6 rounded-full bg-white/[0.15] text-white/90 flex items-center justify-center text-xs font-extrabold shrink-0">
+                    2
+                  </div>
+                  <p className="text-sm">Account: {role === 'ORGANIZER' ? 'Organizer' : 'Attendee'}</p>
+                </div>
+                <span className="text-[10px] uppercase font-bold text-purple-300 bg-purple-500/20 px-2 py-0.5 rounded-md">
+                  Toggle
+                </span>
+              </button>
+
+              {/* Step 3: Inactive Pill */}
+              <div className="w-full py-3.5 px-4 rounded-2xl bg-white/[0.07] border border-white/[0.06] text-white/70 flex items-center gap-3.5 text-left">
+                <div className="w-6 h-6 rounded-full bg-white/[0.15] text-white/90 flex items-center justify-center text-xs font-extrabold shrink-0">
+                  3
+                </div>
+                <p className="text-sm">Set up your profile</p>
+              </div>
+            </div>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-            Create an Account
-          </h1>
-          <p className="text-xs text-slate-500">Join EventHub to discover, attend and host events</p>
+
+          {/* Bottom Note */}
+          <div className="relative z-10 text-[11px] text-slate-400/80 flex items-center gap-1.5">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span>Instant cryptographic QR entry pass enabled</span>
+          </div>
         </div>
 
-        {/* Form Container */}
-        <div className="glass-card p-6 sm:p-8 rounded-3xl shadow-xl space-y-5">
+        {/* ── RIGHT PANEL: Clean Dark Sign Up Form ─────────────────────────── */}
+        <div className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full px-2 sm:px-4 py-4">
+          
+          {/* Header */}
+          <div className="text-center sm:text-left mb-6 space-y-1">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Sign Up Account
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400">
+              Enter your personal data to create your account.
+            </p>
+          </div>
+
+          {/* Social Buttons */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            <button
+              type="button"
+              className="py-2.5 px-4 rounded-xl bg-[#14151c] hover:bg-[#1a1b24] border border-white/[0.08] text-xs font-semibold text-slate-300 flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24">
+                <path
+                  fill="#EA4335"
+                  d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
+                />
+                <path
+                  fill="#4285F4"
+                  d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12 0 12s.7 2.3 1.9 4.7l3.7-1.9z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.4C3.7 20.1 7.5 23 12 23z"
+                />
+              </svg>
+              <span>Google</span>
+            </button>
+
+            <button
+              type="button"
+              className="py-2.5 px-4 rounded-xl bg-[#14151c] hover:bg-[#1a1b24] border border-white/[0.08] text-xs font-semibold text-slate-300 flex items-center justify-center gap-2 transition-colors cursor-pointer"
+            >
+              <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                />
+              </svg>
+              <span>Github</span>
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="relative flex items-center justify-center mb-6">
+            <div className="border-t border-white/[0.08] w-full" />
+            <span className="bg-[#0c0d12] px-3 text-[11px] uppercase font-bold text-slate-500 absolute">
+              Or
+            </span>
+          </div>
+
+          {/* Error Banner */}
           {error && (
-            <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-300 text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
+            <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-300 text-xs flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                Full Name
-              </label>
-              <div className="relative">
-                <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            {/* First Name & Last Name (Side by Side like reference design) */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  First Name
+                </label>
                 <input
                   type="text"
                   required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Alex Morgan"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="eg. John"
+                  className="w-full px-4 py-3 rounded-xl bg-[#161720] border border-white/[0.08] text-sm text-white placeholder-slate-500 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 transition-all"
                 />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Last Name
+                </label>
                 <input
-                  type="email"
+                  type="text"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="eg. Francisco"
+                  className="w-full px-4 py-3 rounded-xl bg-[#161720] border border-white/[0.08] text-sm text-white placeholder-slate-500 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 transition-all"
                 />
               </div>
             </div>
 
+            {/* Email Field */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                Email
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="eg. johnfrans@gmail.com"
+                className="w-full px-4 py-3 rounded-xl bg-[#161720] border border-white/[0.08] text-sm text-white placeholder-slate-500 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 transition-all"
+              />
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5">
                 Password
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   minLength={6}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="At least 6 characters"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter your password"
+                  className="w-full pl-4 pr-11 py-3 rounded-xl bg-[#161720] border border-white/[0.08] text-sm text-white placeholder-slate-500 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 transition-all"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors cursor-pointer p-1"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
+              <p className="text-[11px] text-slate-500 mt-1">
+                Must be at least 6 characters.
+              </p>
             </div>
 
-            {/* Account Role Selector */}
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                I want to:
+            {/* Role Radio Pill */}
+            <div className="pt-1">
+              <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                I am registering as:
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => setRole('USER')}
-                  className={`p-3 rounded-xl border text-xs font-semibold flex flex-col items-center gap-1 transition-all ${
+                  className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border ${
                     role === 'USER'
-                      ? 'border-indigo-600 bg-indigo-50/70 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300'
-                      : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
+                      ? 'bg-purple-600/30 border-purple-500 text-white'
+                      : 'bg-[#14151c] border-white/[0.06] text-slate-400 hover:text-white'
                   }`}
                 >
-                  <User className="w-4 h-4" />
-                  Attend Events
+                  Attendee (User)
                 </button>
                 <button
                   type="button"
                   onClick={() => setRole('ORGANIZER')}
-                  className={`p-3 rounded-xl border text-xs font-semibold flex flex-col items-center gap-1 transition-all ${
+                  className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border ${
                     role === 'ORGANIZER'
-                      ? 'border-indigo-600 bg-indigo-50/70 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300'
-                      : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
+                      ? 'bg-purple-600/30 border-purple-500 text-white'
+                      : 'bg-[#14151c] border-white/[0.06] text-slate-400 hover:text-white'
                   }`}
                 >
-                  <ShieldCheck className="w-4 h-4" />
-                  Host & Organize
+                  Event Organizer
                 </button>
               </div>
             </div>
 
+            {/* Solid Pure White CTA Button (Exact match to reference design) */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 mt-2"
+              className={`w-full mt-2 py-3.5 px-6 rounded-xl font-bold text-sm bg-white text-slate-950 hover:bg-slate-100 transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer ${
+                loading ? 'opacity-80 cursor-not-allowed' : 'hover:scale-[1.01] active:scale-[0.99]'
+              }`}
             >
               {loading ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              ) : (
                 <>
-                  Create Account <ArrowRight className="w-4 h-4" />
+                  <div className="w-4 h-4 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin" />
+                  <span>Creating account...</span>
                 </>
+              ) : (
+                <span>Sign Up</span>
               )}
             </button>
           </form>
 
-          <p className="text-center text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
-            Already have an account?{' '}
-            <Link to="/login" className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
-              Sign In
+          {/* Footer Navigation */}
+          <div className="mt-8 text-center text-xs text-slate-400">
+            <span>Already have an account? </span>
+            <Link
+              to="/login"
+              className="font-bold text-white hover:underline transition-all"
+            >
+              Log in
             </Link>
-          </p>
+          </div>
         </div>
+
       </div>
     </div>
   );
