@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, AlertCircle, ArrowLeft, Calendar } from 'lucide-react';
 
 export default function Register() {
   const { register } = useAuth();
@@ -48,9 +48,30 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#07070a] text-white flex items-center justify-center p-3 sm:p-6 lg:p-10 font-sans selection:bg-purple-500/30">
-      {/* ── Main Window Frame (Exact match to reference design) ─────────────── */}
-      <div className="w-full max-w-5xl rounded-[32px] bg-[#0c0d12] border border-white/[0.08] p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-8 lg:gap-12 shadow-2xl relative">
+    <div className="min-h-screen w-full bg-[#07070a] text-white flex flex-col justify-between p-3 sm:p-6 lg:p-8 font-sans selection:bg-purple-500/30">
+      
+      {/* ── Top Header: Brand (Left) & Back to Home (Right) ───────────────── */}
+      <header className="w-full max-w-5xl mx-auto py-2 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+            <Calendar className="w-5 h-5" />
+          </div>
+          <span className="text-xl font-extrabold tracking-tight text-white">
+            Event<span className="text-indigo-400">Hub</span>
+          </span>
+        </Link>
+
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all hover:scale-[1.02]"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>Back to Home</span>
+        </Link>
+      </header>
+
+      {/* ── Main Window Frame ──────────────────────────────────────────────── */}
+      <div className="w-full max-w-5xl mx-auto my-auto rounded-[32px] bg-[#0c0d12] border border-white/[0.08] p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-8 lg:gap-12 shadow-2xl relative">
         
         {/* ── LEFT PANEL: Radiant Purple Blooming Card ────────────────────── */}
         <div
@@ -63,13 +84,13 @@ export default function Register() {
           {/* Subtle noise/dot overlay */}
           <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
-          {/* Top Brand Logo */}
-          <Link to="/" className="relative z-10 flex items-center gap-2.5 text-white font-extrabold text-lg group">
+          {/* Top Brand Logo inside Card */}
+          <div className="relative z-10 flex items-center gap-2 text-white font-bold text-base">
             <div className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center">
               <div className="w-2.5 h-2.5 rounded-full bg-white" />
             </div>
-            <span className="tracking-tight">EventHub</span>
-          </Link>
+            <span>EventHub</span>
+          </div>
 
           {/* Center Content: Headline & 3 Step Pills */}
           <div className="relative z-10 w-full max-w-sm space-y-6 my-auto py-6">
@@ -82,7 +103,7 @@ export default function Register() {
               </p>
             </div>
 
-            {/* Vertical Step Pills (Exact match to reference design) */}
+            {/* Vertical Step Pills */}
             <div className="space-y-3 pt-2">
               {/* Step 1: Active Pure White Pill */}
               <div className="w-full py-3.5 px-4 rounded-2xl bg-white text-slate-950 font-bold shadow-xl flex items-center gap-3.5 text-left">
@@ -139,47 +160,31 @@ export default function Register() {
             </p>
           </div>
 
-          {/* Social Buttons */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <button
-              type="button"
-              className="py-2.5 px-4 rounded-xl bg-[#14151c] hover:bg-[#1a1b24] border border-white/[0.08] text-xs font-semibold text-slate-300 flex items-center justify-center gap-2 transition-colors cursor-pointer"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24">
-                <path
-                  fill="#EA4335"
-                  d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
-                />
-                <path
-                  fill="#4285F4"
-                  d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12 0 12s.7 2.3 1.9 4.7l3.7-1.9z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.4C3.7 20.1 7.5 23 12 23z"
-                />
-              </svg>
-              <span>Google</span>
-            </button>
-
-            <button
-              type="button"
-              className="py-2.5 px-4 rounded-xl bg-[#14151c] hover:bg-[#1a1b24] border border-white/[0.08] text-xs font-semibold text-slate-300 flex items-center justify-center gap-2 transition-colors cursor-pointer"
-            >
-              <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                />
-              </svg>
-              <span>Github</span>
-            </button>
-          </div>
+          {/* Google Button (Single full-width button, Github removed) */}
+          <button
+            type="button"
+            className="w-full py-2.5 px-4 rounded-xl bg-[#14151c] hover:bg-[#1a1b24] border border-white/[0.08] text-xs font-semibold text-slate-300 flex items-center justify-center gap-2.5 transition-colors cursor-pointer mb-6"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24">
+              <path
+                fill="#EA4335"
+                d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
+              />
+              <path
+                fill="#4285F4"
+                d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12 0 12s.7 2.3 1.9 4.7l3.7-1.9z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.4C3.7 20.1 7.5 23 12 23z"
+              />
+            </svg>
+            <span>Continue with Google</span>
+          </button>
 
           {/* Divider */}
           <div className="relative flex items-center justify-center mb-6">
@@ -199,7 +204,7 @@ export default function Register() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* First Name & Last Name (Side by Side like reference design) */}
+            {/* First Name & Last Name */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5">
@@ -305,7 +310,7 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Solid Pure White CTA Button (Exact match to reference design) */}
+            {/* Solid Pure White CTA Button */}
             <button
               type="submit"
               disabled={loading}
@@ -337,6 +342,11 @@ export default function Register() {
         </div>
 
       </div>
+
+      {/* Bottom subtle copyright */}
+      <footer className="w-full text-center py-2 text-[11px] text-slate-500">
+        <span>© {new Date().getFullYear()} EventHub Technologies Inc. All rights reserved.</span>
+      </footer>
     </div>
   );
 }
