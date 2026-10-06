@@ -236,96 +236,57 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Column: Visual Interactive Event Pass & Image Showcase */}
+            {/* Right Column: High-Impact Hero Event Experience Image */}
             <div className="lg:col-span-5 relative flex items-center justify-center">
-              {/* Back tilted card */}
-              <div className="absolute top-4 -right-2 sm:right-2 w-72 sm:w-80 h-96 rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl rotate-6 opacity-60 dark:opacity-40 hidden sm:block pointer-events-none transition-transform hover:rotate-12 duration-500">
-                <img
-                  src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&auto=format&fit=crop&q=80"
-                  alt="Concert background"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-              </div>
+              {/* Ambient glowing backlight */}
+              <div className="absolute -inset-2 bg-gradient-to-tr from-indigo-500/30 via-purple-500/20 to-pink-500/30 rounded-3xl blur-2xl opacity-70 dark:opacity-50 pointer-events-none" />
 
-              {/* Main Visual Showcase Card */}
-              <div className="relative w-full max-w-sm sm:max-w-md rounded-3xl overflow-hidden bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-slate-800 shadow-2xl shadow-indigo-500/20 backdrop-blur-xl group hover:shadow-indigo-500/30 transition-all duration-300 hover:-translate-y-1">
-                {/* Event Photo Banner */}
-                <div className="relative h-48 sm:h-52 w-full overflow-hidden">
+              {/* Main Hero Image Showcase Card */}
+              <div className="relative w-full max-w-sm sm:max-w-md rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-indigo-500/20 group">
+                <div className="relative h-[380px] sm:h-[420px] w-full overflow-hidden">
                   <img
-                    src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1000&auto=format&fit=crop&q=80"
-                    alt="Global Tech & AI Summit 2026"
+                    src="/hero-events.jpg"
+                    alt="Live Event Experience"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                  {/* Bottom gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
 
-                  {/* Top Badges */}
-                  <div className="absolute top-3 left-3 flex gap-2">
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-600/90 text-white backdrop-blur-md shadow-md">
-                      Technology
+                  {/* Floating Top Pill */}
+                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                    <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-950/70 text-white backdrop-blur-md border border-white/20 shadow-lg flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      500+ Live Experiences
                     </span>
-                    <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/90 text-white backdrop-blur-md shadow-md flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                      Live Entry
-                    </span>
-                  </div>
-
-                  <div className="absolute top-3 right-3">
-                    <span className="px-3 py-1 rounded-full text-xs font-black bg-white/95 text-slate-900 shadow-md">
-                      ₹999
+                    <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-600/80 text-white backdrop-blur-md shadow-lg">
+                      Concerts • Summits
                     </span>
                   </div>
 
-                  {/* Event Info Overlay */}
-                  <div className="absolute bottom-3 left-3 right-3 text-white">
-                    <h3 className="font-extrabold text-lg sm:text-xl drop-shadow-md leading-tight">
-                      Global AI & Web3 Summit 2026
-                    </h3>
-                    <div className="flex items-center gap-3 text-xs text-slate-200 mt-1">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5 text-indigo-400" /> Nov 15, 2026
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-indigo-400" /> Bengaluru
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Simulated Digital QR Ticket Pass */}
-                <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/80 border-t border-dashed border-slate-200 dark:border-slate-800">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5">
-                        <Ticket className="w-4 h-4 text-indigo-500" />
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                          Digital Admission Pass
-                        </span>
-                      </div>
-                      <p className="font-mono text-xs font-semibold text-indigo-600 dark:text-indigo-400">
-                        PASS-TKT-9A4F-2026
+                  {/* Floating Bottom Card */}
+                  <div className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/15 text-white shadow-xl flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-wider font-bold text-indigo-400">
+                        EventHub Atmosphere
                       </p>
-                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-                        ✓ Cryptographic QR Verified
-                      </span>
+                      <p className="text-sm font-extrabold text-white">
+                        Instant QR Entry Guaranteed
+                      </p>
                     </div>
-
-                    {/* QR Code graphic */}
-                    <div className="w-20 h-20 p-1.5 rounded-2xl bg-white shadow-md border border-slate-200 flex-shrink-0 flex items-center justify-center">
-                      <img
-                        src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=EVENTHUB-VIP-PASS-9A4F&color=1e1b4b"
-                        alt="Event QR code"
-                        className="w-full h-full object-contain"
-                      />
+                    <div className="flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/20 px-2.5 py-1 rounded-lg border border-emerald-500/30">
+                      <span>⚡ 0.4s Scan</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Floating feature pills */}
-              <div className="absolute -bottom-4 -left-2 sm:left-4 z-20 px-3.5 py-1.5 rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 shadow-xl flex items-center gap-2 text-xs font-bold text-slate-800 dark:text-slate-200 animate-bounce duration-1000">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>⚡ 0.4s Instant Gate Check-in</span>
+              {/* Floating mini review chip */}
+              <div className="absolute -bottom-3 -left-2 sm:left-4 z-20 px-4 py-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 shadow-xl flex items-center gap-2.5 text-xs font-bold text-slate-800 dark:text-slate-100">
+                <div className="flex text-amber-400 text-xs">
+                  ★★★★★
+                </div>
+                <span className="text-slate-300 dark:text-slate-700">|</span>
+                <span>12,000+ Happy Attendees</span>
               </div>
             </div>
 
