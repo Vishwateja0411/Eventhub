@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
@@ -54,6 +54,35 @@ const queryClient = new QueryClient({
   },
 });
 
+// ── Global Scroll To Top on Route Change ──────────────────────────────────────
+function ScrollToTop() {
+  const { pathname, search, hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const timer = setTimeout(() => {
+        const element = document.getElementById(hash.replace('#', ''));
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        }
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+
+    // Always scroll window to the absolute starting (top = 0)
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+    // Also reset any scrollable main elements (e.g. dashboards)
+    document.querySelectorAll('main').forEach((el) => {
+      el.scrollTop = 0;
+    });
+  }, [pathname, search, hash]);
+
+  return null;
+}
+
 // ── Public layout wrapper (Navbar + Footer) ───────────────────────────────────
 function PublicLayout({ children }) {
   return (
@@ -71,6 +100,7 @@ export default function App() {
       <ThemeProvider>
         <AuthProvider>
           <BrowserRouter>
+            <ScrollToTop />
             <Routes>
               {/* ═══════════════════════════════════════════════════════════════
                   PUBLIC ROUTES (Visitor / User)
