@@ -3,18 +3,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/client';
 import EventCard from '../components/events/EventCard';
 import {
-  Sparkles,
-  ArrowRight,
-  TrendingUp,
-  ShieldCheck,
-  QrCode,
-  Zap,
   Search,
   MapPin,
-  Star,
+  ArrowRight,
+  QrCode,
+  ShieldCheck,
+  CreditCard,
+  BarChart3,
   CheckCircle2,
-  Calendar,
-  Ticket,
+  Lock,
+  Zap,
+  Sparkles,
+  Layers,
 } from 'lucide-react';
 
 const CATEGORY_IMAGES = {
@@ -28,34 +28,46 @@ const CATEGORY_IMAGES = {
   Health: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&auto=format&fit=crop&q=80',
 };
 
-const ATMOSPHERE_CARDS = [
+const FALLBACK_FEATURED_EVENTS = [
   {
-    title: 'Live Concerts & Festivals',
-    subtitle: 'Electrifying sound & live stages',
-    tag: 'Music',
-    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=80',
-    link: '/events?category=music',
+    id: 'f-1',
+    slug: 'global-tech-summit-2026',
+    title: 'Global AI & Web3 Summit 2026',
+    description: 'Join industry pioneers for deep dives into autonomous AI systems, blockchain infrastructure, and developer ecosystems.',
+    category: { name: 'Technology' },
+    city: 'Bengaluru',
+    startDate: new Date(Date.now() + 86400000 * 14).toISOString(),
+    price: 999,
+    spotsLeft: 84,
+    organizer: { name: 'TechCon Innovations' },
+    bannerUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80',
   },
   {
-    title: 'Global Tech Summits',
-    subtitle: 'Keynotes, AI demos & hackathons',
-    tag: 'Technology',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80',
-    link: '/events?category=technology',
+    id: 'f-2',
+    slug: 'pulse-electronic-music-fest',
+    title: 'Pulse Neon Music & Lights Festival',
+    description: 'An immersive audio-visual festival featuring headline international electronic artists and multi-genre stages.',
+    category: { name: 'Music' },
+    city: 'Mumbai',
+    startDate: new Date(Date.now() + 86400000 * 22).toISOString(),
+    price: 1499,
+    spotsLeft: 120,
+    organizer: { name: 'VibeWorks Live' },
+    bannerUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=80',
   },
   {
-    title: 'Creative Arts & Design',
-    subtitle: 'Exhibitions & interactive workshops',
-    tag: 'Arts',
-    image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800&auto=format&fit=crop&q=80',
-    link: '/events?category=arts',
-  },
-  {
-    title: 'Founder & VIP Mixers',
-    subtitle: 'Curated networking & executive talks',
-    tag: 'Business',
-    image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&auto=format&fit=crop&q=80',
-    link: '/events?category=business',
+    id: 'f-3',
+    slug: 'founder-scaleup-conclave',
+    title: 'NextScale Founders & Product Conclave',
+    description: 'Exclusive masterclasses, venture pitch sessions, and product design roundtables with tier-1 founders.',
+    category: { name: 'Business' },
+    city: 'Delhi NCR',
+    startDate: new Date(Date.now() + 86400000 * 30).toISOString(),
+    price: 0,
+    isFree: true,
+    spotsLeft: 35,
+    organizer: { name: 'VentureScale Network' },
+    bannerUrl: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&auto=format&fit=crop&q=80',
   },
 ];
 
@@ -74,10 +86,12 @@ export default function Home() {
           api.get('/events/featured'),
           api.get('/categories'),
         ]);
-        setFeaturedEvents(eventsRes.data.events || []);
+        const eventsData = eventsRes.data.events || [];
+        setFeaturedEvents(eventsData.length > 0 ? eventsData : FALLBACK_FEATURED_EVENTS);
         setCategories(catsRes.data.categories || []);
       } catch (err) {
         console.error('Failed to load home data:', err);
+        setFeaturedEvents(FALLBACK_FEATURED_EVENTS);
       } finally {
         setLoading(false);
       }
@@ -94,60 +108,56 @@ export default function Home() {
   };
 
   return (
-    <div className="space-y-24 pb-24">
-      {/* ─── HERO SECTION ────────────────────────────────────────── */}
-      <section className="relative pt-6 sm:pt-10 pb-12 overflow-hidden">
+    <div className="space-y-24 sm:space-y-32 pb-24">
+      {/* ─── 1. HERO SECTION ────────────────────────────────────────── */}
+      <section className="relative pt-6 sm:pt-12 pb-8 overflow-hidden">
         {/* Ambient lighting & subtle gradient backdrop */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(99,102,241,0.22),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(99,102,241,0.18),rgba(2,6,23,0))] pointer-events-none" />
-        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-indigo-600/25 via-purple-600/20 to-pink-500/20 dark:from-indigo-600/18 dark:via-purple-600/12 dark:to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 right-10 w-96 h-96 bg-pink-500/15 dark:bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(99,102,241,0.2),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(99,102,241,0.18),rgba(7,11,20,0))] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[320px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/15 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
-            {/* Left Column: Headline, Search, Social Proof */}
+            {/* Left Column: Headline, Search, Trust Indicators */}
             <div className="lg:col-span-7 text-center lg:text-left space-y-6">
-              {/* Live Platform Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-50/90 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/80 backdrop-blur-md shadow-xs">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Live Event Platform for Next-Gen Experiences</span>
+              
+              {/* Main Headline */}
+              <div className="space-y-2">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.12]">
+                  Discover Events Worth Experiencing
+                </h1>
+                <p className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                  Instant QR Passes. Seamless Entry.
+                </p>
               </div>
 
-              {/* Main Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.1]">
-                Discover Extraordinary Events
-                <span className="block mt-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
-                  with Instant QR Passes
-                </span>
-              </h1>
-
-              {/* Subheading */}
+              {/* Description */}
               <p className="max-w-xl mx-auto lg:mx-0 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-                Join premier tech summits, design conferences, workshops, and music festivals. Instant cryptographic entry passes, verified admission, and zero gate queues.
+                Discover conferences, workshops, concerts, festivals, and professional events. Book your seat and receive a secure QR pass for instant entry.
               </p>
 
-              {/* Interactive Command Search Bar */}
+              {/* 64-72px High Search Interface */}
               <form
                 onSubmit={handleHeroSearch}
-                className="w-full max-w-2xl mx-auto lg:mx-0 p-2 rounded-2xl bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-2xl shadow-indigo-500/10 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all focus-within:border-indigo-500/50 focus-within:ring-2 focus-within:ring-indigo-500/20"
+                className="w-full max-w-2xl mx-auto lg:mx-0 min-h-[64px] sm:h-[68px] p-2 rounded-2xl bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/90 dark:border-slate-800 shadow-xl shadow-indigo-500/10 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all duration-300 hover:border-indigo-400/50 focus-within:border-indigo-500/60 focus-within:ring-4 focus-within:ring-indigo-500/15"
               >
-                {/* Keyword Input */}
-                <div className="flex-1 flex items-center gap-3 px-3 py-2 text-slate-400">
+                {/* Keyword Search Input */}
+                <div className="flex-1 flex items-center gap-3 px-3.5 py-2 text-slate-400">
                   <Search className="w-5 h-5 text-indigo-500 flex-shrink-0" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search conferences, workshops, festivals, topics..."
-                    className="w-full bg-transparent text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none"
+                    placeholder="Search events, conferences, workshops..."
+                    className="w-full bg-transparent text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none font-medium"
                   />
                 </div>
 
                 {/* Subtle Divider */}
-                <div className="hidden sm:block h-7 w-px bg-slate-200 dark:bg-slate-800" />
+                <div className="hidden sm:block h-8 w-px bg-slate-200 dark:bg-slate-800" />
 
-                {/* Location selector */}
-                <div className="flex items-center gap-2 px-3 py-2 text-slate-400">
+                {/* City Selector */}
+                <div className="flex items-center gap-2 px-3.5 py-2 text-slate-400">
                   <MapPin className="w-4 h-4 text-indigo-500 flex-shrink-0" />
                   <select
                     value={selectedCity}
@@ -163,7 +173,7 @@ export default function Home() {
                   </select>
                 </div>
 
-                {/* Submit button */}
+                {/* Hero Primary CTA: Find Events */}
                 <button
                   type="submit"
                   className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm shadow-md shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
@@ -173,238 +183,286 @@ export default function Home() {
                 </button>
               </form>
 
-              {/* Quick Discovery Tags */}
+              {/* 3-4 Popular Category Pills */}
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1">
-                <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 mr-1 flex items-center gap-1">
-                  Popular:
-                </span>
-                {[
-                  { label: '🔥 Trending', query: 'sortBy=date' },
-                  { label: '💻 Tech & AI', query: 'category=technology' },
-                  { label: '🎨 Arts & Design', query: 'category=arts' },
-                  { label: '🎵 Music', query: 'category=music' },
-                  { label: '💼 Business', query: 'category=business' },
-                  { label: '⚡ Free Passes', query: 'isFree=true' },
-                ].map((pill, idx) => (
-                  <Link
-                    key={idx}
-                    to={`/events?${pill.query}`}
-                    className="px-3 py-1 rounded-full text-xs font-medium bg-white/70 dark:bg-slate-900/70 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 shadow-xs transition-all hover:scale-105 hover:border-indigo-400/50"
-                  >
-                    {pill.label}
-                  </Link>
-                ))}
+                <Link
+                  to="/events"
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 transition-all hover:-translate-y-0.5"
+                >
+                  🔥 Trending
+                </Link>
+                <Link
+                  to="/events?category=technology"
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 transition-all hover:-translate-y-0.5"
+                >
+                  💻 Tech & AI
+                </Link>
+                <Link
+                  to="/events?category=arts"
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 transition-all hover:-translate-y-0.5"
+                >
+                  🎨 Arts & Design
+                </Link>
+                <Link
+                  to="/events?category=music"
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 transition-all hover:-translate-y-0.5"
+                >
+                  🎵 Music
+                </Link>
               </div>
 
-              {/* Social Proof & Trust Strip */}
-              <div className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-5 px-4 py-2 rounded-full bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/70 dark:border-slate-800/80 shadow-xs text-xs text-slate-600 dark:text-slate-400">
-                <div className="flex items-center gap-2">
-                  <div className="flex -space-x-2">
-                    <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
-                      AK
-                    </div>
-                    <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-pink-500 to-rose-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
-                      SR
-                    </div>
-                    <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
-                      VT
-                    </div>
-                    <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
-                      +
-                    </div>
-                  </div>
-                  <span><strong className="text-slate-900 dark:text-white font-semibold">12,500+</strong> registered</span>
-                </div>
-
-                <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
-
-                <div className="flex items-center gap-1.5 font-medium">
-                  <div className="flex text-amber-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  <span><strong className="text-slate-900 dark:text-white font-semibold">4.9/5</strong></span>
-                </div>
-
-                <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
-
-                <div className="flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
+              {/* Trust-Focused Messaging (Replacing excessive statistics) */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-3 text-xs font-medium text-slate-500 dark:text-slate-400">
+                <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>Instant QR Check-in</span>
-                </div>
+                  Verified Events
+                </span>
+                <span className="text-slate-300 dark:text-slate-700">•</span>
+                <span className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Secure QR Passes
+                </span>
+                <span className="text-slate-300 dark:text-slate-700">•</span>
+                <span className="flex items-center gap-1.5 text-purple-600 dark:text-purple-400">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Instant Check-in
+                </span>
               </div>
             </div>
 
-            {/* Right Column: High-Impact Hero Event Experience Image */}
+            {/* Right Column: Premium Event Image with 2 Floating Cards */}
             <div className="lg:col-span-5 relative flex items-center justify-center">
-              {/* Ambient glowing backlight */}
-              <div className="absolute -inset-2 bg-gradient-to-tr from-indigo-500/30 via-purple-500/20 to-pink-500/30 rounded-3xl blur-2xl opacity-70 dark:opacity-50 pointer-events-none" />
+              {/* Subtle ambient glowing backdrop */}
+              <div className="absolute -inset-2 bg-gradient-to-tr from-indigo-500/25 via-purple-500/20 to-pink-500/20 rounded-[28px] blur-2xl opacity-60 pointer-events-none" />
 
-              {/* Main Hero Image Showcase Card */}
-              <div className="relative w-full max-w-sm sm:max-w-md rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-indigo-500/20 group">
-                <div className="relative h-[380px] sm:h-[420px] w-full overflow-hidden">
+              {/* Main Event Showcase Card */}
+              <div className="relative w-full max-w-sm sm:max-w-md rounded-[24px] overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-2xl shadow-indigo-500/15 group">
+                <div className="relative h-[400px] sm:h-[440px] w-full overflow-hidden bg-slate-950">
                   <img
                     src="/hero-events.jpg"
                     alt="Live Event Experience"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  {/* Bottom gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
+                  {/* Subtle dark gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent" />
 
-                  {/* Floating Top Pill */}
-                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                    <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-950/70 text-white backdrop-blur-md border border-white/20 shadow-lg flex items-center gap-2">
+                  {/* Floating Card 1: Top Pill */}
+                  <div className="absolute top-4 left-4">
+                    <div className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-950/75 text-white backdrop-blur-md border border-white/20 shadow-lg flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       500+ Live Experiences
-                    </span>
-                    <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-600/80 text-white backdrop-blur-md shadow-lg">
-                      Concerts • Summits
-                    </span>
+                    </div>
                   </div>
 
-                  {/* Floating Bottom Card */}
+                  {/* Floating Card 2: Bottom Info Card */}
                   <div className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/15 text-white shadow-xl flex items-center justify-between gap-4">
                     <div>
                       <p className="text-[11px] uppercase tracking-wider font-bold text-indigo-400">
-                        EventHub Atmosphere
+                        EventHub Access
                       </p>
                       <p className="text-sm font-extrabold text-white">
-                        Instant QR Entry Guaranteed
+                        Instant QR Entry
                       </p>
                     </div>
-                    <div className="flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/20 px-2.5 py-1 rounded-lg border border-emerald-500/30">
+                    <div className="flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/20 px-3 py-1.5 rounded-xl border border-emerald-500/30">
                       <span>⚡ 0.4s Scan</span>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* Floating mini review chip */}
-              <div className="absolute -bottom-3 -left-2 sm:left-4 z-20 px-4 py-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 shadow-xl flex items-center gap-2.5 text-xs font-bold text-slate-800 dark:text-slate-100">
-                <div className="flex text-amber-400 text-xs">
-                  ★★★★★
-                </div>
-                <span className="text-slate-300 dark:text-slate-700">|</span>
-                <span>12,000+ Happy Attendees</span>
-              </div>
             </div>
 
           </div>
+        </div>
+      </section>
 
-          {/* Highlights bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-7xl mx-auto pt-14 border-t border-slate-200/60 dark:border-slate-800/60 text-left">
-            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm hover:border-indigo-400/50 hover:shadow-xs transition-all">
-              <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
-                <QrCode className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white">QR Check-in</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">1-second gate scan</p>
-              </div>
+      {/* ─── 2. FOUR-CARD FEATURE SECTION ───────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Feature 1 */}
+          <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:border-indigo-400/50 dark:hover:border-indigo-500/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 border border-indigo-100 dark:border-indigo-900/50">
+              <QrCode className="w-6 h-6" />
             </div>
-            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm hover:border-emerald-400/50 hover:shadow-xs transition-all">
-              <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white">Safe & Verified</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Cryptographic tickets</p>
-              </div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1.5">
+              QR Check-in
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+              Fast, secure entry with instant QR scanning.
+            </p>
+          </div>
+
+          {/* Feature 2 */}
+          <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:border-emerald-400/50 dark:hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 border border-emerald-100 dark:border-emerald-900/50">
+              <ShieldCheck className="w-6 h-6" />
             </div>
-            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm hover:border-purple-400/50 hover:shadow-xs transition-all">
-              <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400">
-                <Zap className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white">Zero Waitlist</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Instant registration</p>
-              </div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1.5">
+              Verified Events
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+              Discover events from trusted organizers.
+            </p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:border-purple-400/50 dark:hover:border-purple-500/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-950/70 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4 border border-purple-100 dark:border-purple-900/50">
+              <CreditCard className="w-6 h-6" />
             </div>
-            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm hover:border-amber-400/50 hover:shadow-xs transition-all">
-              <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
-                <TrendingUp className="w-5 h-5" />
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1.5">
+              Secure Payments
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+              Safe and reliable event ticket payments.
+            </p>
+          </div>
+
+          {/* Feature 4 */}
+          <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:border-amber-400/50 dark:hover:border-amber-500/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/70 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4 border border-amber-100 dark:border-amber-900/50">
+              <BarChart3 className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1.5">
+              Live Analytics
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+              Real-time attendance and event insights.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 3. HOW IT WORKS SECTION ────────────────────────────────── */}
+      <section id="how-it-works" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+            Frictionless Process
+          </span>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white mt-1">
+            Your Event Journey, Simplified
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">
+            From discovering extraordinary experiences to walking through the gate in seconds.
+          </p>
+        </div>
+
+        {/* 4-Step Horizontal Timeline on desktop, vertical on mobile */}
+        <div className="relative">
+          {/* Connector line on desktop */}
+          <div className="hidden lg:block absolute top-1/2 left-12 right-12 h-0.5 bg-gradient-to-r from-indigo-500/30 via-purple-500/30 to-pink-500/30 -translate-y-8 z-0 pointer-events-none" />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+            {/* Step 01 */}
+            <div className="relative p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 hover:border-indigo-400/60 shadow-sm transition-all flex flex-col items-start group">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white font-extrabold text-base flex items-center justify-center shadow-md shadow-indigo-500/30 mb-4 group-hover:scale-105 transition-transform">
+                01
               </div>
-              <div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white">Live Analytics</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Turnout tracking</p>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
+                Discover an Event
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                Explore curated conferences, workshops, and concerts matched to your craft and passions.
+              </p>
+            </div>
+
+            {/* Step 02 */}
+            <div className="relative p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 hover:border-purple-400/60 shadow-sm transition-all flex flex-col items-start group">
+              <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white font-extrabold text-base flex items-center justify-center shadow-md shadow-purple-500/30 mb-4 group-hover:scale-105 transition-transform">
+                02
               </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
+                Book Your Seat
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                Choose ticket tiers and complete fast, encrypted checkout with instant seat confirmation.
+              </p>
+            </div>
+
+            {/* Step 03 */}
+            <div className="relative p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 hover:border-pink-400/60 shadow-sm transition-all flex flex-col items-start group">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-600 text-white font-extrabold text-base flex items-center justify-center shadow-md shadow-pink-500/30 mb-4 group-hover:scale-105 transition-transform">
+                03
+              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
+                Get Your QR Pass
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                Receive an authenticated cryptographic digital entry pass stored in your account wallet.
+              </p>
+            </div>
+
+            {/* Step 04 */}
+            <div className="relative p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 hover:border-emerald-400/60 shadow-sm transition-all flex flex-col items-start group">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white font-extrabold text-base flex items-center justify-center shadow-md shadow-emerald-500/30 mb-4 group-hover:scale-105 transition-transform">
+                04
+              </div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
+                Scan & Enter
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                Present your QR code at the venue entrance for seamless 0.4-second contactless admission.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── ATMOSPHERE & VISUAL EXPERIENCES GALLERY ──────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-end justify-between mb-8">
+      {/* ─── 4. FEATURED EVENTS SECTION ─────────────────────────────── */}
+      <section id="featured" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-              Live Atmosphere
+              Curated Selection
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
-              Experience the Energy
+              Featured Events
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              From electric stadium concerts to cutting-edge AI demo stages
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Hand-picked conferences, concerts, and workshops not to miss
             </p>
           </div>
           <Link
             to="/events"
-            className="hidden sm:flex text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline items-center gap-1"
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
           >
-            Explore all experiences <ArrowRight className="w-3.5 h-3.5" />
+            <span>View All Events</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {ATMOSPHERE_CARDS.map((card, idx) => (
-            <Link
-              key={idx}
-              to={card.link}
-              className="group relative h-64 sm:h-72 rounded-3xl overflow-hidden shadow-lg border border-slate-200/50 dark:border-slate-800/80 hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-500 hover:-translate-y-1.5"
-            >
-              <img
-                src={card.image}
-                alt={card.title}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-              
-              <div className="absolute top-4 left-4">
-                <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-white/20 dark:bg-black/30 backdrop-blur-md text-white border border-white/20">
-                  {card.tag}
-                </span>
-              </div>
-
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="font-extrabold text-base sm:text-lg leading-snug group-hover:text-indigo-300 transition-colors">
-                  {card.title}
-                </h3>
-                <p className="text-xs text-slate-300 mt-1 font-medium">
-                  {card.subtitle}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-80 rounded-[18px] bg-slate-200 dark:bg-slate-800 animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredEvents.map((evt) => (
+              <EventCard key={evt.id || evt.slug} event={evt} />
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* ─── POPULAR CATEGORIES (PHOTOGRAPHIC CARDS) ──────────────── */}
+      {/* ─── 5. POPULAR CATEGORIES ──────────────────────────────────── */}
       <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
               Explore Categories
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
               Find events curated by topic, craft, and passion
             </p>
           </div>
           <Link
             to="/events"
-            className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
+            className="text-xs sm:text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
           >
-            View all <ArrowRight className="w-3.5 h-3.5" />
+            <span>View all</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
@@ -414,7 +472,7 @@ export default function Home() {
             return (
               <Link
                 key={cat.id}
-                to={`/events?category=${cat.slug}`}
+                to={`/events?category=${cat.slug || cat.name?.toLowerCase()}`}
                 className="group relative h-36 sm:h-40 rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-md hover:shadow-xl hover:border-indigo-400/60 transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Background photo */}
@@ -422,6 +480,7 @@ export default function Home() {
                   src={bgImage}
                   alt={cat.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/20 group-hover:via-slate-950/50 transition-colors" />
 
@@ -445,56 +504,85 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── FEATURED EVENTS ─────────────────────────────────────── */}
-      <section id="featured" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-              Featured Events
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Hand-picked conferences, concerts, and workshops not to miss
-            </p>
-          </div>
-          <Link
-            to="/events"
-            className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
-          >
-            See all events <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
+      {/* ─── 6. TRUST & SECURITY SECTION ────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 p-8 sm:p-10 shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-80 rounded-2xl bg-slate-200 dark:bg-slate-800 animate-pulse" />
-            ))}
+          <div className="max-w-3xl mx-auto text-center space-y-4 relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60">
+              <Lock className="w-3.5 h-3.5" />
+              <span>Tamper-Proof Ticketing</span>
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Every Ticket. Verified.
+            </h2>
+
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto">
+              Your EventHub QR pass is securely generated and verified at entry, helping organizers prevent duplicate or invalid tickets.
+            </p>
+
+            {/* Three small benefits */}
+            <div className="pt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/60 dark:border-slate-800/60 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                    Secure QR Verification
+                  </h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Encrypted gate tokens
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/60 dark:border-slate-800/60 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                    Real-time Validation
+                  </h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Zero duplicate entry
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/60 dark:border-slate-800/60 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
+                  <Zap className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                    Fast Gate Check-in
+                  </h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Sub-second camera scan
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-        ) : featuredEvents.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredEvents.map((evt) => (
-              <EventCard key={evt.id} event={evt} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12 glass-card rounded-2xl">
-            <p className="text-sm text-slate-500">No featured events found right now.</p>
-          </div>
-        )}
+        </div>
       </section>
 
-      {/* ─── ORGANIZER BANNER CTA (WITH REALISTIC SCANNER VISUAL) ──── */}
+      {/* ─── 7. ORGANIZER CTA BANNER ────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-950 via-indigo-900 to-purple-950 text-white p-8 sm:p-12 lg:p-14 shadow-2xl border border-indigo-800/40">
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-950 via-slate-900 to-purple-950 text-white p-8 sm:p-12 lg:p-14 shadow-2xl border border-indigo-800/30">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-4">
-              <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-white/15 backdrop-blur-md inline-block border border-white/20">
+              <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-white/10 backdrop-blur-md inline-block border border-white/20">
                 For Event Creators & Organizers
               </span>
               <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
                 Ready to Host Your Next Gathering?
               </h2>
-              <p className="text-indigo-200 text-sm leading-relaxed max-w-xl">
+              <p className="text-indigo-200 text-xs sm:text-sm leading-relaxed max-w-xl">
                 Create an event in under 2 minutes. Issue instant cryptographic digital passes, track real-time attendance analytics, and admit guests with our ultra-fast venue QR camera scanner.
               </p>
               <div className="pt-3 flex flex-wrap items-center gap-4">
@@ -505,10 +593,10 @@ export default function Home() {
                   Create Event Now <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  to="/events"
+                  to="/organizer/dashboard"
                   className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 text-white hover:bg-white/20 border border-white/20 font-semibold text-sm transition-all"
                 >
-                  Explore Features
+                  Organizer Dashboard
                 </Link>
               </div>
             </div>

@@ -16,7 +16,7 @@ const DEFAULT_CATEGORY_IMAGES = {
 const GENERIC_EVENT_IMAGE = 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80';
 
 export default function EventCard({ event }) {
-  const startDate = new Date(event.startDate);
+  const startDate = new Date(event.startDate || Date.now());
   const formattedDate = startDate.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
@@ -26,42 +26,38 @@ export default function EventCard({ event }) {
     minute: '2-digit',
   });
 
-  const isSoldOut = event.spotsLeft <= 0;
+  const isSoldOut = event.spotsLeft !== undefined && event.spotsLeft <= 0;
   const isFree = event.isFree || event.price === 0;
   const displayImage = event.bannerUrl || DEFAULT_CATEGORY_IMAGES[event.category?.name] || GENERIC_EVENT_IMAGE;
+  const organizerName = event.organizer?.name || event.organizerName || 'Verified Organizer';
+  const categoryName = event.category?.name || event.category || 'Event';
 
   return (
-    <div className="group glass-card rounded-2xl overflow-hidden hover:shadow-glow transition-all duration-300 flex flex-col hover:-translate-y-1">
+    <div className="group rounded-[18px] overflow-hidden bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 hover:border-indigo-400/50 dark:hover:border-indigo-500/40 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-300 flex flex-col hover:-translate-y-1.5">
       {/* Banner Media */}
-      <div className="relative h-48 w-full overflow-hidden bg-slate-900">
+      <div className="relative h-48 w-full overflow-hidden bg-slate-950">
         <img
           src={displayImage}
           alt={event.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
 
-        {/* Top Badges */}
-        <div className="absolute top-3 left-3 flex gap-2">
-          {event.category && (
-            <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 dark:bg-slate-900/90 text-indigo-600 dark:text-indigo-400 backdrop-blur-md shadow-sm">
-              {event.category.name}
-            </span>
-          )}
-          {event.isFeatured && (
-            <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500 text-white shadow-sm">
-              Featured
-            </span>
-          )}
+        {/* Category Badge */}
+        <div className="absolute top-3 left-3">
+          <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/95 dark:bg-slate-900/90 text-indigo-600 dark:text-indigo-400 backdrop-blur-md shadow-sm border border-slate-100 dark:border-slate-800">
+            {categoryName}
+          </span>
         </div>
 
-        {/* Pricing Badge */}
+        {/* Price Badge */}
         <div className="absolute bottom-3 right-3">
           <span
             className={`px-3 py-1 rounded-full text-xs font-bold shadow-md backdrop-blur-md ${
               isFree
                 ? 'bg-emerald-500 text-white'
-                : 'bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-white'
+                : 'bg-slate-900/90 text-white border border-white/20'
             }`}
           >
             {isFree ? 'FREE' : `₹${event.price}`}
@@ -73,28 +69,33 @@ export default function EventCard({ event }) {
       <div className="p-5 flex-1 flex flex-col justify-between">
         <div>
           {/* Date & Location */}
-          <div className="flex items-center gap-3 text-xs text-indigo-600 dark:text-indigo-400 font-medium mb-2">
+          <div className="flex items-center gap-3 text-xs text-indigo-600 dark:text-indigo-400 font-semibold mb-2">
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
               {formattedDate} • {formattedTime}
             </span>
-            <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
+            <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400 font-normal">
               <MapPin className="w-3.5 h-3.5" />
-              {event.city}
+              {event.city || 'Virtual'}
             </span>
           </div>
 
           {/* Event Title */}
-          <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2 mb-2">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-1 mb-1.5">
             <Link to={`/events/${event.slug || event.id}`}>{event.title}</Link>
           </h3>
 
-          <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-4 leading-relaxed">
+          {/* Organizer */}
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 line-clamp-1">
+            By <span className="font-medium text-slate-700 dark:text-slate-300">{organizerName}</span>
+          </p>
+
+          <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-4">
             {event.description}
           </p>
         </div>
 
-        {/* Footer Meta */}
+        {/* Footer Meta & CTA */}
         <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
           <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
             <Users className="w-3.5 h-3.5" />
@@ -102,16 +103,17 @@ export default function EventCard({ event }) {
               <span className="text-rose-600 dark:text-rose-400 font-semibold">Sold Out</span>
             ) : (
               <span>
-                <strong className="text-slate-900 dark:text-slate-200">{event.spotsLeft}</strong> spots left
+                <strong className="text-slate-900 dark:text-slate-200">{event.spotsLeft ?? 45}</strong> spots left
               </span>
             )}
           </div>
 
           <Link
             to={`/events/${event.slug || event.id}`}
-            className="flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:translate-x-0.5 transition-transform"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/70 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-xs font-semibold text-indigo-600 dark:text-indigo-300 transition-colors"
           >
-            Details <ArrowUpRight className="w-3.5 h-3.5" />
+            <span>View Event</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       </div>

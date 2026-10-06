@@ -42,35 +42,39 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-7">
             <Link
               to="/events"
-              className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
+              className="text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-white transition-colors"
             >
-              <Compass className="w-4 h-4" />
-              Explore Events
+              Explore
             </Link>
 
             <a
               href="/#categories"
-              className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
+              className="text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-white transition-colors"
             >
-              <Layers className="w-4 h-4" />
               Categories
             </a>
 
             <a
               href="/#featured"
-              className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
+              className="text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-white transition-colors"
             >
-              <Sparkles className="w-4 h-4" />
               Featured
+            </a>
+
+            <a
+              href="/#how-it-works"
+              className="text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-white transition-colors"
+            >
+              How It Works
             </a>
 
             {isAuthenticated && user?.role === 'USER' && (
               <Link
                 to="/my-tickets"
-                className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors"
+                className="flex items-center gap-1.5 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 transition-colors"
               >
                 <Ticket className="w-4 h-4" />
                 My Tickets
@@ -80,18 +84,9 @@ export default function Navbar() {
             {user?.role === 'ORGANIZER' && (
               <Link
                 to="/organizer/dashboard"
-                className="flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 transition-colors"
+                className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition-colors"
               >
                 Organizer Dashboard
-              </Link>
-            )}
-
-            {user?.role === 'ADMIN' && (
-              <Link
-                to="/admin/dashboard"
-                className="flex items-center gap-1.5 text-sm font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-700 transition-colors"
-              >
-                Admin Console
               </Link>
             )}
           </nav>
@@ -105,7 +100,7 @@ export default function Navbar() {
             <button
               onClick={toggleTheme}
               aria-label="Toggle dark mode"
-              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
             >
               {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5" />}
             </button>
@@ -113,14 +108,14 @@ export default function Navbar() {
             {isAuthenticated ? (
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-800">
-                  <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-600 dark:text-indigo-300 flex items-center justify-center font-bold text-xs uppercase">
+                  <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 flex items-center justify-center font-bold text-xs uppercase border border-indigo-200 dark:border-indigo-800">
                     {user?.name?.slice(0, 2) || 'U'}
                   </div>
                   <div className="text-left text-xs">
                     <p className="font-semibold text-slate-900 dark:text-white line-clamp-1 max-w-[100px]">
                       {user?.name}
                     </p>
-                    <span className="inline-block px-1.5 py-0.2 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
+                    <span className="inline-block px-1.5 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
                       {user?.role}
                     </span>
                   </div>
@@ -129,22 +124,22 @@ export default function Navbar() {
                 <button
                   onClick={handleLogout}
                   title="Sign out"
-                  className="p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
+                  className="p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <Link
                   to="/login"
-                  className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                  className="px-3.5 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm shadow-indigo-500/20 transition-all hover:scale-[1.02]"
+                  className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-xl shadow-md shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
                 >
                   Get Started
                 </Link>
@@ -152,18 +147,28 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu button and quick CTA */}
           <div className="flex md:hidden items-center gap-2">
+            {!isAuthenticated && (
+              <Link
+                to="/register"
+                className="px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg shadow-sm"
+              >
+                Get Started
+              </Link>
+            )}
             {isAuthenticated && <NotificationBell />}
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg text-slate-500 dark:text-slate-400"
+              aria-label="Toggle theme"
             >
               {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5" />}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-slate-600 dark:text-slate-300"
+              aria-label="Open menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -179,7 +184,7 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
             className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-slate-800"
           >
-            Explore Events
+            Explore
           </Link>
           <a
             href="/#categories"
@@ -195,6 +200,14 @@ export default function Navbar() {
           >
             Featured
           </a>
+          <a
+            href="/#how-it-works"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-slate-800"
+          >
+            How It Works
+          </a>
+
           {isAuthenticated && user?.role === 'USER' && (
             <Link
               to="/my-tickets"
@@ -214,7 +227,6 @@ export default function Navbar() {
               Organizer Dashboard
             </Link>
           )}
-
 
           <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
             {isAuthenticated ? (
@@ -240,16 +252,16 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-center py-2 text-sm font-medium border border-slate-300 dark:border-slate-700 rounded-xl"
+                  className="text-center py-2 text-sm font-medium border border-slate-300 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-200"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-center py-2 text-sm font-medium bg-indigo-600 text-white rounded-xl"
+                  className="text-center py-2 text-sm font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl shadow-sm"
                 >
-                  Register
+                  Get Started
                 </Link>
               </div>
             )}
