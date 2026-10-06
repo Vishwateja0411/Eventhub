@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,8 +16,6 @@ import {
   ArrowRight,
   CheckCircle2,
   AlertCircle,
-  Sparkles,
-  Zap,
   HelpCircle,
   X,
 } from 'lucide-react';
@@ -42,25 +40,20 @@ const ROLES = {
   ADMIN: {
     id: 'ADMIN',
     name: 'ADMIN',
-    tag: 'GOVERNANCE',
-    title: 'ADMIN LOGIN',
+    label: 'ADMIN',
+    title: 'Manage EventHub',
+    modalTitle: 'Admin Portal Login',
     welcome: 'Welcome back, Administrator',
-    subtitle: 'Manage EventHub',
-    description: 'System governance, user audits & analytics',
+    description: 'Manage users, organizers, events, payments and platform activity.',
+    buttonText: 'Continue as Admin',
     icon: Shield,
     redirect: '/admin/dashboard',
-    theme: {
-      primary: 'indigo',
-      badge: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30',
-      glow: 'rgba(99, 102, 241, 0.45)',
-      gradient: 'from-indigo-500 via-indigo-600 to-violet-600',
-      borderGlow: 'hover:border-indigo-400/80',
-      activeBorder: 'border-indigo-500',
-      ring: 'ring-indigo-500/50',
-      button: 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-indigo-500/25',
-      accentText: 'text-indigo-400',
-      lineStroke: '#6366f1',
-    },
+    accentColor: '#6366F1',
+    badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-800',
+    iconBgClass: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/70 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white',
+    hoverBorder: 'hover:border-indigo-500',
+    hoverButton: 'group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600',
+    formButton: 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-500/20',
     demo: {
       email: 'admin@eventhub.com',
       password: 'Admin@123',
@@ -69,25 +62,20 @@ const ROLES = {
   ORGANIZER: {
     id: 'ORGANIZER',
     name: 'ORGANIZER',
-    tag: 'EVENT CREATOR',
-    title: 'ORGANIZER LOGIN',
+    label: 'ORGANIZER',
+    title: 'Create & Manage Events',
+    modalTitle: 'Organizer Portal Login',
     welcome: 'Welcome back, Organizer',
-    subtitle: 'Create & Manage Events',
-    description: 'Host experiences, manage tickets & check-ins',
+    description: 'Create events, manage registrations, track payments and monitor attendance.',
+    buttonText: 'Continue as Organizer',
     icon: Calendar,
     redirect: '/organizer/create-event',
-    theme: {
-      primary: 'emerald',
-      badge: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-      glow: 'rgba(16, 185, 129, 0.45)',
-      gradient: 'from-emerald-500 via-teal-600 to-cyan-600',
-      borderGlow: 'hover:border-emerald-400/80',
-      activeBorder: 'border-emerald-500',
-      ring: 'ring-emerald-500/50',
-      button: 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-500/25',
-      accentText: 'text-emerald-400',
-      lineStroke: '#10b981',
-    },
+    accentColor: '#10B981',
+    badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+    iconBgClass: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white',
+    hoverBorder: 'hover:border-emerald-500',
+    hoverButton: 'group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600',
+    formButton: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-500/20',
     demo: {
       email: 'organizer@eventhub.com',
       password: 'Organizer@123',
@@ -96,25 +84,20 @@ const ROLES = {
   USER: {
     id: 'USER',
     name: 'USER',
-    tag: 'ATTENDEE PASS',
-    title: 'USER LOGIN',
+    label: 'USER',
+    title: 'Discover & Book Events',
+    modalTitle: 'User Account Login',
     welcome: 'Welcome back',
-    subtitle: 'Discover & Book Events',
-    description: 'Explore live events, book seats & access passes',
+    description: 'Explore events, book tickets, make payments and access your QR passes.',
+    buttonText: 'Continue as User',
     icon: User,
     redirect: '/',
-    theme: {
-      primary: 'sky',
-      badge: 'bg-sky-500/15 text-sky-400 border-sky-500/30',
-      glow: 'rgba(14, 165, 233, 0.45)',
-      gradient: 'from-sky-500 via-blue-600 to-indigo-600',
-      borderGlow: 'hover:border-sky-400/80',
-      activeBorder: 'border-sky-500',
-      ring: 'ring-sky-500/50',
-      button: 'bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white shadow-sky-500/25',
-      accentText: 'text-sky-400',
-      lineStroke: '#0ea5e9',
-    },
+    accentColor: '#3B82F6',
+    badgeClass: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800',
+    iconBgClass: 'bg-blue-50 text-blue-600 dark:bg-blue-950/70 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white',
+    hoverBorder: 'hover:border-blue-500',
+    hoverButton: 'group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600',
+    formButton: 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20',
     demo: {
       email: 'user@eventhub.com',
       password: 'User@123',
@@ -130,7 +113,6 @@ export default function Login() {
 
   // State
   const [selectedRole, setSelectedRole] = useState(null);
-  const [hoveredRole, setHoveredRole] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -192,14 +174,14 @@ export default function Login() {
       // 3. Trigger success animation
       setIsSuccess(true);
 
-      // 4. Redirect after a smooth cinematic confirmation
+      // 4. Redirect after smooth confirmation
       setTimeout(() => {
         const destination =
           selectedRole.id === 'USER'
             ? location.state?.from?.pathname || selectedRole.redirect
             : selectedRole.redirect;
         navigate(destination, { replace: true });
-      }, 700);
+      }, 600);
     } catch (err) {
       console.error('Login error:', err);
       const serverMessage =
@@ -228,368 +210,161 @@ export default function Login() {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#060814] text-slate-100 flex flex-col justify-between overflow-x-hidden selection:bg-indigo-500/30">
-      {/* ── Ambient Background & Glowing Orbs ─────────────────────────────────── */}
+    <div className="relative min-h-screen w-full bg-[#F8F9FC] dark:bg-[#0B0F19] text-[#111827] dark:text-slate-100 flex flex-col justify-between overflow-x-hidden transition-colors duration-200">
+      {/* ── Extremely Subtle Ambient Background Corner Blobs ───────────────── */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        {/* Soft Radial Gradients */}
-        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[700px] h-[550px] bg-gradient-to-b from-indigo-900/25 via-purple-900/15 to-transparent rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-emerald-950/20 rounded-full blur-[140px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-sky-950/20 rounded-full blur-[140px]" />
-
-        {/* Subtle grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px)`,
-            backgroundSize: '36px 36px',
-          }}
-        />
-
-        {/* Ambient floating dust particles */}
-        {!shouldReduceMotion && (
-          <>
-            <motion.div
-              animate={{ y: [0, -25, 0], opacity: [0.2, 0.5, 0.2] }}
-              transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute top-1/4 left-1/5 w-1.5 h-1.5 rounded-full bg-indigo-400 blur-[0.5px]"
-            />
-            <motion.div
-              animate={{ y: [0, 20, 0], opacity: [0.15, 0.4, 0.15] }}
-              transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-              className="absolute top-1/3 right-1/4 w-2 h-2 rounded-full bg-cyan-400 blur-[0.5px]"
-            />
-            <motion.div
-              animate={{ y: [0, -15, 0], opacity: [0.2, 0.6, 0.2] }}
-              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-              className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 rounded-full bg-emerald-400 blur-[0.5px]"
-            />
-          </>
-        )}
+        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-purple-500/5 dark:bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
       </div>
 
-      {/* ── Top Navigation Bar ──────────────────────────────────────────────── */}
-      <header className="relative z-20 w-full px-6 py-5 flex items-center justify-between max-w-7xl mx-auto">
-        <Link
-          to="/"
-          className="flex items-center gap-2.5 group transition-transform duration-200 hover:scale-[1.02]"
-        >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[1px] shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-shadow">
-            <div className="w-full h-full bg-[#0b0e24] rounded-[11px] flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-indigo-400 group-hover:text-cyan-300 transition-colors" />
+      {/* ── Top Navigation Bar / Header ───────────────────────────────────── */}
+      <header className="sticky top-0 z-30 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#E5E7EB] dark:border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <Link
+            to="/"
+            className="flex items-center gap-2.5 group transition-transform duration-200 hover:scale-[1.01]"
+          >
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#5B4BFF] to-[#7C3AED] flex items-center justify-center text-white shadow-sm">
+              <Calendar className="w-5 h-5" />
             </div>
-          </div>
-          <div>
-            <span className="text-xl font-extrabold tracking-tight text-white flex items-center gap-1">
-              Event<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Hub</span>
+            <span className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              Event<span className="text-[#5B4BFF]">Hub</span>
             </span>
-          </div>
-        </Link>
+          </Link>
 
-        <Link
-          to="/"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.15] hover:text-white transition-all shadow-sm backdrop-blur-md"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Home</span>
-        </Link>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Home</span>
+          </Link>
+        </div>
       </header>
 
       {/* ── Main View Container ────────────────────────────────────────────── */}
-      <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
+      <main className="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <AnimatePresence mode="wait">
           {!selectedRole ? (
             /* ═════════════════════════════════════════════════════════════════
-               1. ROLE SELECTION VIEW (Orbital Desktop / Vertical Mobile)
+               1. ROLE SELECTION VIEW (Clean 3-Card Grid Layout)
                ═════════════════════════════════════════════════════════════════ */
             <motion.div
               key="role-selection"
-              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
-              animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.92 }}
-              transition={{ duration: 0.45, ease: 'easeOut' }}
-              className="w-full max-w-4xl flex flex-col items-center justify-center"
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 15 }}
+              animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -15 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className="w-full max-w-5xl flex flex-col items-center"
             >
-              {/* Heading */}
-              <div className="text-center mb-6 sm:mb-8 space-y-2">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs font-semibold uppercase tracking-wider mb-1 shadow-[0_0_20px_rgba(99,102,241,0.2)] backdrop-blur-md">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Enterprise Role Authentication</span>
+              {/* Center Brand Element & Hero Heading */}
+              <div className="text-center mb-10 sm:mb-12 space-y-3">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200/80 dark:border-indigo-800/80 text-indigo-700 dark:text-indigo-300 text-xs font-bold tracking-wide uppercase">
+                  <Calendar className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                  <span>Welcome to EventHub</span>
                 </div>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400">
-                  Choose Your Portal
+
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#111827] dark:text-white">
+                  Choose how you want to continue
                 </h1>
-                <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
-                  Select your role to access your dedicated workspace and tools
+
+                <p className="text-sm sm:text-base text-[#6B7280] dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+                  Select your account type to access the right EventHub experience.
                 </p>
               </div>
 
-              {/* ── DESKTOP & TABLET ORBIT COMPOSITION (hidden on small mobile) ── */}
-              <div className="hidden md:block relative w-[680px] h-[550px] mx-auto select-none">
-                {/* Background Nebula Glow Spotlight */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-indigo-600/15 via-purple-600/10 to-cyan-500/10 rounded-full blur-[110px] pointer-events-none" />
-
-                {/* SVG Orbit Lines & SVG Connector Laser Beams */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-                  <defs>
-                    <linearGradient id="orbitGlowAdmin" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#818cf8" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="#6366f1" stopOpacity="0.2" />
-                    </linearGradient>
-                    <linearGradient id="orbitGlowOrg" x1="0%" y1="100%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#34d399" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="#10b981" stopOpacity="0.2" />
-                    </linearGradient>
-                    <linearGradient id="orbitGlowUser" x1="100%" y1="100%" x2="0%" y2="0%">
-                      <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.2" />
-                    </linearGradient>
-                    <filter id="laserGlow" x="-20%" y="-20%" width="140%" height="140%">
-                      <feGaussianBlur stdDeviation="3" result="blur" />
-                      <feMerge>
-                        <feMergeNode in="blur" />
-                        <feMergeNode in="SourceGraphic" />
-                      </feMerge>
-                    </filter>
-                  </defs>
-
-                  {/* Concentric Radar / Orbit Rings */}
-                  <circle
-                    cx="340"
-                    cy="275"
-                    r="240"
-                    fill="none"
-                    stroke="rgba(255, 255, 255, 0.04)"
-                    strokeWidth="1"
-                  />
-                  <circle
-                    cx="340"
-                    cy="275"
-                    r="190"
-                    fill="none"
-                    stroke="rgba(99, 102, 241, 0.08)"
-                    strokeWidth="1.5"
-                    strokeDasharray="4 6"
-                  />
-                  <circle
-                    cx="340"
-                    cy="275"
-                    r="140"
-                    fill="none"
-                    stroke="rgba(255, 255, 255, 0.05)"
-                    strokeWidth="1"
-                    strokeDasharray="2 4"
-                  />
-
-                  {/* Dynamic Laser Beams to Roles */}
-                  {/* Center (340, 275) to Admin Top (340, 100) */}
-                  <line
-                    x1="340"
-                    y1="275"
-                    x2="340"
-                    y2="100"
-                    stroke={hoveredRole === 'ADMIN' ? 'url(#orbitGlowAdmin)' : 'rgba(255, 255, 255, 0.15)'}
-                    strokeWidth={hoveredRole === 'ADMIN' ? 3 : 1.5}
-                    strokeDasharray={hoveredRole === 'ADMIN' ? 'none' : '3 4'}
-                    filter={hoveredRole === 'ADMIN' ? 'url(#laserGlow)' : 'none'}
-                    className="transition-all duration-300"
-                  />
-
-                  {/* Center (340, 275) to Organizer Bottom-Left (150, 435) */}
-                  <line
-                    x1="340"
-                    y1="275"
-                    x2="150"
-                    y2="435"
-                    stroke={hoveredRole === 'ORGANIZER' ? 'url(#orbitGlowOrg)' : 'rgba(255, 255, 255, 0.15)'}
-                    strokeWidth={hoveredRole === 'ORGANIZER' ? 3 : 1.5}
-                    strokeDasharray={hoveredRole === 'ORGANIZER' ? 'none' : '3 4'}
-                    filter={hoveredRole === 'ORGANIZER' ? 'url(#laserGlow)' : 'none'}
-                    className="transition-all duration-300"
-                  />
-
-                  {/* Center (340, 275) to User Bottom-Right (530, 435) */}
-                  <line
-                    x1="340"
-                    y1="275"
-                    x2="530"
-                    y2="435"
-                    stroke={hoveredRole === 'USER' ? 'url(#orbitGlowUser)' : 'rgba(255, 255, 255, 0.15)'}
-                    strokeWidth={hoveredRole === 'USER' ? 3 : 1.5}
-                    strokeDasharray={hoveredRole === 'USER' ? 'none' : '3 4'}
-                    filter={hoveredRole === 'USER' ? 'url(#laserGlow)' : 'none'}
-                    className="transition-all duration-300"
-                  />
-                </svg>
-
-                {/* ── Central Animated Hub ── */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
-                  <div className="relative w-48 h-48 flex items-center justify-center">
-                    {/* Pulsing Outer Nebula Aura */}
-                    <motion.div
-                      animate={
-                        shouldReduceMotion
-                          ? {}
-                          : {
-                              scale: hoveredRole ? [1.1, 1.28, 1.1] : [1, 1.14, 1],
-                              opacity: hoveredRole ? [0.45, 0.75, 0.45] : [0.25, 0.45, 0.25],
-                            }
-                      }
-                      transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-                      className="absolute inset-0 rounded-full blur-2xl"
-                      style={{
-                        background:
-                          hoveredRole === 'ADMIN'
-                            ? 'radial-gradient(circle, rgba(99,102,241,0.6) 0%, rgba(139,92,246,0.2) 50%, transparent 70%)'
-                            : hoveredRole === 'ORGANIZER'
-                            ? 'radial-gradient(circle, rgba(16,185,129,0.6) 0%, rgba(20,184,166,0.2) 50%, transparent 70%)'
-                            : hoveredRole === 'USER'
-                            ? 'radial-gradient(circle, rgba(14,165,233,0.6) 0%, rgba(59,130,246,0.2) 50%, transparent 70%)'
-                            : 'radial-gradient(circle, rgba(99,102,241,0.4) 0%, rgba(168,85,247,0.15) 50%, transparent 70%)',
-                      }}
-                    />
-
-                    {/* Rotating Dashed Outer Ring */}
-                    <motion.div
-                      animate={shouldReduceMotion ? {} : { rotate: 360 }}
-                      transition={{
-                        duration: hoveredRole ? 12 : 28,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }}
-                      className="absolute inset-[-4px] rounded-full border border-dashed border-indigo-400/35"
-                    />
-
-                    {/* Counter-rotating Secondary Accent Ring with Dual Orbiting Beacons */}
-                    <motion.div
-                      animate={shouldReduceMotion ? {} : { rotate: -360 }}
-                      transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-                      className="absolute inset-2 rounded-full border border-white/10"
-                    >
-                      <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]" />
-                    </motion.div>
-
-                    {/* Center Core Glass Orb */}
-                    <div className="relative w-36 h-36 rounded-full bg-gradient-to-b from-[#13193a]/95 to-[#080b1d]/98 border border-white/20 backdrop-blur-2xl shadow-[0_0_30px_rgba(99,102,241,0.25)] flex flex-col items-center justify-center p-3 text-center">
-                      <div className="w-2 h-2 rounded-full bg-indigo-400 mb-1.5 shadow-[0_0_10px_#818cf8] animate-pulse" />
-                      <span className="text-[13px] font-black tracking-[0.24em] text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-100 to-slate-200">
-                        EVENTHUB
-                      </span>
-                      <span className="text-[9px] uppercase font-bold text-indigo-300/80 tracking-widest mt-1 px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
-                        CHOOSE ROLE
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* ── TOP ROLE: ADMIN ── */}
-                <RoleOrbitCard
-                  role={ROLES.ADMIN}
-                  positionClasses="top-0 left-1/2 -translate-x-1/2"
-                  isHovered={hoveredRole === 'ADMIN'}
-                  onHover={() => setHoveredRole('ADMIN')}
-                  onLeave={() => setHoveredRole(null)}
-                  onClick={() => handleSelectRole('ADMIN')}
-                  shouldReduceMotion={shouldReduceMotion}
-                />
-
-                {/* ── BOTTOM LEFT ROLE: ORGANIZER ── */}
-                <RoleOrbitCard
-                  role={ROLES.ORGANIZER}
-                  positionClasses="bottom-2 left-4"
-                  isHovered={hoveredRole === 'ORGANIZER'}
-                  onHover={() => setHoveredRole('ORGANIZER')}
-                  onLeave={() => setHoveredRole(null)}
-                  onClick={() => handleSelectRole('ORGANIZER')}
-                  shouldReduceMotion={shouldReduceMotion}
-                />
-
-                {/* ── BOTTOM RIGHT ROLE: USER ── */}
-                <RoleOrbitCard
-                  role={ROLES.USER}
-                  positionClasses="bottom-2 right-4"
-                  isHovered={hoveredRole === 'USER'}
-                  onHover={() => setHoveredRole('USER')}
-                  onLeave={() => setHoveredRole(null)}
-                  onClick={() => handleSelectRole('USER')}
-                  shouldReduceMotion={shouldReduceMotion}
-                />
-              </div>
-
-              {/* ── MOBILE VERTICAL STACK (< 768px) ── */}
-              <div className="md:hidden w-full max-w-sm space-y-4">
-                {/* Center Animation Mini Hub */}
-                <div className="flex justify-center mb-4">
-                  <div className="relative w-32 h-32 flex items-center justify-center">
-                    <motion.div
-                      animate={shouldReduceMotion ? {} : { rotate: 360 }}
-                      transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                      className="absolute inset-0 rounded-full border border-dashed border-indigo-400/40"
-                    />
-                    <div className="relative w-28 h-28 rounded-full bg-[#111633]/90 border border-white/20 backdrop-blur-xl flex flex-col items-center justify-center p-2 text-center shadow-lg">
-                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mb-1 animate-pulse" />
-                      <span className="text-xs font-black tracking-widest text-white">EVENTHUB</span>
-                      <span className="text-[9px] uppercase font-bold text-indigo-300 mt-0.5">
-                        CHOOSE ROLE
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Three Vertical Cards */}
-                {Object.values(ROLES).map((role) => {
+              {/* Three Role Cards (Horizontal on Desktop, Stack on Mobile) */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full">
+                {['ADMIN', 'ORGANIZER', 'USER'].map((roleKey) => {
+                  const role = ROLES[roleKey];
                   const RoleIcon = role.icon;
+
                   return (
-                    <motion.button
+                    <motion.div
                       key={role.id}
-                      type="button"
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={shouldReduceMotion ? {} : { y: -5 }}
+                      transition={{ duration: 0.25, ease: 'easeOut' }}
                       onClick={() => handleSelectRole(role.id)}
-                      className="w-full text-left p-4 rounded-3xl relative overflow-hidden bg-[#0e1432]/92 border border-white/[0.14] hover:border-white/30 hover:bg-[#12193e] transition-all flex items-center gap-4 group backdrop-blur-2xl shadow-xl"
+                      className={`group cursor-pointer rounded-[22px] bg-white dark:bg-slate-900 border border-[#E5E7EB] dark:border-slate-800 ${role.hoverBorder} shadow-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 p-7 sm:p-8 flex flex-col justify-between text-left relative overflow-hidden`}
                     >
+                      {/* Top Accent Line */}
                       <div
-                        className={`absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${role.theme.gradient} opacity-80`}
+                        className="absolute top-0 inset-x-0 h-1 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                        style={{ backgroundColor: role.accentColor }}
                       />
-                      <div
-                        className={`w-12 h-12 rounded-2xl flex items-center justify-center bg-gradient-to-br ${role.theme.gradient} text-white shadow-md shrink-0`}
-                      >
-                        <RoleIcon className="w-6 h-6" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-base font-extrabold text-white tracking-wide">
-                            {role.name}
-                          </span>
-                          <span
-                            className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${role.theme.badge}`}
+
+                      <div>
+                        {/* Icon Container & Role Tag */}
+                        <div className="flex items-center justify-between mb-6">
+                          <div
+                            className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${role.iconBgClass} shadow-sm`}
                           >
-                            {role.tag}
+                            <RoleIcon className="w-6 h-6" />
+                          </div>
+
+                          <span
+                            className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full border ${role.badgeClass}`}
+                          >
+                            {role.label}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-300 mt-0.5">{role.subtitle}</p>
+
+                        {/* Title */}
+                        <h2 className="text-xl font-bold text-[#111827] dark:text-white mb-2 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+                          {role.title}
+                        </h2>
+
+                        {/* Description */}
+                        <p className="text-xs sm:text-sm text-[#6B7280] dark:text-slate-400 leading-relaxed mb-8">
+                          {role.description}
+                        </p>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
-                    </motion.button>
+
+                      {/* CTA Button */}
+                      <div
+                        className={`w-full py-3 px-4 rounded-xl font-semibold text-xs sm:text-sm border border-[#E5E7EB] dark:border-slate-800 bg-[#F9FAFB] dark:bg-slate-800/80 text-[#111827] dark:text-slate-200 flex items-center justify-center gap-2 transition-all duration-300 ${role.hoverButton}`}
+                      >
+                        <span>{role.buttonText}</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </motion.div>
                   );
                 })}
               </div>
 
-              {/* Bottom Instructions */}
-              <p className="text-xs text-slate-500 mt-6 sm:mt-8 text-center flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5 text-amber-400" />
-                <span>Click a role to open its dedicated sign-in portal</span>
-              </p>
+              {/* Bottom Trust Section */}
+              <div className="mt-14 text-center space-y-3">
+                <p className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  One platform. Every event experience.
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-slate-500 dark:text-slate-400">
+                  <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
+                    <CheckCircle2 className="w-4 h-4" />
+                    Secure Authentication
+                  </span>
+                  <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
+                  <span className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-medium">
+                    <CheckCircle2 className="w-4 h-4" />
+                    Verified Events
+                  </span>
+                  <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
+                  <span className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-medium">
+                    <CheckCircle2 className="w-4 h-4" />
+                    Fast QR Check-in
+                  </span>
+                </div>
+              </div>
             </motion.div>
           ) : (
             /* ═════════════════════════════════════════════════════════════════
-               2. ROLE LOGIN FORM VIEW (Cinematic Glassmorphic Form)
+               2. ROLE LOGIN FORM VIEW (Clean Modern SaaS Form Card)
                ═════════════════════════════════════════════════════════════════ */
             <motion.div
               key="role-login-form"
               initial={
                 shouldReduceMotion
                   ? { opacity: 0 }
-                  : { opacity: 0, y: 20, scale: 0.96 }
+                  : { opacity: 0, y: 15, scale: 0.98 }
               }
               animate={
                 shouldReduceMotion
@@ -599,41 +374,44 @@ export default function Login() {
               exit={
                 shouldReduceMotion
                   ? { opacity: 0 }
-                  : { opacity: 0, y: -20, scale: 0.96 }
+                  : { opacity: 0, y: -15, scale: 0.98 }
               }
-              transition={{ duration: 0.4, ease: 'easeOut' }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
               className="w-full max-w-md"
             >
-              <div className="relative rounded-3xl bg-[#0e122b]/85 border border-white/[0.12] p-6 sm:p-8 shadow-2xl backdrop-blur-2xl overflow-hidden">
-                {/* Top Subtle Role Gradient Stripe */}
+              <div className="relative rounded-[22px] bg-white dark:bg-slate-900 border border-[#E5E7EB] dark:border-slate-800 p-7 sm:p-8 shadow-xl overflow-hidden">
+                {/* Top Subtle Role Accent Stripe */}
                 <div
-                  className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${selectedRole.theme.gradient}`}
+                  className="absolute top-0 inset-x-0 h-1.5"
+                  style={{ backgroundColor: selectedRole.accentColor }}
                 />
 
                 {/* Header with Role Badge */}
                 <div className="text-center space-y-2 mb-6">
                   <div className="flex justify-center">
                     <div
-                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider ${selectedRole.theme.badge}`}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider ${selectedRole.badgeClass}`}
                     >
                       {React.createElement(selectedRole.icon, { className: 'w-3.5 h-3.5' })}
                       <span>{selectedRole.name}</span>
                     </div>
                   </div>
 
-                  <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                    {selectedRole.title}
+                  <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                    {selectedRole.modalTitle}
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-400">{selectedRole.welcome}</p>
+                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                    {selectedRole.welcome}
+                  </p>
                 </div>
 
                 {/* 1-Click Demo Account Quick Fill Button */}
-                <div className="mb-5 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between gap-3">
+                <div className="mb-5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex items-center justify-between gap-3">
                   <div className="text-left">
-                    <p className="text-[11px] font-semibold text-slate-300">
-                      ⚡ Quick Demo Credentials
+                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      ⚡ Demo Credentials
                     </p>
-                    <p className="text-[10px] text-slate-500 truncate max-w-[200px]">
+                    <p className="text-[11px] text-slate-500 truncate max-w-[200px]">
                       {selectedRole.demo.email}
                     </p>
                   </div>
@@ -642,7 +420,7 @@ export default function Login() {
                     onClick={() =>
                       handleFillDemo(selectedRole.demo.email, selectedRole.demo.password)
                     }
-                    className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 transition-colors border border-white/10"
+                    className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 transition-colors border border-slate-200 dark:border-slate-600 shadow-2xs cursor-pointer"
                   >
                     Auto Fill
                   </button>
@@ -655,11 +433,11 @@ export default function Login() {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2.5"
+                      className="mb-4 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2.5"
                     >
-                      <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                      <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                       <div className="flex-1">
-                        <span className="font-semibold block text-rose-200">
+                        <span className="font-semibold block text-rose-800 dark:text-rose-200">
                           Authentication Notice
                         </span>
                         <span>{authError}</span>
@@ -674,9 +452,9 @@ export default function Login() {
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="mb-4 p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2.5"
+                      className="mb-4 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2.5"
                     >
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 animate-bounce" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 animate-bounce" />
                       <span className="font-semibold">
                         Role verified! Redirecting to workspace...
                       </span>
@@ -684,29 +462,29 @@ export default function Login() {
                   )}
                 </AnimatePresence>
 
-                {/* Reusable Login Form */}
+                {/* Login Form */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                   {/* Email Field */}
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                       Email Address
                     </label>
                     <div className="relative group">
-                      <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 group-focus-within:text-white transition-colors" />
+                      <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 group-focus-within:text-[#5B4BFF] transition-colors" />
                       <input
                         type="email"
                         autoComplete="email"
                         {...register('email')}
                         placeholder={`e.g. ${selectedRole.demo.email}`}
-                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl border bg-black/30 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all ${
+                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl border bg-slate-50 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:bg-white dark:focus:bg-slate-900 transition-all ${
                           errors.email
-                            ? 'border-rose-500/60 focus:ring-rose-500/40'
-                            : 'border-white/10 focus:border-white/30 ' + selectedRole.theme.ring
+                            ? 'border-rose-300 dark:border-rose-700 focus:ring-rose-400/30'
+                            : 'border-slate-200 dark:border-slate-700 focus:border-[#5B4BFF] focus:ring-[#5B4BFF]/20'
                         }`}
                       />
                     </div>
                     {errors.email && (
-                      <p className="text-[11px] text-rose-400 mt-1 pl-1">
+                      <p className="text-[11px] text-rose-500 mt-1 pl-1">
                         {errors.email.message}
                       </p>
                     )}
@@ -714,26 +492,26 @@ export default function Login() {
 
                   {/* Password Field */}
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                       Password
                     </label>
                     <div className="relative group">
-                      <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 group-focus-within:text-white transition-colors" />
+                      <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 group-focus-within:text-[#5B4BFF] transition-colors" />
                       <input
                         type={showPassword ? 'text' : 'password'}
                         autoComplete="current-password"
                         {...register('password')}
                         placeholder="••••••••"
-                        className={`w-full pl-10 pr-10 py-2.5 rounded-xl border bg-black/30 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all ${
+                        className={`w-full pl-10 pr-10 py-2.5 rounded-xl border bg-slate-50 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:bg-white dark:focus:bg-slate-900 transition-all ${
                           errors.password
-                            ? 'border-rose-500/60 focus:ring-rose-500/40'
-                            : 'border-white/10 focus:border-white/30 ' + selectedRole.theme.ring
+                            ? 'border-rose-300 dark:border-rose-700 focus:ring-rose-400/30'
+                            : 'border-slate-200 dark:border-slate-700 focus:border-[#5B4BFF] focus:ring-[#5B4BFF]/20'
                         }`}
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors p-1"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 cursor-pointer"
                         aria-label={showPassword ? 'Hide password' : 'Show password'}
                       >
                         {showPassword ? (
@@ -744,7 +522,7 @@ export default function Login() {
                       </button>
                     </div>
                     {errors.password && (
-                      <p className="text-[11px] text-rose-400 mt-1 pl-1">
+                      <p className="text-[11px] text-rose-500 mt-1 pl-1">
                         {errors.password.message}
                       </p>
                     )}
@@ -752,11 +530,11 @@ export default function Login() {
 
                   {/* Remember Me & Forgot Password */}
                   <div className="flex items-center justify-between text-xs pt-1">
-                    <label className="flex items-center gap-2 cursor-pointer select-none text-slate-400 hover:text-slate-300">
+                    <label className="flex items-center gap-2 cursor-pointer select-none text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200">
                       <input
                         type="checkbox"
                         {...register('rememberMe')}
-                        className="w-4 h-4 rounded border-white/20 bg-black/30 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-0 focus:ring-offset-transparent cursor-pointer"
+                        className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-[#5B4BFF] focus:ring-[#5B4BFF] cursor-pointer"
                       />
                       <span>Remember me</span>
                     </label>
@@ -764,20 +542,18 @@ export default function Login() {
                     <button
                       type="button"
                       onClick={() => setShowForgotModal(true)}
-                      className="text-slate-400 hover:text-white hover:underline transition-colors"
+                      className="text-slate-500 dark:text-slate-400 hover:text-[#5B4BFF] dark:hover:text-indigo-400 hover:underline transition-colors cursor-pointer"
                     >
                       Forgot password?
                     </button>
                   </div>
 
                   {/* Submit Button */}
-                  <motion.button
+                  <button
                     type="submit"
                     disabled={isSubmitting || isSuccess}
-                    whileHover={shouldReduceMotion ? {} : { scale: 1.01 }}
-                    whileTap={shouldReduceMotion ? {} : { scale: 0.99 }}
-                    className={`w-full mt-2 py-3 px-4 rounded-xl font-bold text-sm tracking-wide shadow-lg transition-all flex items-center justify-center gap-2 ${selectedRole.theme.button} ${
-                      isSubmitting || isSuccess ? 'opacity-85 cursor-not-allowed' : ''
+                    className={`w-full mt-2 py-3 px-4 rounded-xl font-bold text-sm tracking-wide shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${selectedRole.formButton} ${
+                      isSubmitting || isSuccess ? 'opacity-85 cursor-not-allowed' : 'hover:scale-[1.01] active:scale-[0.99]'
                     }`}
                   >
                     {isSubmitting ? (
@@ -796,15 +572,15 @@ export default function Login() {
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
-                  </motion.button>
+                  </button>
                 </form>
 
                 {/* Footer Controls: Change Role & Registration Link */}
-                <div className="mt-6 pt-5 border-t border-white/[0.08] flex flex-col items-center gap-3">
+                <div className="mt-6 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-col items-center gap-3">
                   <button
                     type="button"
                     onClick={handleBackToRoles}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition-colors group"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors group cursor-pointer"
                   >
                     <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
                     <span>Change Role</span>
@@ -812,11 +588,11 @@ export default function Login() {
 
                   {/* Organizer Registration Link */}
                   {selectedRole.id === 'ORGANIZER' && (
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       Don't have an account?{' '}
                       <Link
                         to="/register?role=ORGANIZER"
-                        className="font-semibold text-emerald-400 hover:text-emerald-300 hover:underline transition-colors"
+                        className="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline transition-colors"
                       >
                         Create new account
                       </Link>
@@ -825,11 +601,11 @@ export default function Login() {
 
                   {/* Normal User Registration Link */}
                   {selectedRole.id === 'USER' && (
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       Don't have an account?{' '}
                       <Link
                         to="/register?role=USER"
-                        className="font-semibold text-sky-400 hover:text-sky-300 hover:underline transition-colors"
+                        className="font-semibold text-blue-600 dark:text-blue-400 hover:underline transition-colors"
                       >
                         Create new account
                       </Link>
@@ -843,38 +619,38 @@ export default function Login() {
       </main>
 
       {/* ── Bottom Brand Footer ────────────────────────────────────────────── */}
-      <footer className="relative z-10 w-full py-4 text-center text-xs text-slate-500">
-        <span>© {new Date().getFullYear()} EventHub Inc. All rights reserved. Enterprise Security & RBAC.</span>
+      <footer className="relative z-10 w-full py-4 text-center text-xs text-slate-400 dark:text-slate-500">
+        <span>© {new Date().getFullYear()} EventHub Technologies Inc. All rights reserved.</span>
       </footer>
 
       {/* ── Forgot Password Modal ──────────────────────────────────────────── */}
       <AnimatePresence>
         {showForgotModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-sm rounded-2xl bg-[#0f1430] border border-white/10 p-6 shadow-2xl relative"
+              className="w-full max-w-sm rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-2xl relative"
             >
               <button
                 type="button"
                 onClick={() => setShowForgotModal(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
-              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-3">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3">
                 <HelpCircle className="w-5 h-5" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-1">Reset Password</h3>
-              <p className="text-xs text-slate-400 mb-4 leading-relaxed">
-                Password recovery is managed by the system administrator. For demo purposes, you can use the default demo credentials provided on the login card.
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Reset Password</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
+                Password recovery is managed by your system administrator. For demo purposes, you can use the default demo credentials provided on the login card.
               </p>
               <button
                 type="button"
                 onClick={() => setShowForgotModal(false)}
-                className="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-semibold transition-colors"
+                className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white text-xs font-semibold transition-colors cursor-pointer"
               >
                 Got it
               </button>
@@ -883,106 +659,5 @@ export default function Login() {
         )}
       </AnimatePresence>
     </div>
-  );
-}
-
-// ── Role Orbit Card Component (for Desktop/Tablet Orbit) ─────────────────────
-function RoleOrbitCard({
-  role,
-  positionClasses,
-  isHovered,
-  onHover,
-  onLeave,
-  onClick,
-  shouldReduceMotion,
-}) {
-  const IconComponent = role.icon;
-
-  return (
-    <motion.div
-      className={`absolute ${positionClasses} z-20 cursor-pointer`}
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
-      onClick={onClick}
-      whileHover={shouldReduceMotion ? {} : { scale: 1.06 }}
-      whileTap={shouldReduceMotion ? {} : { scale: 0.97 }}
-      animate={
-        shouldReduceMotion
-          ? {}
-          : {
-              y: isHovered ? -6 : [0, -5, 0],
-            }
-      }
-      transition={{
-        y: {
-          duration: 4.5,
-          repeat: isHovered ? 0 : Infinity,
-          ease: 'easeInOut',
-        },
-        scale: { duration: 0.2 },
-      }}
-    >
-      <div
-        className={`w-52 p-5 rounded-3xl relative overflow-hidden transition-all duration-300 backdrop-blur-2xl flex flex-col items-center text-center group ${
-          isHovered
-            ? `bg-[#131b40]/95 ${role.theme.activeBorder} shadow-2xl`
-            : 'bg-[#0e1432]/92 border border-white/[0.14] hover:border-white/30 hover:bg-[#11183c]/95'
-        }`}
-        style={{
-          boxShadow: isHovered
-            ? `0 20px 40px -10px ${role.theme.glow}, 0 0 25px 2px ${role.theme.glow}`
-            : '0 12px 36px -8px rgba(0,0,0,0.65), 0 0 1px 1px rgba(255,255,255,0.06) inset',
-        }}
-      >
-        {/* Top Glowing Gradient Accent Rim */}
-        <div
-          className={`absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${role.theme.gradient} transition-opacity duration-300 ${
-            isHovered ? 'opacity-100 shadow-[0_0_12px_rgba(99,102,241,0.8)]' : 'opacity-70'
-          }`}
-        />
-
-        {/* Role Icon Circle with Elevated Glow */}
-        <div
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br ${role.theme.gradient} text-white shadow-lg mb-3 transition-all duration-300 ${
-            isHovered ? 'scale-110 shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'shadow-md'
-          }`}
-        >
-          <IconComponent className="w-7 h-7" />
-        </div>
-
-        {/* Subtle Category Tag */}
-        <span
-          className={`text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-full border mb-1.5 transition-colors ${role.theme.badge}`}
-        >
-          {role.tag}
-        </span>
-
-        {/* Role Name */}
-        <span className="text-lg font-black tracking-wide text-white">
-          {role.name}
-        </span>
-
-        {/* Role Subtitle */}
-        <span className="text-xs font-medium text-slate-300 mt-1 leading-snug line-clamp-1">
-          {role.subtitle}
-        </span>
-
-        {/* Action Button Pill */}
-        <div
-          className={`mt-4 w-full py-1.5 px-3 rounded-xl flex items-center justify-center gap-1.5 text-xs font-semibold transition-all ${
-            isHovered
-              ? `bg-white/15 text-white ${role.theme.ring} ring-1 shadow-sm`
-              : 'bg-white/[0.05] text-slate-400 group-hover:text-slate-200'
-          }`}
-        >
-          <span>Enter Portal</span>
-          <ArrowRight
-            className={`w-3.5 h-3.5 transition-transform duration-200 ${
-              isHovered ? 'translate-x-1 text-white' : 'text-slate-500'
-            }`}
-          />
-        </div>
-      </div>
-    </motion.div>
   );
 }
