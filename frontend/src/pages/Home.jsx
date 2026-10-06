@@ -13,7 +13,51 @@ import {
   MapPin,
   Star,
   CheckCircle2,
+  Calendar,
+  Ticket,
 } from 'lucide-react';
+
+const CATEGORY_IMAGES = {
+  Technology: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=80',
+  Music: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&auto=format&fit=crop&q=80',
+  Arts: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600&auto=format&fit=crop&q=80',
+  Business: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&auto=format&fit=crop&q=80',
+  Education: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&auto=format&fit=crop&q=80',
+  Food: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80',
+  Sports: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&auto=format&fit=crop&q=80',
+  Health: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&auto=format&fit=crop&q=80',
+};
+
+const ATMOSPHERE_CARDS = [
+  {
+    title: 'Live Concerts & Festivals',
+    subtitle: 'Electrifying sound & live stages',
+    tag: 'Music',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=80',
+    link: '/events?category=music',
+  },
+  {
+    title: 'Global Tech Summits',
+    subtitle: 'Keynotes, AI demos & hackathons',
+    tag: 'Technology',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80',
+    link: '/events?category=technology',
+  },
+  {
+    title: 'Creative Arts & Design',
+    subtitle: 'Exhibitions & interactive workshops',
+    tag: 'Arts',
+    image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800&auto=format&fit=crop&q=80',
+    link: '/events?category=arts',
+  },
+  {
+    title: 'Founder & VIP Mixers',
+    subtitle: 'Curated networking & executive talks',
+    tag: 'Business',
+    image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&auto=format&fit=crop&q=80',
+    link: '/events?category=business',
+  },
+];
 
 export default function Home() {
   const [featuredEvents, setFeaturedEvents] = useState([]);
@@ -50,146 +94,245 @@ export default function Home() {
   };
 
   return (
-    <div className="space-y-20 pb-20">
+    <div className="space-y-24 pb-24">
       {/* ─── HERO SECTION ────────────────────────────────────────── */}
-      <section className="relative pt-6 sm:pt-12 pb-12 overflow-hidden">
+      <section className="relative pt-6 sm:pt-10 pb-12 overflow-hidden">
         {/* Ambient lighting & subtle gradient backdrop */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(99,102,241,0.18),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(99,102,241,0.14),rgba(2,6,23,0))] pointer-events-none" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/20 to-pink-500/15 dark:from-indigo-600/15 dark:via-purple-600/10 dark:to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 left-10 w-72 h-72 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 right-10 w-72 h-72 bg-pink-500/10 dark:bg-pink-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(99,102,241,0.22),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(99,102,241,0.18),rgba(2,6,23,0))] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-indigo-600/25 via-purple-600/20 to-pink-500/20 dark:from-indigo-600/18 dark:via-purple-600/12 dark:to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 right-10 w-96 h-96 bg-pink-500/15 dark:bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-5xl mx-auto px-4 text-center relative z-10">
-          {/* Live Platform Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-indigo-50/90 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/80 mb-6 backdrop-blur-md shadow-xs">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Live Event Platform for Next-Gen Experiences</span>
-          </div>
-
-          {/* Balanced 2-line Headline — No orphaned words */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-5 max-w-4xl mx-auto">
-            Discover Extraordinary Events
-            <span className="block mt-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
-              with Instant QR Passes
-            </span>
-          </h1>
-
-          {/* Subheading */}
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
-            Join premier tech summits, design conferences, workshops, and music festivals. Instant cryptographic entry passes, verified admission, and zero gate queues.
-          </p>
-
-          {/* Interactive Command Search Bar */}
-          <form
-            onSubmit={handleHeroSearch}
-            className="w-full max-w-3xl mx-auto p-2 rounded-2xl bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-2xl shadow-indigo-500/10 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-4 transition-all focus-within:border-indigo-500/50 focus-within:ring-2 focus-within:ring-indigo-500/20"
-          >
-            {/* Keyword Input */}
-            <div className="flex-1 flex items-center gap-3 px-3 py-2 text-slate-400">
-              <Search className="w-5 h-5 text-indigo-500 flex-shrink-0" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search conferences, workshops, festivals, topics..."
-                className="w-full bg-transparent text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none"
-              />
-            </div>
-
-            {/* Subtle Divider */}
-            <div className="hidden sm:block h-7 w-px bg-slate-200 dark:border-slate-800" />
-
-            {/* Location selector */}
-            <div className="flex items-center gap-2 px-3 py-2 text-slate-400">
-              <MapPin className="w-4 h-4 text-indigo-500 flex-shrink-0" />
-              <select
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-                className="bg-transparent text-xs sm:text-sm text-slate-700 dark:text-slate-300 outline-none cursor-pointer pr-2 font-medium"
-              >
-                <option value="" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">All Cities</option>
-                <option value="Bangalore" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Bengaluru</option>
-                <option value="Mumbai" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Mumbai</option>
-                <option value="Delhi" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Delhi NCR</option>
-                <option value="Hyderabad" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Hyderabad</option>
-                <option value="Online" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Online / Virtual</option>
-              </select>
-            </div>
-
-            {/* Submit button */}
-            <button
-              type="submit"
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm shadow-md shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-            >
-              <span>Find Events</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </form>
-
-          {/* Quick Discovery Tags */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
-            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 mr-1 flex items-center gap-1">
-              Popular:
-            </span>
-            {[
-              { label: '🔥 Trending', query: 'sortBy=date' },
-              { label: '💻 Tech & AI', query: 'category=technology' },
-              { label: '🎨 Arts & Design', query: 'category=arts' },
-              { label: '🎵 Music', query: 'category=music' },
-              { label: '💼 Business', query: 'category=business' },
-              { label: '⚡ Free Passes', query: 'isFree=true' },
-            ].map((pill, idx) => (
-              <Link
-                key={idx}
-                to={`/events?${pill.query}`}
-                className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white/70 dark:bg-slate-900/70 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 shadow-xs transition-all hover:scale-105 hover:border-indigo-400/50"
-              >
-                {pill.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Social Proof & Trust Strip */}
-          <div className="inline-flex flex-wrap items-center justify-center gap-4 sm:gap-6 px-5 py-2.5 rounded-full bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/70 dark:border-slate-800/80 shadow-xs text-xs text-slate-600 dark:text-slate-400 mb-12">
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
-                  AK
-                </div>
-                <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-pink-500 to-rose-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
-                  SR
-                </div>
-                <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
-                  VT
-                </div>
-                <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
-                  +
-                </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+            
+            {/* Left Column: Headline, Search, Social Proof */}
+            <div className="lg:col-span-7 text-center lg:text-left space-y-6">
+              {/* Live Platform Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-50/90 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/80 backdrop-blur-md shadow-xs">
+                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Live Event Platform for Next-Gen Experiences</span>
               </div>
-              <span><strong className="text-slate-900 dark:text-white font-semibold">12,500+</strong> attendees registered</span>
-            </div>
 
-            <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
+              {/* Main Headline */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.1]">
+                Discover Extraordinary Events
+                <span className="block mt-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
+                  with Instant QR Passes
+                </span>
+              </h1>
 
-            <div className="flex items-center gap-1.5 font-medium">
-              <div className="flex text-amber-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              {/* Subheading */}
+              <p className="max-w-xl mx-auto lg:mx-0 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                Join premier tech summits, design conferences, workshops, and music festivals. Instant cryptographic entry passes, verified admission, and zero gate queues.
+              </p>
+
+              {/* Interactive Command Search Bar */}
+              <form
+                onSubmit={handleHeroSearch}
+                className="w-full max-w-2xl mx-auto lg:mx-0 p-2 rounded-2xl bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-2xl shadow-indigo-500/10 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all focus-within:border-indigo-500/50 focus-within:ring-2 focus-within:ring-indigo-500/20"
+              >
+                {/* Keyword Input */}
+                <div className="flex-1 flex items-center gap-3 px-3 py-2 text-slate-400">
+                  <Search className="w-5 h-5 text-indigo-500 flex-shrink-0" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search conferences, workshops, festivals, topics..."
+                    className="w-full bg-transparent text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none"
+                  />
+                </div>
+
+                {/* Subtle Divider */}
+                <div className="hidden sm:block h-7 w-px bg-slate-200 dark:bg-slate-800" />
+
+                {/* Location selector */}
+                <div className="flex items-center gap-2 px-3 py-2 text-slate-400">
+                  <MapPin className="w-4 h-4 text-indigo-500 flex-shrink-0" />
+                  <select
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    className="bg-transparent text-xs sm:text-sm text-slate-700 dark:text-slate-300 outline-none cursor-pointer pr-2 font-medium"
+                  >
+                    <option value="" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">All Cities</option>
+                    <option value="Bangalore" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Bengaluru</option>
+                    <option value="Mumbai" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Mumbai</option>
+                    <option value="Delhi" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Delhi NCR</option>
+                    <option value="Hyderabad" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Hyderabad</option>
+                    <option value="Online" className="dark:bg-slate-900 text-slate-700 dark:text-slate-300">Online / Virtual</option>
+                  </select>
+                </div>
+
+                {/* Submit button */}
+                <button
+                  type="submit"
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm shadow-md shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                >
+                  <span>Find Events</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+
+              {/* Quick Discovery Tags */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1">
+                <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 mr-1 flex items-center gap-1">
+                  Popular:
+                </span>
+                {[
+                  { label: '🔥 Trending', query: 'sortBy=date' },
+                  { label: '💻 Tech & AI', query: 'category=technology' },
+                  { label: '🎨 Arts & Design', query: 'category=arts' },
+                  { label: '🎵 Music', query: 'category=music' },
+                  { label: '💼 Business', query: 'category=business' },
+                  { label: '⚡ Free Passes', query: 'isFree=true' },
+                ].map((pill, idx) => (
+                  <Link
+                    key={idx}
+                    to={`/events?${pill.query}`}
+                    className="px-3 py-1 rounded-full text-xs font-medium bg-white/70 dark:bg-slate-900/70 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 shadow-xs transition-all hover:scale-105 hover:border-indigo-400/50"
+                  >
+                    {pill.label}
+                  </Link>
                 ))}
               </div>
-              <span><strong className="text-slate-900 dark:text-white font-semibold">4.9/5</strong> rating</span>
+
+              {/* Social Proof & Trust Strip */}
+              <div className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-5 px-4 py-2 rounded-full bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/70 dark:border-slate-800/80 shadow-xs text-xs text-slate-600 dark:text-slate-400">
+                <div className="flex items-center gap-2">
+                  <div className="flex -space-x-2">
+                    <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
+                      AK
+                    </div>
+                    <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-pink-500 to-rose-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
+                      SR
+                    </div>
+                    <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
+                      VT
+                    </div>
+                    <div className="w-6 h-6 rounded-full ring-2 ring-white dark:ring-slate-900 bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xs">
+                      +
+                    </div>
+                  </div>
+                  <span><strong className="text-slate-900 dark:text-white font-semibold">12,500+</strong> registered</span>
+                </div>
+
+                <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
+
+                <div className="flex items-center gap-1.5 font-medium">
+                  <div className="flex text-amber-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <span><strong className="text-slate-900 dark:text-white font-semibold">4.9/5</strong></span>
+                </div>
+
+                <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
+
+                <div className="flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Instant QR Check-in</span>
+                </div>
+              </div>
             </div>
 
-            <span className="hidden sm:inline-block text-slate-300 dark:text-slate-700">•</span>
+            {/* Right Column: Visual Interactive Event Pass & Image Showcase */}
+            <div className="lg:col-span-5 relative flex items-center justify-center">
+              {/* Back tilted card */}
+              <div className="absolute top-4 -right-2 sm:right-2 w-72 sm:w-80 h-96 rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl rotate-6 opacity-60 dark:opacity-40 hidden sm:block pointer-events-none transition-transform hover:rotate-12 duration-500">
+                <img
+                  src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&auto=format&fit=crop&q=80"
+                  alt="Concert background"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+              </div>
 
-            <div className="flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Instant QR Check-in</span>
+              {/* Main Visual Showcase Card */}
+              <div className="relative w-full max-w-sm sm:max-w-md rounded-3xl overflow-hidden bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-slate-800 shadow-2xl shadow-indigo-500/20 backdrop-blur-xl group hover:shadow-indigo-500/30 transition-all duration-300 hover:-translate-y-1">
+                {/* Event Photo Banner */}
+                <div className="relative h-48 sm:h-52 w-full overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1000&auto=format&fit=crop&q=80"
+                    alt="Global Tech & AI Summit 2026"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+
+                  {/* Top Badges */}
+                  <div className="absolute top-3 left-3 flex gap-2">
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-600/90 text-white backdrop-blur-md shadow-md">
+                      Technology
+                    </span>
+                    <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/90 text-white backdrop-blur-md shadow-md flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                      Live Entry
+                    </span>
+                  </div>
+
+                  <div className="absolute top-3 right-3">
+                    <span className="px-3 py-1 rounded-full text-xs font-black bg-white/95 text-slate-900 shadow-md">
+                      ₹999
+                    </span>
+                  </div>
+
+                  {/* Event Info Overlay */}
+                  <div className="absolute bottom-3 left-3 right-3 text-white">
+                    <h3 className="font-extrabold text-lg sm:text-xl drop-shadow-md leading-tight">
+                      Global AI & Web3 Summit 2026
+                    </h3>
+                    <div className="flex items-center gap-3 text-xs text-slate-200 mt-1">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-indigo-400" /> Nov 15, 2026
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-indigo-400" /> Bengaluru
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Simulated Digital QR Ticket Pass */}
+                <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-900/80 border-t border-dashed border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1.5">
+                        <Ticket className="w-4 h-4 text-indigo-500" />
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                          Digital Admission Pass
+                        </span>
+                      </div>
+                      <p className="font-mono text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                        PASS-TKT-9A4F-2026
+                      </p>
+                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                        ✓ Cryptographic QR Verified
+                      </span>
+                    </div>
+
+                    {/* QR Code graphic */}
+                    <div className="w-20 h-20 p-1.5 rounded-2xl bg-white shadow-md border border-slate-200 flex-shrink-0 flex items-center justify-center">
+                      <img
+                        src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=EVENTHUB-VIP-PASS-9A4F&color=1e1b4b"
+                        alt="Event QR code"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating feature pills */}
+              <div className="absolute -bottom-4 -left-2 sm:left-4 z-20 px-3.5 py-1.5 rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 shadow-xl flex items-center gap-2 text-xs font-bold text-slate-800 dark:text-slate-200 animate-bounce duration-1000">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>⚡ 0.4s Instant Gate Check-in</span>
+              </div>
             </div>
+
           </div>
 
           {/* Highlights bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto pt-8 border-t border-slate-200/60 dark:border-slate-800/60 text-left">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-7xl mx-auto pt-14 border-t border-slate-200/60 dark:border-slate-800/60 text-left">
             <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm hover:border-indigo-400/50 hover:shadow-xs transition-all">
               <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
                 <QrCode className="w-5 h-5" />
@@ -230,13 +373,70 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── POPULAR CATEGORIES ──────────────────────────────────── */}
+      {/* ─── ATMOSPHERE & VISUAL EXPERIENCES GALLERY ──────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+              Live Atmosphere
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+              Experience the Energy
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              From electric stadium concerts to cutting-edge AI demo stages
+            </p>
+          </div>
+          <Link
+            to="/events"
+            className="hidden sm:flex text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline items-center gap-1"
+          >
+            Explore all experiences <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {ATMOSPHERE_CARDS.map((card, idx) => (
+            <Link
+              key={idx}
+              to={card.link}
+              className="group relative h-64 sm:h-72 rounded-3xl overflow-hidden shadow-lg border border-slate-200/50 dark:border-slate-800/80 hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-500 hover:-translate-y-1.5"
+            >
+              <img
+                src={card.image}
+                alt={card.title}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+              
+              <div className="absolute top-4 left-4">
+                <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-white/20 dark:bg-black/30 backdrop-blur-md text-white border border-white/20">
+                  {card.tag}
+                </span>
+              </div>
+
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <h3 className="font-extrabold text-base sm:text-lg leading-snug group-hover:text-indigo-300 transition-colors">
+                  {card.title}
+                </h3>
+                <p className="text-xs text-slate-300 mt-1 font-medium">
+                  {card.subtitle}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── POPULAR CATEGORIES (PHOTOGRAPHIC CARDS) ──────────────── */}
       <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Explore Categories</h2>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Explore Categories
+            </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Find events curated by topic and discipline
+              Find events curated by topic, craft, and passion
             </p>
           </div>
           <Link
@@ -247,26 +447,40 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4">
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              to={`/events?category=${cat.slug}`}
-              className="glass-card p-5 rounded-2xl hover:border-indigo-400 hover:shadow-glow transition-all group flex items-center gap-3"
-            >
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-slate-800 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
-                {cat.icon || '🎯'}
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                  {cat.name}
-                </h3>
-                <span className="text-[11px] text-slate-400">
-                  {cat.eventCount || 0} upcoming
-                </span>
-              </div>
-            </Link>
-          ))}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-5">
+          {categories.map((cat) => {
+            const bgImage = CATEGORY_IMAGES[cat.name] || 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=600&auto=format&fit=crop&q=80';
+            return (
+              <Link
+                key={cat.id}
+                to={`/events?category=${cat.slug}`}
+                className="group relative h-36 sm:h-40 rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-md hover:shadow-xl hover:border-indigo-400/60 transition-all duration-300 hover:-translate-y-1"
+              >
+                {/* Background photo */}
+                <img
+                  src={bgImage}
+                  alt={cat.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/20 group-hover:via-slate-950/50 transition-colors" />
+
+                {/* Content */}
+                <div className="absolute inset-0 p-4 flex flex-col justify-between text-white">
+                  <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-lg border border-white/20 group-hover:scale-110 transition-transform">
+                    {cat.icon || '🎯'}
+                  </div>
+                  <div>
+                    <h3 className="text-sm sm:text-base font-bold text-white group-hover:text-indigo-300 transition-colors">
+                      {cat.name}
+                    </h3>
+                    <span className="text-[11px] text-slate-300 font-medium">
+                      {cat.eventCount || 0} upcoming
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
@@ -274,9 +488,11 @@ export default function Home() {
       <section id="featured" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Featured Events</h2>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Featured Events
+            </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Hand-picked conferences and workshops not to miss
+              Hand-picked conferences, concerts, and workshops not to miss
             </p>
           </div>
           <Link
@@ -306,26 +522,62 @@ export default function Home() {
         )}
       </section>
 
-      {/* ─── ORGANIZER BANNER CTA ────────────────────────────────── */}
+      {/* ─── ORGANIZER BANNER CTA (WITH REALISTIC SCANNER VISUAL) ──── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 text-white p-8 sm:p-14 shadow-2xl">
-          <div className="max-w-2xl space-y-4">
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-md inline-block">
-              For Organizers
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-              Ready to Host Your Next Gathering?
-            </h2>
-            <p className="text-indigo-200 text-sm leading-relaxed">
-              Create an event in under 2 minutes. Manage registrations, set capacity limits, upload media banners, and check in your guests at the venue with the built-in QR scanner.
-            </p>
-            <div className="pt-2">
-              <Link
-                to="/events/create"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-indigo-900 font-bold text-sm hover:bg-indigo-50 shadow-lg hover:scale-105 transition-all"
-              >
-                Create Event Now <ArrowRight className="w-4 h-4" />
-              </Link>
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-950 via-indigo-900 to-purple-950 text-white p-8 sm:p-12 lg:p-14 shadow-2xl border border-indigo-800/40">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-7 space-y-4">
+              <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-white/15 backdrop-blur-md inline-block border border-white/20">
+                For Event Creators & Organizers
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
+                Ready to Host Your Next Gathering?
+              </h2>
+              <p className="text-indigo-200 text-sm leading-relaxed max-w-xl">
+                Create an event in under 2 minutes. Issue instant cryptographic digital passes, track real-time attendance analytics, and admit guests with our ultra-fast venue QR camera scanner.
+              </p>
+              <div className="pt-3 flex flex-wrap items-center gap-4">
+                <Link
+                  to="/events/create"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white text-indigo-950 font-bold text-sm hover:bg-indigo-50 shadow-lg hover:scale-105 transition-all cursor-pointer"
+                >
+                  Create Event Now <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  to="/events"
+                  className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 text-white hover:bg-white/20 border border-white/20 font-semibold text-sm transition-all"
+                >
+                  Explore Features
+                </Link>
+              </div>
+            </div>
+
+            {/* Organizer Venue Photo & Mockup */}
+            <div className="lg:col-span-5 relative flex justify-center">
+              <div className="relative w-full max-w-sm rounded-2xl overflow-hidden border border-white/20 shadow-2xl group">
+                <img
+                  src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80"
+                  alt="Organizer Venue Admission"
+                  className="w-full h-56 sm:h-64 object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+                
+                {/* Floating Admission Mock Badge */}
+                <div className="absolute bottom-4 left-4 right-4 p-3.5 rounded-xl bg-slate-900/90 backdrop-blur-md border border-emerald-500/40 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+                      ✓
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white leading-tight">Admitted — Valid Pass</p>
+                      <p className="text-[10px] text-emerald-300">Verified in 0.3s</p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">
+                    GATE 1
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
