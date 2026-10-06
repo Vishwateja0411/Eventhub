@@ -113,7 +113,7 @@ export default function Home() {
     <div className="space-y-24 sm:space-y-32 pb-24 bg-white dark:bg-[#070B1A] transition-colors">
       
       {/* ─── 1. ENTERPRISE CINEMATIC HERO SECTION ─────────────────────── */}
-      <section className="relative min-h-[85vh] lg:h-[90vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[85vh] lg:h-[88vh] flex items-center overflow-hidden">
         {/* Full-width 16:9 cinematic event hall background */}
         <img
           src="/enterprise-event-hero.jpg"
@@ -121,40 +121,39 @@ export default function Home() {
           className="absolute inset-0 w-full h-full object-cover object-center scale-100"
         />
 
-        {/* Dark Navy / Charcoal Enterprise Gradient Overlay (Darker on Left 45%) */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#070B1A] via-[#070B1A]/85 to-[#070B1A]/35" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#070B1A] via-transparent to-[#070B1A]/40" />
-        <div className="absolute inset-0 bg-purple-950/15 pointer-events-none" />
+        {/* Smooth Photographic Vignette Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#070B1A] via-[#070B1A]/90 via-[#070B1A]/65 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070B1A] via-transparent to-[#070B1A]/50" />
 
         {/* Content Container */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-16 lg:py-20 flex flex-col justify-between h-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-10 sm:py-12 flex flex-col justify-between h-full">
           
-          <div className="max-w-3xl space-y-7 pt-4 sm:pt-8 text-left">
+          <div className="max-w-3xl space-y-6 pt-2 sm:pt-4 text-left">
             {/* Small Eyebrow Text */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold uppercase tracking-widest text-[#A78BFA]">
-              <Sparkles className="w-3.5 h-3.5 text-[#A78BFA]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold uppercase tracking-widest text-[#C4B5FD]">
+              <Sparkles className="w-3.5 h-3.5 text-[#C4B5FD]" />
               <span>The Future of Event Experiences</span>
             </div>
 
-            {/* Main Headline (Uppercase, Tight Line Spacing, Bold Impact) */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white leading-[1.04]">
+            {/* Main Headline (Tight tracking, refined gradient) */}
+            <h1 className="text-4xl sm:text-6xl lg:text-[72px] font-black uppercase tracking-[-0.03em] text-white leading-[0.98] sm:leading-[1.02]">
               DISCOVER EVENTS <br />
               WORTH{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8B5CF6] via-[#A78BFA] to-white">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9D7BFF] via-[#C4B5FD] to-[#DDD6FE]">
                 EXPERIENCING.
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-200 max-w-xl font-normal leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-300 max-w-xl font-normal leading-relaxed">
               Discover, book, and experience extraordinary events with seamless digital tickets and instant QR entry.
             </p>
 
             {/* Two Primary CTAs */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <Link
                 to="/events"
-                className="px-8 py-4 rounded-lg bg-[#6C4DF6] hover:bg-[#5B3FE0] text-white font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-[#6C4DF6]/30 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="px-8 py-3.5 rounded-lg bg-[#6C4DF6] hover:bg-[#5839E6] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-md shadow-[#6C4DF6]/25 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 <span>EXPLORE EVENTS</span>
                 <ArrowRight className="w-4 h-4" />
@@ -162,35 +161,35 @@ export default function Home() {
 
               <Link
                 to="/events/create"
-                className="px-8 py-4 rounded-lg border-2 border-white/80 hover:border-white hover:bg-white/10 text-white font-extrabold text-sm uppercase tracking-wider backdrop-blur-xs transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="px-7 py-3.5 rounded-lg border border-white/30 hover:border-white/70 bg-white/[0.04] hover:bg-white/[0.1] text-white font-bold text-xs sm:text-sm uppercase tracking-wider backdrop-blur-md transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 <span>HOST AN EVENT</span>
               </Link>
             </div>
 
-            {/* Search Interface (Semi-transparent dark glass container) */}
+            {/* High-Contrast Luxury Search Interface */}
             <form
               onSubmit={handleHeroSearch}
-              className="w-full max-w-2xl p-2 rounded-xl bg-black/60 backdrop-blur-md border border-white/20 shadow-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all focus-within:border-[#8B5CF6]/80 focus-within:ring-2 focus-within:ring-[#8B5CF6]/30"
+              className="w-full max-w-2xl p-2 rounded-xl bg-slate-950/80 backdrop-blur-xl border border-white/15 shadow-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all focus-within:border-white/40 focus-within:ring-2 focus-within:ring-white/10 mt-6"
             >
               {/* Keyword Search */}
-              <div className="flex-1 flex items-center gap-3 px-3 py-2 text-slate-300">
-                <Search className="w-5 h-5 text-[#A78BFA] flex-shrink-0" />
+              <div className="flex-1 flex items-center gap-3 px-3.5 py-2 text-slate-300 min-w-0">
+                <Search className="w-4 h-4 text-slate-400 shrink-0" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search events, conferences, workshops..."
-                  className="w-full bg-transparent text-sm text-white placeholder-slate-400 outline-none font-medium"
+                  placeholder="Search conferences, workshops, summits..."
+                  className="w-full bg-transparent text-sm text-white placeholder-slate-400 outline-none font-medium truncate"
                 />
               </div>
 
               {/* Subtle Divider */}
-              <div className="hidden sm:block h-7 w-px bg-white/20" />
+              <div className="hidden sm:block h-7 w-px bg-white/15" />
 
               {/* City Selector */}
-              <div className="flex items-center gap-2 px-3 py-2 text-slate-300">
-                <MapPin className="w-4 h-4 text-[#A78BFA] flex-shrink-0" />
+              <div className="flex items-center gap-2 px-3 py-2 text-slate-300 shrink-0">
+                <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
                 <select
                   value={selectedCity}
                   onChange={(e) => setSelectedCity(e.target.value)}
@@ -205,10 +204,10 @@ export default function Home() {
                 </select>
               </div>
 
-              {/* Submit Button */}
+              {/* High-Contrast Luxury Search Trigger (Eliminates Purple Button Clash) */}
               <button
                 type="submit"
-                className="px-6 py-3 rounded-lg bg-[#6C4DF6] hover:bg-[#5B3FE0] text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                className="px-6 py-3 rounded-lg bg-white hover:bg-slate-100 text-slate-950 font-extrabold text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm shrink-0"
               >
                 <span>FIND EVENTS</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -217,21 +216,21 @@ export default function Home() {
           </div>
 
           {/* Bottom Hero Trust Row */}
-          <div className="pt-8 border-t border-white/10 mt-8 flex flex-wrap items-center justify-between gap-4 text-xs font-semibold text-slate-300">
+          <div className="pt-6 sm:pt-8 border-t border-white/10 mt-6 sm:mt-8 flex flex-wrap items-center justify-between gap-4 text-xs font-semibold text-slate-300">
             <div className="flex items-center gap-2">
-              <QrCode className="w-4 h-4 text-[#A78BFA]" />
+              <QrCode className="w-4 h-4 text-[#C4B5FD]" />
               <span>Instant QR Entry</span>
             </div>
             <div className="flex items-center gap-2">
-              <CreditCard className="w-4 h-4 text-[#A78BFA]" />
+              <CreditCard className="w-4 h-4 text-[#C4B5FD]" />
               <span>Secure Payments</span>
             </div>
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#A78BFA]" />
+              <ShieldCheck className="w-4 h-4 text-[#C4B5FD]" />
               <span>Verified Events</span>
             </div>
             <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-[#A78BFA]" />
+              <Zap className="w-4 h-4 text-[#C4B5FD]" />
               <span>Real-Time Booking</span>
             </div>
           </div>
