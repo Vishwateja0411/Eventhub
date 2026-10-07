@@ -96,6 +96,14 @@ export default function Home() {
         setFeaturedEvents(FALLBACK_FEATURED_EVENTS);
       } finally {
         setLoading(false);
+        if (window.location.hash) {
+          const target = document.getElementById(window.location.hash.replace('#', ''));
+          if (target) {
+            setTimeout(() => {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 60);
+          }
+        }
       }
     };
     fetchData();

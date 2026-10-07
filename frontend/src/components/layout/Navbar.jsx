@@ -28,18 +28,25 @@ export default function Navbar() {
   };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     setMobileMenuOpen(false);
+    if (window.location.pathname === '/') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      window.history.pushState(null, '', '/');
+    }
   };
 
   const handleAnchorClick = (e, id) => {
+    e.preventDefault();
     setMobileMenuOpen(false);
     if (window.location.pathname === '/') {
-      e.preventDefault();
       const el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.pushState(null, '', `/#${id}`);
       }
+    } else {
+      // Client-side SPA navigation without hard reload or lag
+      navigate(`/#${id}`);
     }
   };
 
@@ -70,7 +77,7 @@ export default function Navbar() {
             <a
               href="/#featured"
               onClick={(e) => handleAnchorClick(e, 'featured')}
-              className="text-sm font-medium text-slate-700 hover:text-[#6C4DF6] dark:text-slate-300 dark:hover:text-white transition-colors"
+              className="text-sm font-medium text-slate-700 hover:text-[#6C4DF6] dark:text-slate-300 dark:hover:text-white transition-colors cursor-pointer"
             >
               Featured
             </a>
@@ -78,7 +85,7 @@ export default function Navbar() {
             <a
               href="/#categories"
               onClick={(e) => handleAnchorClick(e, 'categories')}
-              className="text-sm font-medium text-slate-700 hover:text-[#6C4DF6] dark:text-slate-300 dark:hover:text-white transition-colors"
+              className="text-sm font-medium text-slate-700 hover:text-[#6C4DF6] dark:text-slate-300 dark:hover:text-white transition-colors cursor-pointer"
             >
               Categories
             </a>
@@ -86,7 +93,7 @@ export default function Navbar() {
             <a
               href="/#how-it-works"
               onClick={(e) => handleAnchorClick(e, 'how-it-works')}
-              className="text-sm font-medium text-slate-700 hover:text-[#6C4DF6] dark:text-slate-300 dark:hover:text-white transition-colors"
+              className="text-sm font-medium text-slate-700 hover:text-[#6C4DF6] dark:text-slate-300 dark:hover:text-white transition-colors cursor-pointer"
             >
               How It Works
             </a>
@@ -214,21 +221,21 @@ export default function Navbar() {
           <a
             href="/#featured"
             onClick={(e) => handleAnchorClick(e, 'featured')}
-            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
           >
             Featured
           </a>
           <a
             href="/#categories"
             onClick={(e) => handleAnchorClick(e, 'categories')}
-            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
           >
             Categories
           </a>
           <a
             href="/#how-it-works"
             onClick={(e) => handleAnchorClick(e, 'how-it-works')}
-            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
           >
             How It Works
           </a>

@@ -60,15 +60,25 @@ function ScrollToTop() {
 
   useEffect(() => {
     if (hash) {
-      const timer = setTimeout(() => {
-        const element = document.getElementById(hash.replace('#', ''));
+      const targetId = hash.replace('#', '');
+      const tryScroll = () => {
+        const element = document.getElementById(targetId);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+          return true;
         }
-      }, 50);
-      return () => clearTimeout(timer);
+        return false;
+      };
+
+      if (!tryScroll()) {
+        const timer1 = setTimeout(tryScroll, 60);
+        const timer2 = setTimeout(tryScroll, 200);
+        return () => {
+          clearTimeout(timer1);
+          clearTimeout(timer2);
+        };
+      }
+      return;
     }
 
     // Always scroll window to the absolute starting (top = 0)
