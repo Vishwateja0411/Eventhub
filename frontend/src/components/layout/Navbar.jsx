@@ -41,11 +41,22 @@ export default function Navbar() {
     if (window.location.pathname === '/') {
       const el = document.getElementById(id);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const rect = el.getBoundingClientRect();
+        // If current position is below the element (user scrolled past it), reset to top first
+        // so the transition always glides smoothly from TOP to BOTTOM
+        if (rect.top < 0) {
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 30);
+        } else {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
         window.history.pushState(null, '', `/#${id}`);
       }
     } else {
       // Client-side SPA navigation without hard reload or lag
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       navigate(`/#${id}`);
     }
   };

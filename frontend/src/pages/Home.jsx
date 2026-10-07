@@ -99,9 +99,13 @@ export default function Home() {
         if (window.location.hash) {
           const target = document.getElementById(window.location.hash.replace('#', ''));
           if (target) {
-            setTimeout(() => {
-              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 60);
+            const rect = target.getBoundingClientRect();
+            // Only re-align if cards layout shift caused significant drift
+            if (Math.abs(rect.top - 96) > 60) {
+              setTimeout(() => {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }, 60);
+            }
           }
         }
       }

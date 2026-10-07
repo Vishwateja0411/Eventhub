@@ -61,6 +61,10 @@ function ScrollToTop() {
   useEffect(() => {
     if (hash) {
       const targetId = hash.replace('#', '');
+      
+      // Reset window to top instantly so navigation always glides from TOP to BOTTOM
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
       const tryScroll = () => {
         const element = document.getElementById(targetId);
         if (element) {
@@ -70,15 +74,12 @@ function ScrollToTop() {
         return false;
       };
 
-      if (!tryScroll()) {
-        const timer1 = setTimeout(tryScroll, 60);
-        const timer2 = setTimeout(tryScroll, 200);
-        return () => {
-          clearTimeout(timer1);
-          clearTimeout(timer2);
-        };
-      }
-      return;
+      const timer1 = setTimeout(tryScroll, 60);
+      const timer2 = setTimeout(tryScroll, 220);
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      };
     }
 
     // Always scroll window to the absolute starting (top = 0)
